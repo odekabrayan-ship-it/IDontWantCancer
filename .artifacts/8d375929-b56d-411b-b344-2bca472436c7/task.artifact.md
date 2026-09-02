@@ -1,0 +1,5 @@
+- [x] Add `hilt-navigation-compose` and `lifecycle-runtime-compose` dependencies
+- [x] Create Home screen sub-components (Header, Status, Summary, Signals, Actions, etc.)
+- [x] Implement `HomeScreen` with state handling and `HomeViewModel` integration
+- [x] Run Gradle Sync
+- [x] Verify build and launch

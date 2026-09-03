@@ -36,7 +36,9 @@ class BaselineIntelligenceSeeder @Inject constructor(
             recommendedAction = "Immediately check your freezer for the affected brand names listed in the full briefing and return them for a refund.",
             source = SignalSource("U.S. FDA", "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts"),
             isActionable = true,
-            actionType = ActionType.AVOID
+            actionType = ActionType.AVOID,
+            scope = GeographicScope.NATIONAL,
+            targetCountryCode = "US"
         )
 
         // 2. IARC Classification Baseline
@@ -54,7 +56,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             recommendedAction = "Consider limiting consumption of processed meats (like sausages, ham, and bacon) as part of a long-term cancer prevention strategy.",
             source = SignalSource("IARC / WHO", "https://www.iarc.who.int/news-events/iarc-monographs-evaluate-consumption-of-red-meat-and-processed-meat/"),
             isActionable = true,
-            actionType = ActionType.MONITOR
+            actionType = ActionType.MONITOR,
+            scope = GeographicScope.GLOBAL
         )
 
         // 3. Screening Guideline Baseline
@@ -72,7 +75,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             recommendedAction = "If you are 45 or older, discuss colorectal cancer screening options with your primary care provider.",
             source = SignalSource("USPSTF", "https://www.uspreventiveservicestaskforce.org/"),
             isActionable = true,
-            actionType = ActionType.SCREEN
+            actionType = ActionType.SCREEN,
+            scope = GeographicScope.GLOBAL
         )
 
         // 4. Nutrition Intelligence Baseline (Step 222)
@@ -90,7 +94,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             recommendedAction = "Integrate whole grains (oats, brown rice, whole wheat) into your daily eating pattern as a sustainable prevention action.",
             source = SignalSource("WCRF / AICR", "https://www.wcrf.org/diet-activity-and-cancer/dietary-patterns/eat-wholegrains-vegetables-fruit-and-beans/"),
             isActionable = true,
-            actionType = ActionType.MONITOR
+            actionType = ActionType.MONITOR,
+            scope = GeographicScope.GLOBAL
         )
 
         // 5. Truth Check Baseline (Step 222)
@@ -107,7 +112,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             publishedAt = now.minusSeconds(3600 * 120),
             recommendedAction = "Maintain consumption within the established acceptable daily intake (ADI) of 40 mg/kg of body weight.",
             source = SignalSource("IARC / WHO", "https://www.who.int/news/item/14-07-2023-aspartame-hazard-and-risk-assessment-results-released"),
-            verdict = EvidenceVerdict.PARTLY_SUPPORTED
+            verdict = EvidenceVerdict.PARTLY_SUPPORTED,
+            scope = GeographicScope.GLOBAL
         )
 
         // 6. Education Baseline (Step 222)
@@ -123,7 +129,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             detectedAt = now.minusSeconds(3600 * 144),
             publishedAt = now.minusSeconds(3600 * 144),
             source = SignalSource("Agency Education", ""),
-            isActionable = false
+            isActionable = false,
+            scope = GeographicScope.GLOBAL
         )
 
         memory.saveSignal(fdaRecall)

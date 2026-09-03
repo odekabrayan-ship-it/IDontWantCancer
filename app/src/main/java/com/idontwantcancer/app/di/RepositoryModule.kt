@@ -4,10 +4,8 @@ import com.idontwantcancer.app.data.repository.BriefingRepositoryImpl
 import com.idontwantcancer.app.data.repository.IntelligenceMemoryRepositoryImpl
 import com.idontwantcancer.app.data.repository.SignalRepositoryImpl
 import com.idontwantcancer.app.data.repository.StaticIntelligenceSourceRegistry
-import com.idontwantcancer.app.domain.repository.BriefingRepository
-import com.idontwantcancer.app.domain.repository.IntelligenceMemoryRepository
-import com.idontwantcancer.app.domain.repository.SignalRepository
-import com.idontwantcancer.app.domain.repository.IntelligenceSourceRegistry
+import com.idontwantcancer.app.data.repository.UserContextRepositoryImpl
+import com.idontwantcancer.app.domain.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -41,4 +39,10 @@ abstract class RepositoryModule {
     abstract fun bindIntelligenceMemoryRepository(
         intelligenceMemoryRepositoryImpl: IntelligenceMemoryRepositoryImpl
     ): IntelligenceMemoryRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserContextRepository(
+        userContextRepositoryImpl: UserContextRepositoryImpl
+    ): UserContextRepository
 }

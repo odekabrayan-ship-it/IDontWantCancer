@@ -22,7 +22,8 @@ class StaticIntelligenceSourceRegistry @Inject constructor() : IntelligenceSourc
                 trustLevel = SourceTrustLevel.VERY_HIGH,
                 isTransparent = true,
                 updateReliability = SourceTrustLevel.HIGH
-            )
+            ),
+            scope = GeographicScope.GLOBAL
         ),
         IntelligenceSource(
             id = "fda_food",
@@ -34,7 +35,9 @@ class StaticIntelligenceSourceRegistry @Inject constructor() : IntelligenceSourc
                 isTransparent = true,
                 updateReliability = SourceTrustLevel.VERY_HIGH,
                 specialization = SignalCategory.FOOD
-            )
+            ),
+            scope = GeographicScope.NATIONAL,
+            countryCode = "US"
         ),
         IntelligenceSource(
             id = "eu_efsa",
@@ -46,7 +49,9 @@ class StaticIntelligenceSourceRegistry @Inject constructor() : IntelligenceSourc
                 isTransparent = true,
                 updateReliability = SourceTrustLevel.HIGH,
                 specialization = SignalCategory.FOOD
-            )
+            ),
+            scope = GeographicScope.REGIONAL,
+            countryCode = "EU"
         ),
         IntelligenceSource(
             id = "nih_nci",
@@ -57,7 +62,8 @@ class StaticIntelligenceSourceRegistry @Inject constructor() : IntelligenceSourc
                 trustLevel = SourceTrustLevel.VERY_HIGH,
                 isTransparent = true,
                 updateReliability = SourceTrustLevel.MODERATE
-            )
+            ),
+            scope = GeographicScope.GLOBAL
         )
     )
 

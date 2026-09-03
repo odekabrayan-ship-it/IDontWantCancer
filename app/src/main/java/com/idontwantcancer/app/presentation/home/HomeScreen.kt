@@ -80,6 +80,7 @@ fun HomeScreen(
                 is HomeUiState.Success -> {
                     HomeContent(
                         briefing = state.briefing,
+                        userCountry = state.userCountry,
                         reconciliations = state.reconciliations,
                         finality = state.finality,
                         onInteraction = onInteraction
@@ -128,6 +129,7 @@ private fun HomeHeader(
 @Composable
 private fun HomeContent(
     briefing: IntelligenceBriefing,
+    userCountry: String,
     reconciliations: Map<String, IntelligenceReentryReconciliationPresentationContract>,
     finality: CommandConsumptionFinalityPresentationContract,
     onInteraction: (IntelligenceUiInteraction) -> Unit
@@ -144,7 +146,7 @@ private fun HomeContent(
     }
 
     if (isClear) {
-        HomeClearState(lastUpdated = briefing.generatedAt)
+        HomeClearState(lastUpdated = briefing.generatedAt, userCountry = userCountry)
     } else {
         val spacing = LocalSpacing.current
         LazyColumn(
@@ -380,7 +382,7 @@ private fun ActionItem(action: BriefingAction) {
 }
 
 @Composable
-private fun HomeClearState(lastUpdated: java.time.Instant) {
+private fun HomeClearState(lastUpdated: java.time.Instant, userCountry: String) {
     val formatter = remember {
         DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
             .withLocale(Locale.getDefault())
@@ -388,6 +390,7 @@ private fun HomeClearState(lastUpdated: java.time.Instant) {
     }
     
     val timeString = remember(lastUpdated) { formatter.format(lastUpdated) }
+    val countryName = remember(userCountry) { Locale("", userCountry).displayCountry }
 
     AgencyEmptyState(
         title = stringResource(R.string.briefing_clear_title),
@@ -396,11 +399,23 @@ private fun HomeClearState(lastUpdated: java.time.Instant) {
     )
     
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-        Text(
-            text = stringResource(R.string.briefing_last_update, timeString),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(bottom = 32.dp)
-        )
+        ) {
+            Text(
+                text = stringResource(R.string.briefing_monitoring_reassurance, countryName),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 32.dp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.briefing_last_update, timeString),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+            )
+        }
     }
 }

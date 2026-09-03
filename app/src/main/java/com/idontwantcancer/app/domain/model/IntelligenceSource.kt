@@ -9,6 +9,8 @@ data class IntelligenceSource(
     val type: IntelligenceSourceType,
     val authority: SourceAuthority,
     val reliability: SourceReliability,
+    val scope: GeographicScope = GeographicScope.GLOBAL,
+    val countryCode: String? = null,
     val operationalStatus: SourceOperationalStatus = SourceOperationalStatus.UNKNOWN,
     val isEnabled: Boolean = true
 )

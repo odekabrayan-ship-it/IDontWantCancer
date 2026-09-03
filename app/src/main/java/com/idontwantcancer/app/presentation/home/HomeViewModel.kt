@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
+import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.GetCurrentBriefingUseCase
 import com.idontwantcancer.app.presentation.boundary.*
 import com.idontwantcancer.app.presentation.mapper.toContract
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getCurrentBriefingUseCase: GetCurrentBriefingUseCase,
     private val coordinator: IntelligenceCycleCoordinator,
+    private val userContextRepository: UserContextRepository,
     private val resultHandoverBridge: IntelligenceCommandExecutionResultHandoverBoundary,
     private val lifecycleBoundary: IntelligenceCommandLifecycleBoundary,
     private val renderingLifecycleBoundary: IntelligenceCommandRenderingLifecycleBoundary,
@@ -135,7 +137,11 @@ class HomeViewModel @Inject constructor(
                     )
                 }
 
-                _uiState.value = HomeUiState.Success(briefing, reconciliations)
+                _uiState.value = HomeUiState.Success(
+                    briefing = briefing,
+                    userCountry = userContextRepository.getUserCountryCode(),
+                    reconciliations = reconciliations
+                )
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
 

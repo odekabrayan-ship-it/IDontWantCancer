@@ -18,6 +18,7 @@ sealed interface HomeUiState {
      */
     data class Success(
         val briefing: IntelligenceBriefing,
+        val userCountry: String,
         /**
          * Map of signal ID to its verified re-entry reconciliation status.
          */

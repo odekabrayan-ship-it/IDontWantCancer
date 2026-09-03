@@ -2,6 +2,7 @@ package com.idontwantcancer.app.domain.engine
 
 import com.idontwantcancer.app.domain.model.*
 import com.idontwantcancer.app.domain.repository.IntelligenceMemoryRepository
+import com.idontwantcancer.app.domain.repository.UserContextRepository
 import java.time.Instant
 import java.util.*
 import javax.inject.Inject
@@ -12,6 +13,7 @@ import javax.inject.Inject
  */
 class DefaultIntelligenceBriefingAssemblyEngine @Inject constructor(
     private val memory: IntelligenceMemoryRepository,
+    private val userContextRepository: UserContextRepository,
     private val explanationEngine: IntelligenceBriefingExplanationEngine,
     private val synthesisEngine: IntelligenceEvidenceSynthesisEngine,
     private val gapEngine: IntelligenceEvidenceGapEngine,
@@ -38,8 +40,23 @@ class DefaultIntelligenceBriefingAssemblyEngine @Inject constructor(
         prioritizedSignals: List<PrioritizedSignal>,
         atTime: Instant
     ): IntelligenceBriefing {
+        // Step 222 - V2: Geographical Noise Destruction
+        val userCountry = userContextRepository.getUserCountryCode()
+        val relevantSignals = prioritizedSignals.filter { prioritized ->
+            val signal = prioritized.signal
+            when (signal.scope) {
+                GeographicScope.GLOBAL -> true
+                GeographicScope.NATIONAL -> signal.targetCountryCode == userCountry
+                GeographicScope.REGIONAL -> {
+                    // EU logic for example
+                    if (userIsEuropean(userCountry) && signal.targetCountryCode == "EU") true
+                    else signal.targetCountryCode == userCountry
+                }
+            }
+        }
+
         // 1. Generate candidate communication packages
-        val candidates = prioritizedSignals.map { prioritized ->
+        val candidates = relevantSignals.map { prioritized ->
             val signal = prioritized.signal
             val thread = memory.findThreadByTopic(signal.title) ?: 
                 IntelligenceThread(UUID.randomUUID().toString(), signal.title, signal.detectedAt, signal.detectedAt)
@@ -226,5 +243,10 @@ class DefaultIntelligenceBriefingAssemblyEngine @Inject constructor(
             signals = finalHandoffs.associate { it.intelligenceId to it.communicationPackage.provenance.signal },
             handoffs = finalHandoffs.associateBy { it.intelligenceId }
         )
+    }
+
+    private fun userIsEuropean(countryCode: String): Boolean {
+        val euCountries = setOf("AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK")
+        return euCountries.contains(countryCode)
     }
 }

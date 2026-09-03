@@ -7,12 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.domain.model.SignalCategory
@@ -139,25 +141,27 @@ fun SignalHeader(
     }
 }
 
+@Composable
 fun formatCategory(category: SignalCategory): String {
     return when (category) {
-        SignalCategory.FOOD -> "Food"
-        SignalCategory.CONSUMER_PRODUCTS -> "Consumer products"
-        SignalCategory.SCREENING -> "Screening"
-        SignalCategory.ENVIRONMENT -> "Environment"
-        SignalCategory.MEDICINE -> "Medicine"
-        SignalCategory.RESEARCH -> "Research"
-        SignalCategory.REGULATION -> "Regulation"
-        SignalCategory.PREVENTION -> "Prevention"
+        SignalCategory.FOOD -> stringResource(R.string.cat_food)
+        SignalCategory.CONSUMER_PRODUCTS -> stringResource(R.string.cat_consumer_products)
+        SignalCategory.SCREENING -> stringResource(R.string.cat_screening)
+        SignalCategory.ENVIRONMENT -> stringResource(R.string.cat_environment)
+        SignalCategory.MEDICINE -> stringResource(R.string.cat_medicine)
+        SignalCategory.RESEARCH -> stringResource(R.string.cat_research)
+        SignalCategory.REGULATION -> stringResource(R.string.cat_regulation)
+        SignalCategory.PREVENTION -> stringResource(R.string.cat_prevention)
     }
 }
 
+@Composable
 fun formatImportance(importance: SignalImportance): String {
     return when (importance) {
-        SignalImportance.LOW -> "Low importance"
-        SignalImportance.MODERATE -> "Moderate importance"
-        SignalImportance.HIGH -> "High importance"
-        SignalImportance.CRITICAL -> "Critical"
+        SignalImportance.LOW -> stringResource(R.string.imp_low)
+        SignalImportance.MODERATE -> stringResource(R.string.imp_moderate)
+        SignalImportance.HIGH -> stringResource(R.string.imp_high)
+        SignalImportance.CRITICAL -> stringResource(R.string.imp_critical)
     }
 }
 

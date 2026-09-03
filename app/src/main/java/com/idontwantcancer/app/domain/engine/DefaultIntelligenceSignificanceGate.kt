@@ -42,6 +42,13 @@ class DefaultIntelligenceSignificanceGate @Inject constructor() : IntelligenceSi
             factors.add("Official recommendation change")
         }
 
+        // Step 222: Initial Observation of critical categories
+        if (change.type == ChangeType.NEW_INFORMATION && 
+            (source.type == IntelligenceSourceType.FOOD_SAFETY || source.type == IntelligenceSourceType.PRODUCT_RECALL)) {
+            outcome = maxSignificance(outcome, SignificanceOutcome.SIGNIFICANT)
+            factors.add("Initial observation of critical health/safety topic")
+        }
+
         // 3. Evidence and Authority Integration
         if (assessment.strength >= EvidenceStrength.HIGH && source.authority == SourceAuthority.INTERNATIONAL) {
             outcome = maxSignificance(outcome, SignificanceOutcome.CRITICAL)

@@ -3,6 +3,7 @@ package com.idontwantcancer.app.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
+import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
 import com.idontwantcancer.app.domain.usecase.GetCurrentBriefingUseCase
 import com.idontwantcancer.app.presentation.boundary.*
 import com.idontwantcancer.app.presentation.mapper.toContract
@@ -25,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCurrentBriefingUseCase: GetCurrentBriefingUseCase,
+    private val coordinator: IntelligenceCycleCoordinator,
     private val resultHandoverBridge: IntelligenceCommandExecutionResultHandoverBoundary,
     private val lifecycleBoundary: IntelligenceCommandLifecycleBoundary,
     private val renderingLifecycleBoundary: IntelligenceCommandRenderingLifecycleBoundary,
@@ -110,8 +112,14 @@ class HomeViewModel @Inject constructor(
 
             _uiState.value = HomeUiState.Loading
             try {
-                val briefing = getCurrentBriefingUseCase()
+                var briefing = getCurrentBriefingUseCase()
                 
+                // Step 222: If briefing is empty, trigger an immediate autonomous cycle
+                if (briefing.items.isEmpty()) {
+                    coordinator.runCycle()
+                    briefing = getCurrentBriefingUseCase()
+                }
+
                 // Step 212: Move expensive association and mapping to Default dispatcher
                 val reconciliations = withContext(dispatcherProvider.default) {
                     briefing.items.associate { item ->

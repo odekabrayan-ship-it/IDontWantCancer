@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -54,8 +55,8 @@ fun AppNavigation(
         navigationSuiteItems = {
             items.forEach { item ->
                 item(
-                    icon = { Icon(item.icon, contentDescription = item.label) },
-                    label = { Text(item.label) },
+                    icon = { Icon(item.icon, contentDescription = stringResource(item.labelRes)) },
+                    label = { Text(stringResource(item.labelRes)) },
                     selected = currentDestination?.hierarchy?.any { it.hasRoute(item.screen::class) } == true,
                     onClick = {
                         navController.navigate(item.screen) {

@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.idontwantcancer.app.R
 import com.idontwantcancer.app.presentation.model.CommandConsumptionFinalityPresentationContract
 import com.idontwantcancer.app.presentation.model.IntelligenceReentryReconciliationPresentationContract
 
@@ -46,7 +48,7 @@ fun ReconciliationWarning(
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
-                    text = "Processing discrepancy detected",
+                    text = stringResource(R.string.reentry_discrepancy_title),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onErrorContainer,
                     fontWeight = FontWeight.Bold
@@ -84,7 +86,7 @@ fun CompactReconciliationIndicator(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = "Sync discrepancy",
+            text = stringResource(R.string.reentry_discrepancy_compact),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.error
         )
@@ -103,8 +105,8 @@ fun OperationalFinalityIndicator(
     if (contract is CommandConsumptionFinalityPresentationContract.StatusUnavailable) return
 
     val text = when (contract) {
-        is CommandConsumptionFinalityPresentationContract.Final -> "Operational finality reached"
-        is CommandConsumptionFinalityPresentationContract.NonTerminal -> "Syncing operational state..."
+        is CommandConsumptionFinalityPresentationContract.Final -> stringResource(R.string.finality_final)
+        is CommandConsumptionFinalityPresentationContract.NonTerminal -> stringResource(R.string.finality_non_terminal)
         else -> ""
     }
 

@@ -27,6 +27,10 @@ data class Signal(
     val recommendedAction: String? = null,
     val source: SignalSource,
     val supportingSources: List<SignalSource> = emptyList(),
+
+    // Actionability (Step 222)
+    val isActionable: Boolean = false,
+    val actionType: ActionType = ActionType.NONE,
     
     // Admission Context
     val lastAdmittedStateEntryId: String? = null

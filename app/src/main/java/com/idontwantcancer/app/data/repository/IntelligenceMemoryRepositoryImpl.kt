@@ -131,4 +131,8 @@ class IntelligenceMemoryRepositoryImpl @Inject constructor(
     override suspend fun getReentryAuditHistory(identity: String): List<IntelligenceReentryAuditEntry> = withContext(dispatcherProvider.default) {
         reentryAuditDao.getByReentryIdentity(identity).map { it.toDomain() }
     }
+
+    override suspend fun clearAll() = withContext(dispatcherProvider.io) {
+        database.clearAllTables()
+    }
 }

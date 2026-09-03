@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 
 /**
@@ -20,7 +22,7 @@ import com.idontwantcancer.app.core.ui.theme.LocalSpacing
  */
 @Composable
 fun AgencyLoadingState(
-    message: String = "Preparing your intelligence briefing...",
+    message: String = stringResource(R.string.loading_default),
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -76,11 +78,11 @@ fun AgencyErrorState(
             Row(horizontalArrangement = Arrangement.spacedBy(LocalSpacing.current.medium)) {
                 onBack?.let {
                     OutlinedButton(onClick = it) {
-                        Text("Back")
+                        Text(stringResource(R.string.action_back))
                     }
                 }
                 Button(onClick = onRetry) {
-                    Text("Try again")
+                    Text(stringResource(R.string.action_retry))
                 }
             }
         }

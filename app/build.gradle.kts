@@ -1,7 +1,16 @@
-﻿val signingStoreFile = providers.gradleProperty("IDWC_SIGNING_STORE_FILE").getOrNull()
-val signingStorePassword = providers.gradleProperty("IDWC_SIGNING_STORE_PASSWORD").getOrNull()
-val signingKeyAlias = providers.gradleProperty("IDWC_SIGNING_KEY_ALIAS").getOrNull()
-val signingKeyPassword = providers.gradleProperty("IDWC_SIGNING_KEY_PASSWORD").getOrNull()
+﻿import java.util.Properties
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = project.rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { load(it) }
+    }
+}
+
+val signingStoreFile = localProperties.getProperty("IDWC_SIGNING_STORE_FILE") ?: providers.gradleProperty("IDWC_SIGNING_STORE_FILE").getOrNull()
+val signingStorePassword = localProperties.getProperty("IDWC_SIGNING_STORE_PASSWORD") ?: providers.gradleProperty("IDWC_SIGNING_STORE_PASSWORD").getOrNull()
+val signingKeyAlias = localProperties.getProperty("IDWC_SIGNING_KEY_ALIAS") ?: providers.gradleProperty("IDWC_SIGNING_KEY_ALIAS").getOrNull()
+val signingKeyPassword = localProperties.getProperty("IDWC_SIGNING_KEY_PASSWORD") ?: providers.gradleProperty("IDWC_SIGNING_KEY_PASSWORD").getOrNull()
 
 plugins {
     alias(libs.plugins.android.application)
@@ -23,8 +32,8 @@ android {
         applicationId = "com.idontwantcancer.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 5
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -59,6 +68,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures {
         compose = true
@@ -66,6 +76,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
@@ -75,6 +86,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.compose.material3.window.size)
     implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
@@ -108,4 +120,3 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
-

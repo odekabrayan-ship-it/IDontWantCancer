@@ -123,4 +123,9 @@ interface IntelligenceMemoryRepository {
      * Retrieves the complete audit history for a re-entry event.
      */
     suspend fun getReentryAuditHistory(identity: String): List<IntelligenceReentryAuditEntry>
+
+    /**
+     * Clears all intelligence memory from the local repository.
+     */
+    suspend fun clearAll()
 }

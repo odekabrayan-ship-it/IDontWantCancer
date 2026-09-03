@@ -27,6 +27,10 @@ data class SignalEntity(
     val sourceName: String,
     val sourceUrl: String?,
     val supportingSourcesJson: String, // Serialized list of SignalSource
+
+    // Actionability (Step 222)
+    val isActionable: Boolean = false,
+    val actionType: ActionType = ActionType.NONE,
     
     // Memory/Lifecycle properties
     val lifecycle: IntelligenceLifecycle,

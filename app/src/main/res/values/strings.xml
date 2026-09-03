@@ -1,3 +1,97 @@
 <resources>
     <string name="app_name">I Don\'t Want Cancer</string>
+    <string name="app_subtitle">Your cancer intelligence briefing</string>
+
+    <!-- Home Screen -->
+    <string name="section_what_changed">WHAT CHANGED?</string>
+    <string name="section_additional_intelligence">ADDITIONAL INTELLIGENCE</string>
+    <string name="section_recommended_actions">RECOMMENDED ACTIONS</string>
+    <string name="briefing_clear_title">Nothing important changed.</string>
+    <string name="briefing_clear_desc">Your intelligence watch is clear.</string>
+    <string name="status_no_changes">Nothing important changed.</string>
+    <string name="status_ready">Something changed.</string>
+    <string name="status_attention">This needs your attention.</string>
+
+    <!-- Alerts Screen -->
+    <string name="alerts_title">Alerts</string>
+    <string name="alerts_subtitle">Things worth your attention</string>
+    <string name="alerts_empty_title">Nothing needs your attention.</string>
+    <string name="alerts_empty_desc">The intelligence watch is clear.</string>
+    <string name="alerts_select_prompt">Select an alert</string>
+    <string name="alerts_select_desc">Choose an item from the list to view its complete intelligence briefing.</string>
+
+    <!-- Search / Intelligence Inquiry Screen -->
+    <string name="search_title">Intelligence Inquiry</string>
+    <string name="search_subtitle">Ask the Agency a specific claim or topic</string>
+    <string name="search_placeholder">Is it true that [___] causes cancer?</string>
+    <string name="search_clear_content_desc">Clear search</string>
+    <string name="search_loading">Checking the intelligence&#8230;</string>
+    <string name="search_empty_title">No results</string>
+    <string name="search_empty_desc">We don\'t have a meaningful signal on this yet.</string>
+    <string name="search_idle_prompt">Verified evidence for common claims:</string>
+    <string name="search_example_1">Aspartame increases risk</string>
+    <string name="search_example_2">Red meat is carcinogenic</string>
+    <string name="search_example_3">Cell phones cause brain tumors</string>
+    <string name="search_example_4">Air pollution and lung cancer</string>
+    <string name="search_found_header">Intelligence found</string>
+    <string name="search_select_prompt">Select a search result</string>
+    <string name="search_select_desc">Choose an item from the list to view its complete intelligence briefing.</string>
+
+    <!-- Signal Detail -->
+    <string name="nav_back_content_desc">Back</string>
+    <string name="not_found_title">Not Found</string>
+    <string name="not_found_desc">The requested intelligence could not be located.</string>
+    <string name="detail_section_summary">What changed?</string>
+    <string name="detail_section_significance">Why it matters</string>
+    <string name="detail_section_explanation">What you should know</string>
+    <string name="detail_section_action">What you can do</string>
+    <string name="detail_section_provenance">Where this came from</string>
+    <string name="detail_source_label">Source: %1$s</string>
+
+    <!-- Signal Categories -->
+    <string name="cat_food">Food</string>
+    <string name="cat_consumer_products">Consumer products</string>
+    <string name="cat_screening">Screening</string>
+    <string name="cat_environment">Environment</string>
+    <string name="cat_medicine">Medicine</string>
+    <string name="cat_research">Research</string>
+    <string name="cat_regulation">Regulation</string>
+    <string name="cat_prevention">Prevention</string>
+
+    <!-- Signal Importance -->
+    <string name="imp_low">Low importance</string>
+    <string name="imp_moderate">Moderate importance</string>
+    <string name="imp_high">High importance</string>
+    <string name="imp_critical">Critical</string>
+
+    <!-- Reentry / Finality -->
+    <string name="reentry_discrepancy_title">Processing discrepancy detected</string>
+    <string name="reentry_discrepancy_compact">Sync discrepancy</string>
+    <string name="finality_final">Operational finality reached</string>
+    <string name="finality_non_terminal">Syncing operational state&#8230;</string>
+
+    <!-- Common / Agency States -->
+    <string name="loading_default">Preparing your intelligence briefing&#8230;</string>
+    <string name="action_retry">Try again</string>
+    <string name="action_back">Back</string>
+    <string name="action_refresh_content_desc">Refresh Intelligence</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_notifications">Notifications</string>
+    <string name="settings_notifications_frequency">Frequency</string>
+    <string name="settings_section_sources">Intelligence Sources</string>
+    <string name="settings_source_fda">openFDA Food Recalls</string>
+    <string name="settings_section_data">Data Management</string>
+    <string name="settings_data_clear">Clear intelligence memory</string>
+    <string name="settings_data_clear_desc">Remove all cached intelligence and briefings from this device.</string>
+    <string name="settings_section_about">About</string>
+    <string name="settings_about_version">Version</string>
+    <string name="settings_about_privacy">Privacy Policy</string>
+    <string name="settings_about_legal">Legal Information</string>
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_alerts">Alerts</string>
+    <string name="nav_inquiry">Inquiry</string>
+    <string name="nav_settings">Settings</string>
 </resources>

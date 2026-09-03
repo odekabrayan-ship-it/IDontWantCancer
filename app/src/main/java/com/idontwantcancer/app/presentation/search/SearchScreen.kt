@@ -28,11 +28,13 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.presentation.components.*
@@ -94,7 +96,7 @@ fun SearchScreen(
                             .padding(LocalSpacing.current.screenPadding)
                     ) {
                         Text(
-                            text = "Search",
+                            text = stringResource(R.string.search_title),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier
@@ -102,7 +104,7 @@ fun SearchScreen(
                                 .semantics { heading() }
                         )
                         Text(
-                            text = "Ask the Intelligence Agency",
+                            text = stringResource(R.string.search_subtitle),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(bottom = 24.dp)
@@ -119,7 +121,7 @@ fun SearchScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .focusRequester(focusRequester),
-                            placeholder = { Text("What do you want to know about?") },
+                            placeholder = { Text(stringResource(R.string.search_placeholder)) },
                             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                             trailingIcon = {
                                 if (query.isNotEmpty()) {
@@ -128,7 +130,7 @@ fun SearchScreen(
                                         onInteraction(IntelligenceUiInteraction.ClearSearch)
                                         focusRequester.requestFocus()
                                     }) {
-                                        Icon(Icons.Default.Clear, contentDescription = "Clear search")
+                                        Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.search_clear_content_desc))
                                     }
                                 }
                             },
@@ -152,7 +154,7 @@ fun SearchScreen(
                         ) {
                             when (val state = uiState) {
                                 is SearchUiState.Idle -> SearchIdleState()
-                                is SearchUiState.Searching -> AgencyLoadingState(message = "Checking the intelligence...")
+                                is SearchUiState.Searching -> AgencyLoadingState(message = stringResource(R.string.search_loading))
                                 is SearchUiState.Success -> SearchResultsList(
                                 signals = state.signals,
                                 reconciliations = state.reconciliations,
@@ -165,8 +167,8 @@ fun SearchScreen(
                                 }
                             )
                                 is SearchUiState.Empty -> AgencyEmptyState(
-                                    title = "No results",
-                                    description = "We don't have a meaningful signal on this yet."
+                                    title = stringResource(R.string.search_empty_title),
+                                    description = stringResource(R.string.search_empty_desc)
                                 )
                                 is SearchUiState.Error -> AgencyErrorState(
                                     message = state.message,
@@ -213,8 +215,8 @@ fun SearchScreen(
                                 }
                                 is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.NotFound -> {
                                     AgencyEmptyState(
-                                        title = "Not Found",
-                                        description = "The requested intelligence could not be located."
+                                        title = stringResource(R.string.not_found_title),
+                                        description = stringResource(R.string.not_found_desc)
                                     )
                                 }
                             }
@@ -222,8 +224,8 @@ fun SearchScreen(
                     }
                 } else {
                     AgencyEmptyState(
-                        title = "Select a search result",
-                        description = "Choose an item from the list to view its complete intelligence briefing."
+                        title = stringResource(R.string.search_select_prompt),
+                        description = stringResource(R.string.search_select_desc)
                     )
                 }
             }
@@ -239,15 +241,15 @@ private fun SearchIdleState() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Try searching for:",
+            text = stringResource(R.string.search_idle_prompt),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(LocalSpacing.current.small))
-        Text("food preservatives", style = MaterialTheme.typography.bodyMedium)
-        Text("screening changes", style = MaterialTheme.typography.bodyMedium)
-        Text("product recalls", style = MaterialTheme.typography.bodyMedium)
-        Text("environmental exposure", style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.search_example_1), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.search_example_2), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.search_example_3), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.search_example_4), style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -281,7 +283,7 @@ private fun SearchResultsList(
         }
         item {
             Text(
-                text = "Intelligence found",
+                text = stringResource(R.string.search_found_header),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,

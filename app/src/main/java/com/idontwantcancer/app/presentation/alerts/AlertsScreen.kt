@@ -19,12 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.presentation.components.*
@@ -133,8 +135,8 @@ fun AlertsScreen(
                                 }
                                 is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.NotFound -> {
                                     AgencyEmptyState(
-                                        title = "Not Found",
-                                        description = "The requested intelligence could not be located."
+                                        title = stringResource(R.string.not_found_title),
+                                        description = stringResource(R.string.not_found_desc)
                                     )
                                 }
                             }
@@ -142,8 +144,8 @@ fun AlertsScreen(
                     }
                 } else {
                     AgencyEmptyState(
-                        title = "Select an alert",
-                        description = "Choose an item from the list to view its complete intelligence briefing."
+                        title = stringResource(R.string.alerts_select_prompt),
+                        description = stringResource(R.string.alerts_select_desc)
                     )
                 }
             }
@@ -161,12 +163,12 @@ private fun AlertsHeader() {
             .semantics { heading() }
     ) {
         Text(
-            text = "Alerts",
+            text = stringResource(R.string.alerts_title),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Things worth your attention",
+            text = stringResource(R.string.alerts_subtitle),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -220,8 +222,8 @@ private fun AlertsContent(
 @Composable
 private fun AlertsEmptyState() {
     AgencyEmptyState(
-        title = "Nothing needs your attention.",
-        description = "The intelligence watch is clear.",
+        title = stringResource(R.string.alerts_empty_title),
+        description = stringResource(R.string.alerts_empty_desc),
         icon = Icons.Default.Notifications
     )
 }

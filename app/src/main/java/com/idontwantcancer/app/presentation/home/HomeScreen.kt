@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayout
 import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayoutType
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
@@ -43,7 +45,7 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeHeader()
+            HomeHeader(onRefresh = { onInteraction(IntelligenceUiInteraction.RetryOperation) })
         }
     ) { innerPadding ->
         Box(
@@ -71,25 +73,37 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeHeader() {
+private fun HomeHeader(
+    onRefresh: () -> Unit
+) {
     val spacing = LocalSpacing.current
-    Column(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(horizontal = spacing.screenPadding, vertical = spacing.large)
-            .semantics { heading() }
+            .padding(horizontal = spacing.screenPadding, vertical = spacing.large),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = "I Don't Want Cancer",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = "Your cancer intelligence briefing",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.semantics { heading() }
+            )
+            Text(
+                text = stringResource(R.string.app_subtitle),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        IconButton(onClick = onRefresh) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = stringResource(R.string.action_refresh_content_desc)
+            )
+        }
     }
 }
 
@@ -141,7 +155,7 @@ private fun HomeContent(
             val additionalSignals = signals.drop(1)
             if (additionalSignals.isNotEmpty()) {
                 item {
-                    SectionHeader(title = "ADDITIONAL INTELLIGENCE")
+                    SectionHeader(title = stringResource(R.string.section_additional_intelligence))
                 }
                 
                 if (layout == AdaptiveLayoutType.Compact) {
@@ -190,7 +204,7 @@ private fun HomeContent(
 
             if (briefing.actionItems.isNotEmpty()) {
                 item {
-                    SectionHeader(title = "RECOMMENDED ACTIONS")
+                    SectionHeader(title = stringResource(R.string.section_recommended_actions))
                 }
                 
                 if (layout == AdaptiveLayoutType.Compact) {
@@ -223,17 +237,17 @@ private fun HomeContent(
 private fun BriefingStatusSection(status: BriefingStatus) {
     val (text, icon, color) = when (status) {
         BriefingStatus.NO_MAJOR_CHANGES -> Triple(
-            "Nothing important changed.",
+            stringResource(R.string.status_no_changes),
             Icons.Default.CheckCircle,
             MaterialTheme.colorScheme.primary
         )
         BriefingStatus.READY -> Triple(
-            "Something changed.",
+            stringResource(R.string.status_ready),
             Icons.Default.Info,
             MaterialTheme.colorScheme.secondary
         )
         BriefingStatus.ATTENTION_REQUIRED -> Triple(
-            "This needs your attention.",
+            stringResource(R.string.status_attention),
             Icons.Default.Warning,
             MaterialTheme.colorScheme.error
         )
@@ -281,7 +295,7 @@ private fun BriefingSummarySection(
             .padding(horizontal = spacing.screenPadding, vertical = spacing.cardPadding)
     ) {
         Text(
-            text = "WHAT CHANGED?",
+            text = stringResource(R.string.section_what_changed),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.primary,
             fontWeight = FontWeight.ExtraBold,
@@ -317,7 +331,9 @@ private fun SectionHeader(title: String) {
         style = MaterialTheme.typography.labelLarge,
         color = MaterialTheme.colorScheme.secondary,
         fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(start = spacing.screenPadding, end = spacing.screenPadding, top = spacing.large, bottom = spacing.small)
+        modifier = Modifier
+            .padding(start = spacing.screenPadding, end = spacing.screenPadding, top = spacing.large, bottom = spacing.small)
+            .semantics { heading() }
     )
 }
 
@@ -348,8 +364,8 @@ private fun ActionItem(action: BriefingAction) {
 @Composable
 private fun HomeClearState() {
     AgencyEmptyState(
-        title = "Nothing important changed.",
-        description = "Your intelligence watch is clear.",
+        title = stringResource(R.string.briefing_clear_title),
+        description = stringResource(R.string.briefing_clear_desc),
         icon = Icons.Default.CheckCircle
     )
 }

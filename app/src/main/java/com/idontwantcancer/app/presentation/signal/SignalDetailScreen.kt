@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.presentation.components.*
@@ -42,7 +44,7 @@ fun SignalDetailScreen(
                     IconButton(onClick = { onInteraction(IntelligenceUiInteraction.NavigateBack) }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.nav_back_content_desc)
                         )
                     }
                 },
@@ -61,8 +63,8 @@ fun SignalDetailScreen(
             when (val state = uiState) {
                 is SignalDetailUiState.Loading -> AgencyLoadingState()
                 is SignalDetailUiState.NotFound -> AgencyEmptyState(
-                    title = "Not Found",
-                    description = "The requested intelligence could not be located.",
+                    title = stringResource(R.string.not_found_title),
+                    description = stringResource(R.string.not_found_desc),
                     icon = Icons.AutoMirrored.Filled.ArrowBack
                 )
                 is SignalDetailUiState.Error -> AgencyErrorState(
@@ -118,7 +120,7 @@ fun SignalDetailView(
 
         item {
             IntelligenceSection(
-                title = "What changed?",
+                title = stringResource(R.string.detail_section_summary),
                 content = signal.summary
             )
         }
@@ -126,7 +128,7 @@ fun SignalDetailView(
         signal.significance?.let { significance ->
             item {
                 IntelligenceSection(
-                    title = "Why it matters",
+                    title = stringResource(R.string.detail_section_significance),
                     content = significance
                 )
             }
@@ -135,7 +137,7 @@ fun SignalDetailView(
         signal.explanation?.let { explanation ->
             item {
                 IntelligenceSection(
-                    title = "What you should know",
+                    title = stringResource(R.string.detail_section_explanation),
                     content = explanation
                 )
             }
@@ -144,7 +146,7 @@ fun SignalDetailView(
         signal.recommendedAction?.let { action ->
             item {
                 IntelligenceSection(
-                    title = "What you can do",
+                    title = stringResource(R.string.detail_section_action),
                     content = action
                 )
             }
@@ -185,13 +187,13 @@ private fun SourceSection(sourceName: String) {
     Column(verticalArrangement = Arrangement.spacedBy(spacing.small)) {
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         Text(
-            text = "Where this came from",
+            text = stringResource(R.string.detail_section_provenance),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Source: $sourceName",
+            text = stringResource(R.string.detail_source_label, sourceName),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

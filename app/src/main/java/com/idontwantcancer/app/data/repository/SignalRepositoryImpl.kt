@@ -60,19 +60,8 @@ class SignalRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun searchSignals(query: String): List<Signal> {
-        return try {
-            withContext(dispatcherProvider.default) {
-                signalDataSource.searchSignals(query).map { it.toDomain() }
-            }
-        } catch (e: Exception) {
-            // Search local memory if remote fails
-            withContext(dispatcherProvider.default) {
-                signalDao.getAllFlow().first()
-                    .map { it.toDomain() }
-                    .filter { it.title.contains(query, ignoreCase = true) || it.summary.contains(query, ignoreCase = true) }
-            }
-        }
+    override suspend fun searchSignals(query: String): List<Signal> = withContext(dispatcherProvider.io) {
+        signalDao.search(query).map { it.toDomain() }
     }
 
     override suspend fun getSignalById(signalId: String): Signal? {

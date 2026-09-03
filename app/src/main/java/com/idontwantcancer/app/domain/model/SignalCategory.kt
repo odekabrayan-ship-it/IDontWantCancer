@@ -1,5 +1,8 @@
 package com.idontwantcancer.app.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 enum class SignalCategory {
     FOOD,
     CONSUMER_PRODUCTS,
@@ -8,5 +11,8 @@ enum class SignalCategory {
     MEDICINE,
     RESEARCH,
     REGULATION,
-    PREVENTION
+    PREVENTION,
+    LIFESTYLE,
+    NUTRITION,
+    OCCUPATIONAL
 }

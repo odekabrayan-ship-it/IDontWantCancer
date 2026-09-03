@@ -11,14 +11,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
-import com.idontwantcancer.app.domain.model.Signal
-import com.idontwantcancer.app.domain.model.SignalCategory
-import com.idontwantcancer.app.domain.model.SignalImportance
+import com.idontwantcancer.app.domain.model.*
 
 /**
  * A consistent card for displaying intelligence signals in lists.
@@ -76,6 +75,47 @@ fun SignalCard(
             )
             
             reconciliationIndicator?.invoke()
+
+            if (signal.verdict != null) {
+                Spacer(modifier = Modifier.height(spacing.small))
+                TruthCheckBadge(signal.verdict)
+            }
+        }
+    }
+}
+
+/**
+ * A standard badge for displaying a truth-check verdict.
+ */
+@Composable
+fun TruthCheckBadge(
+    verdict: EvidenceVerdict,
+    modifier: Modifier = Modifier
+) {
+    val (textRes, color) = when (verdict) {
+        EvidenceVerdict.SUPPORTED -> R.string.verdict_supported to MaterialTheme.colorScheme.primary
+        EvidenceVerdict.PARTLY_SUPPORTED -> R.string.verdict_partly_supported to MaterialTheme.colorScheme.secondary
+        EvidenceVerdict.UNCERTAIN -> R.string.verdict_uncertain to MaterialTheme.colorScheme.onSurfaceVariant
+        EvidenceVerdict.MISLEADING -> R.string.verdict_misleading to MaterialTheme.colorScheme.error
+        EvidenceVerdict.NOT_SUPPORTED -> R.string.verdict_not_supported to MaterialTheme.colorScheme.error
+    }
+
+    Surface(
+        color = color.copy(alpha = 0.1f),
+        shape = MaterialTheme.shapes.small,
+        border = BorderStroke(1.dp, color.copy(alpha = 0.2f)),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(textRes),
+                style = MaterialTheme.typography.labelSmall,
+                color = color,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
     }
 }
@@ -152,6 +192,9 @@ fun formatCategory(category: SignalCategory): String {
         SignalCategory.RESEARCH -> stringResource(R.string.cat_research)
         SignalCategory.REGULATION -> stringResource(R.string.cat_regulation)
         SignalCategory.PREVENTION -> stringResource(R.string.cat_prevention)
+        SignalCategory.LIFESTYLE -> stringResource(R.string.cat_lifestyle)
+        SignalCategory.NUTRITION -> stringResource(R.string.cat_nutrition)
+        SignalCategory.OCCUPATIONAL -> stringResource(R.string.cat_occupational)
     }
 }
 

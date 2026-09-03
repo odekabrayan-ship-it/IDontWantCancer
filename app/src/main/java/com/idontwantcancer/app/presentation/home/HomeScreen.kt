@@ -1,17 +1,19 @@
 package com.idontwantcancer.app.presentation.home
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -35,6 +37,10 @@ import com.idontwantcancer.app.presentation.components.*
 import com.idontwantcancer.app.presentation.model.CommandConsumptionFinalityPresentationContract
 import com.idontwantcancer.app.presentation.model.IntelligenceReentryReconciliationPresentationContract
 import com.idontwantcancer.app.presentation.model.IntelligenceUiInteraction
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
 @Composable
 fun HomeScreen(
@@ -42,6 +48,18 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // Step 222: Request Notification Permission on launch
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { /* No action needed, preference stored by system */ }
+    )
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -126,7 +144,7 @@ private fun HomeContent(
     }
 
     if (isClear) {
-        HomeClearState()
+        HomeClearState(lastUpdated = briefing.generatedAt)
     } else {
         val spacing = LocalSpacing.current
         LazyColumn(
@@ -204,7 +222,7 @@ private fun HomeContent(
 
             if (briefing.actionItems.isNotEmpty()) {
                 item {
-                    SectionHeader(title = stringResource(R.string.section_recommended_actions))
+                    SectionHeader(title = stringResource(R.string.section_prevention_focus))
                 }
                 
                 if (layout == AdaptiveLayoutType.Compact) {
@@ -362,10 +380,27 @@ private fun ActionItem(action: BriefingAction) {
 }
 
 @Composable
-private fun HomeClearState() {
+private fun HomeClearState(lastUpdated: java.time.Instant) {
+    val formatter = remember {
+        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+            .withLocale(Locale.getDefault())
+            .withZone(ZoneId.systemDefault())
+    }
+    
+    val timeString = remember(lastUpdated) { formatter.format(lastUpdated) }
+
     AgencyEmptyState(
         title = stringResource(R.string.briefing_clear_title),
         description = stringResource(R.string.briefing_clear_desc),
         icon = Icons.Default.CheckCircle
     )
+    
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+        Text(
+            text = stringResource(R.string.briefing_last_update, timeString),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+    }
 }

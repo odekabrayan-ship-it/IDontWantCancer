@@ -31,6 +31,9 @@ data class Signal(
     // Actionability (Step 222)
     val isActionable: Boolean = false,
     val actionType: ActionType = ActionType.NONE,
+
+    // Truth Check (Step 222)
+    val verdict: EvidenceVerdict? = null,
     
     // Admission Context
     val lastAdmittedStateEntryId: String? = null

@@ -46,6 +46,7 @@ fun SignalEntity.toDomain(): Signal {
         },
         isActionable = isActionable,
         actionType = actionType,
+        verdict = verdict,
         lastAdmittedStateEntryId = lastAdmittedStateEntryId
     )
 }
@@ -76,6 +77,7 @@ fun Signal.toEntity(
         supportingSourcesJson = Json.encodeToString(supportingSources),
         isActionable = isActionable,
         actionType = actionType,
+        verdict = verdict,
         lifecycle = lifecycle,
         isBriefed = isBriefed,
         firstObservedAt = firstObservedAt,

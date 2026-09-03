@@ -75,14 +75,71 @@ class BaselineIntelligenceSeeder @Inject constructor(
             actionType = ActionType.SCREEN
         )
 
+        // 4. Nutrition Intelligence Baseline (Step 222)
+        val nutritionSignal = Signal(
+            id = "seed-nutrition-1",
+            title = "Evidence-Based Guidance: Whole Grains and Cancer Prevention",
+            summary = "Strong evidence indicates that consuming whole grains reduces the risk of colorectal cancer. This is one of the most consistent findings in nutritional oncology.",
+            significance = "Unlike many dietary claims, the link between whole grain fiber and reduced cancer risk is supported by a large body of corroborating research from multiple international agencies.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.NUTRITION,
+            importance = SignalImportance.MODERATE,
+            confidence = SignalConfidence.HIGH,
+            detectedAt = now.minusSeconds(3600 * 96),
+            publishedAt = now.minusSeconds(3600 * 96),
+            recommendedAction = "Integrate whole grains (oats, brown rice, whole wheat) into your daily eating pattern as a sustainable prevention action.",
+            source = SignalSource("WCRF / AICR", "https://www.wcrf.org/diet-activity-and-cancer/dietary-patterns/eat-wholegrains-vegetables-fruit-and-beans/"),
+            isActionable = true,
+            actionType = ActionType.MONITOR
+        )
+
+        // 5. Truth Check Baseline (Step 222)
+        val truthCheckSignal = Signal(
+            id = "seed-truth-1",
+            title = "Claim Check: Aspartame and Cancer Risk",
+            summary = "Following a review of available evidence, the IARC classified aspartame as 'possibly carcinogenic to humans' (Group 2B), while the JECFA reaffirmed the acceptable daily intake level.",
+            significance = "This update provides clarity on a widely circulated health claim. The 'possibly carcinogenic' label means evidence is limited, and current consumption levels remain within safety limits according to food safety authorities.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.RESEARCH,
+            importance = SignalImportance.MODERATE,
+            confidence = SignalConfidence.HIGH,
+            detectedAt = now.minusSeconds(3600 * 120),
+            publishedAt = now.minusSeconds(3600 * 120),
+            recommendedAction = "Maintain consumption within the established acceptable daily intake (ADI) of 40 mg/kg of body weight.",
+            source = SignalSource("IARC / WHO", "https://www.who.int/news/item/14-07-2023-aspartame-hazard-and-risk-assessment-results-released"),
+            verdict = EvidenceVerdict.PARTLY_SUPPORTED
+        )
+
+        // 6. Education Baseline (Step 222)
+        val educationSignal = Signal(
+            id = "seed-edu-1",
+            title = "Intelligence Foundation: What is a Carcinogen?",
+            summary = "A carcinogen is any substance or agent that can cause cancer. These are classified by authoritative bodies like the IARC based on the strength of evidence.",
+            significance = "Understanding what a carcinogen is—and how they are classified—helps you navigate health claims and understand why certain products are recalled or regulated.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.RESEARCH,
+            importance = SignalImportance.LOW,
+            confidence = SignalConfidence.VERY_HIGH,
+            detectedAt = now.minusSeconds(3600 * 144),
+            publishedAt = now.minusSeconds(3600 * 144),
+            source = SignalSource("Agency Education", ""),
+            isActionable = false
+        )
+
         memory.saveSignal(fdaRecall)
         memory.saveSignal(iarcSignal)
         memory.saveSignal(screeningSignal)
+        memory.saveSignal(nutritionSignal)
+        memory.saveSignal(truthCheckSignal)
+        memory.saveSignal(educationSignal)
 
         // Seed corresponding threads to ensure they appear in briefings
         seedThread(fdaRecall)
         seedThread(iarcSignal)
         seedThread(screeningSignal)
+        seedThread(nutritionSignal)
+        seedThread(truthCheckSignal)
+        seedThread(educationSignal)
     }
 
     private suspend fun seedThread(signal: Signal) {

@@ -25,7 +25,7 @@ import com.idontwantcancer.app.data.local.entity.*
         ReentryLifecycleEntity::class,
         ReentryAuditEntity::class
     ],
-    version = 13,
+    version = 14,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

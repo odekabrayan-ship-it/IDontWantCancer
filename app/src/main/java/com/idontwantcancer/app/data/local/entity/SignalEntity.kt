@@ -31,6 +31,9 @@ data class SignalEntity(
     // Actionability (Step 222)
     val isActionable: Boolean = false,
     val actionType: ActionType = ActionType.NONE,
+
+    // Truth Check (Step 222)
+    val verdict: EvidenceVerdict? = null,
     
     // Memory/Lifecycle properties
     val lifecycle: IntelligenceLifecycle,

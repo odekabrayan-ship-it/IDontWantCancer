@@ -6,8 +6,10 @@
     <string name="section_what_changed">WHAT CHANGED?</string>
     <string name="section_additional_intelligence">ADDITIONAL INTELLIGENCE</string>
     <string name="section_recommended_actions">RECOMMENDED ACTIONS</string>
-    <string name="briefing_clear_title">Nothing important changed.</string>
+    <string name="section_prevention_focus">YOUR PREVENTION FOCUS</string>
+    <string name="briefing_clear_title">Nothing important changed today.</string>
     <string name="briefing_clear_desc">Your intelligence watch is clear.</string>
+    <string name="briefing_last_update">Last watch update: %1$s</string>
     <string name="status_no_changes">Nothing important changed.</string>
     <string name="status_ready">Something changed.</string>
     <string name="status_attention">This needs your attention.</string>
@@ -57,6 +59,9 @@
     <string name="cat_research">Research</string>
     <string name="cat_regulation">Regulation</string>
     <string name="cat_prevention">Prevention</string>
+    <string name="cat_lifestyle">Lifestyle</string>
+    <string name="cat_nutrition">Nutrition</string>
+    <string name="cat_occupational">Occupational</string>
 
     <!-- Signal Importance -->
     <string name="imp_low">Low importance</string>
@@ -76,6 +81,22 @@
     <string name="action_back">Back</string>
     <string name="action_refresh_content_desc">Refresh Intelligence</string>
 
+    <!-- Truth Check -->
+    <string name="verdict_supported">Supported</string>
+    <string name="verdict_partly_supported">Partly supported</string>
+    <string name="verdict_uncertain">Uncertain</string>
+    <string name="verdict_misleading">Misleading</string>
+    <string name="verdict_not_supported">Not supported</string>
+
+    <!-- Notifications -->
+    <string name="channel_briefing_name">Intelligence Briefings</string>
+    <string name="channel_briefing_desc">Periodic summaries of cancer intelligence and research.</string>
+    <string name="channel_urgent_name">Urgent Safety Alerts</string>
+    <string name="channel_urgent_desc">Immediate notifications regarding high-priority health recalls.</string>
+    <string name="notif_ready_title">New Intelligence Briefing</string>
+    <string name="notif_urgent_title">⚠️ URGENT HEALTH ALERT</string>
+    <string name="notif_generic_content">Something changed in the intelligence landscape. Tap to read the full briefing.</string>
+
     <!-- Settings Screen -->
     <string name="settings_title">Settings</string>
     <string name="settings_section_notifications">Notifications</string>
@@ -94,4 +115,8 @@
     <string name="nav_alerts">Alerts</string>
     <string name="nav_inquiry">Inquiry</string>
     <string name="nav_settings">Settings</string>
+
+    <!-- Education (60-Second Prevention) -->
+    <string name="edu_carcinogen_title">What does “carcinogen” mean?</string>
+    <string name="edu_carcinogen_summary">A carcinogen is a substance, organism, or agent capable of causing cancer. Carcinogens can be found in the environment, lifestyle choices (like tobacco), or certain workplace exposures.</string>
 </resources>

@@ -27,4 +27,7 @@ interface SignalDao {
 
     @Query("SELECT * FROM signals ORDER BY publishedAt DESC")
     fun getAllFlow(): Flow<List<SignalEntity>>
+
+    @Query("SELECT * FROM signals WHERE title LIKE '%' || :query || '%' OR summary LIKE '%' || :query || '%' ORDER BY publishedAt DESC")
+    suspend fun search(query: String): List<SignalEntity>
 }

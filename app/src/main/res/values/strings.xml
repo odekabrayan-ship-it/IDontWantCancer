@@ -122,7 +122,20 @@
     <string name="nav_home">Home</string>
     <string name="nav_alerts">Alerts</string>
     <string name="nav_inquiry">Inquiry</string>
+    <string name="nav_prevention">Prevention</string>
     <string name="nav_settings">Settings</string>
+
+    <!-- Prevention Screen -->
+    <string name="prevention_title">Prevention Hub</string>
+    <string name="prevention_subtitle">Evidence-based foundations for long-term health</string>
+    <string name="prevention_section_eat_smarter">Eat Smarter</string>
+    <string name="prevention_section_eat_smarter_desc">Nutritional patterns that actually matter</string>
+
+    <!-- Truth Detail -->
+    <string name="truth_evidence_label">The Evidence:</string>
+    <string name="truth_reality_label">The Reality:</string>
+    <string name="truth_recommendation_label">Agency Recommendation:</string>
+    <string name="truth_no_fear_clause">This is a long-term pattern. Occasional consumption does not equal immediate hazard.</string>
 
     <!-- Education (60-Second Prevention) -->
     <string name="edu_carcinogen_title">What does “carcinogen” mean?</string>

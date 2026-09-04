@@ -2,6 +2,7 @@ package com.idontwantcancer.app.data.repository
 
 import com.idontwantcancer.app.domain.model.*
 import com.idontwantcancer.app.domain.repository.IntelligenceMemoryRepository
+import com.idontwantcancer.app.domain.repository.PreventionRepository
 import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
@@ -13,12 +14,15 @@ import javax.inject.Singleton
  */
 @Singleton
 class BaselineIntelligenceSeeder @Inject constructor(
-    private val memory: IntelligenceMemoryRepository
+    private val memory: IntelligenceMemoryRepository,
+    private val preventionRepository: PreventionRepository
 ) {
     suspend fun seedIfEmpty() {
         val existingSignals = memory.getAllSignals()
         if (existingSignals.isNotEmpty()) return
 
+        seedNutritionTruths()
+        
         val now = Instant.now()
         
         // 1. FDA Food Recall Baseline
@@ -220,6 +224,62 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedThread(benzeneSignal)
         seedThread(talcSignal)
         seedThread(pfasSignal)
+    }
+
+    private suspend fun seedNutritionTruths() {
+        val nutritionTruths = listOf(
+            NutritionIntelligence(
+                id = "truth-nutrition-1",
+                title = "Processed Meat and Colorectal Cancer",
+                summary = "Processed meats like bacon, sausages, and ham are classified by IARC as Group 1 carcinogens.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                reality = "There is convincing evidence that processed meat causes colorectal cancer. Each 50-gram portion consumed daily increases the risk by about 18%.",
+                recommendation = "Avoid processed meat where possible. Choose fresh poultry, fish, or plant-based proteins (legumes, lentils) as healthy alternatives.",
+                source = "IARC / World Health Organization",
+                sourceUrl = "https://www.iarc.who.int/wp-content/uploads/2018/07/pr240_E.pdf"
+            ),
+            NutritionIntelligence(
+                id = "truth-nutrition-2",
+                title = "Alcohol and Multiple Cancer Types",
+                summary = "Alcohol consumption is a known cause of at least seven types of cancer, including breast, liver, and esophageal cancer.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                reality = "When it comes to cancer prevention, there is no safe level of alcohol consumption. Risk increases with the amount consumed.",
+                recommendation = "For cancer prevention, it is best not to drink alcohol. If you do, limit consumption to national guidelines (e.g., no more than 2 drinks a day for men, 1 for women).",
+                source = "IARC / WCRF",
+                sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/alcoholic-drinks-and-cancer-risk/"
+            ),
+            NutritionIntelligence(
+                id = "truth-nutrition-3",
+                title = "Dietary Fiber and Colon Protection",
+                summary = "Consuming foods high in dietary fiber, particularly whole grains, strongly reduces the risk of colorectal cancer.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                reality = "Fiber increases stool bulk and dilutes potential carcinogens in the colon, while whole grains contain various bioactive compounds with anti-cancer properties.",
+                recommendation = "Aim for at least 30g of fiber daily. Switch white bread and pasta for whole-grain versions and include beans and lentils in your meals.",
+                source = "WCRF / AICR",
+                sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/wholegrains-veg-fruit-beans-and-cancer-risk/"
+            ),
+            NutritionIntelligence(
+                id = "truth-nutrition-4",
+                title = "Red Meat: Probable Carcinogenicity",
+                summary = "Red meat (beef, lamb, pork) is classified as 'probably carcinogenic to humans' (Group 2A).",
+                evidenceLevel = EvidenceStrength.HIGH,
+                reality = "The evidence for red meat is strong but not as absolute as processed meat. High consumption is linked to colorectal, pancreatic, and prostate cancers.",
+                recommendation = "If you eat red meat, limit it to no more than about 3 portions (350–500g cooked weight) per week.",
+                source = "WCRF / IARC",
+                sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/meat-fish-dairy-and-cancer-risk/"
+            ),
+            NutritionIntelligence(
+                id = "truth-nutrition-5",
+                title = "Sugar-Sweetened Drinks and Weight-Mediated Risk",
+                summary = "Sugary drinks are a cause of weight gain, overweight, and obesity, which in turn increase the risk of 13 types of cancer.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                reality = "While sugar doesn't 'feed' cancer directly in a unique way, the metabolic changes caused by obesity (like inflammation and insulin levels) are major cancer drivers.",
+                recommendation = "Avoid sugar-sweetened drinks. Choose water or unsweetened tea/coffee instead.",
+                source = "AICR / WCRF",
+                sourceUrl = "https://www.aicr.org/cancer-prevention/recommendations/limit-consumption-of-sugar-sweetened-drinks/"
+            )
+        )
+        preventionRepository.saveNutritionIntelligence(nutritionTruths)
     }
 
     private suspend fun seedThread(signal: Signal) {

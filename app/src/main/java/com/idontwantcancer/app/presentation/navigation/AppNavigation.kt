@@ -24,6 +24,8 @@ import com.idontwantcancer.app.presentation.alerts.AlertsScreen
 import com.idontwantcancer.app.presentation.alerts.AlertsViewModel
 import com.idontwantcancer.app.presentation.home.HomeScreen
 import com.idontwantcancer.app.presentation.home.HomeViewModel
+import com.idontwantcancer.app.presentation.prevention.PreventionScreen
+import com.idontwantcancer.app.presentation.prevention.PreventionViewModel
 import com.idontwantcancer.app.presentation.boundary.DefaultIntelligenceCommandDispatcher
 import com.idontwantcancer.app.presentation.search.SearchScreen
 import com.idontwantcancer.app.presentation.search.SearchViewModel
@@ -46,6 +48,7 @@ fun AppNavigation(
         NavigationItem.Home,
         NavigationItem.Alerts,
         NavigationItem.Search,
+        NavigationItem.Prevention,
         NavigationItem.Settings
     )
     
@@ -136,6 +139,9 @@ fun AppNavigation(
                     viewModel = searchViewModel,
                     onInteraction = onSearchInteraction
                 )
+            }
+            composable<Screen.Prevention> {
+                PreventionScreen()
             }
             composable<Screen.Settings> {
                 SettingsScreen()

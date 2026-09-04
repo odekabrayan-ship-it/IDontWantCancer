@@ -13,6 +13,9 @@ sealed interface Screen {
     data object Search : Screen
 
     @Serializable
+    data object Prevention : Screen
+
+    @Serializable
     data object Settings : Screen
 
     @Serializable

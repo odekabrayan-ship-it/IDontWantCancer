@@ -2,6 +2,7 @@ package com.idontwantcancer.app.di
 
 import com.idontwantcancer.app.data.repository.BriefingRepositoryImpl
 import com.idontwantcancer.app.data.repository.IntelligenceMemoryRepositoryImpl
+import com.idontwantcancer.app.data.repository.PreventionRepositoryImpl
 import com.idontwantcancer.app.data.repository.SignalRepositoryImpl
 import com.idontwantcancer.app.data.repository.StaticIntelligenceSourceRegistry
 import com.idontwantcancer.app.data.repository.UserContextRepositoryImpl
@@ -45,4 +46,10 @@ abstract class RepositoryModule {
     abstract fun bindUserContextRepository(
         userContextRepositoryImpl: UserContextRepositoryImpl
     ): UserContextRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindPreventionRepository(
+        preventionRepositoryImpl: PreventionRepositoryImpl
+    ): PreventionRepository
 }

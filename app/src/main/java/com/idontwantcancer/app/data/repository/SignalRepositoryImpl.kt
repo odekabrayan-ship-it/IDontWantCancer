@@ -2,13 +2,16 @@ package com.idontwantcancer.app.data.repository
 
 import com.idontwantcancer.app.data.datasource.SignalDataSource
 import com.idontwantcancer.app.data.local.dao.SignalDao
-import com.idontwantcancer.app.data.local.mapper.toDomain
+import com.idontwantcancer.app.data.local.mapper.toDomain as toDomainFromEntity
 import com.idontwantcancer.app.data.local.mapper.toEntity
-import com.idontwantcancer.app.data.mapper.toDomain
+import com.idontwantcancer.app.data.mapper.toDomain as toDomainFromDto
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.model.Signal
+import com.idontwantcancer.app.domain.model.SignalCategory
 import com.idontwantcancer.app.domain.repository.SignalRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -25,7 +28,7 @@ class SignalRepositoryImpl @Inject constructor(
     override suspend fun getLatestSignals(): List<Signal> {
         return try {
             val remoteSignals = withContext(dispatcherProvider.default) {
-                signalDataSource.getLatestSignals().map { it.toDomain() }
+                signalDataSource.getLatestSignals().map { it.toDomainFromDto() }
             }
             val entities = withContext(dispatcherProvider.default) {
                 remoteSignals.map { it.toEntity() }
@@ -36,7 +39,7 @@ class SignalRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             // Offline-first fallback
             withContext(dispatcherProvider.default) {
-                signalDao.getAllFlow().first().map { it.toDomain() }
+                signalDao.getAllFlow().first().map { it.toDomainFromEntity() }
             }
         }
     }
@@ -44,41 +47,34 @@ class SignalRepositoryImpl @Inject constructor(
     override suspend fun getAttentionSignals(): List<Signal> {
         return try {
             val remoteSignals = withContext(dispatcherProvider.default) {
-                signalDataSource.getAttentionSignals().map { it.toDomain() }
+                signalDataSource.getAttentionSignals().map { it.toDomainFromDto() }
             }
             val entities = withContext(dispatcherProvider.default) {
                 remoteSignals.map { it.toEntity() }
             }
-            // Save to local memory in batch (Step 214)
             signalDao.upsertAll(entities)
             remoteSignals
         } catch (e: Exception) {
-            // Fallback to local memory (filtering by significance conceptually)
+            // Filter local memory for high importance
             withContext(dispatcherProvider.default) {
-                signalDao.getAllFlow().first().map { it.toDomain() }
+                signalDao.getAllFlow().first()
+                    .map { it.toDomainFromEntity() }
+                    .filter { it.importance.ordinal >= 2 } // HIGH or CRITICAL
             }
         }
     }
 
     override suspend fun searchSignals(query: String): List<Signal> = withContext(dispatcherProvider.io) {
-        signalDao.search(query).map { it.toDomain() }
+        signalDao.search(query).map { it.toDomainFromEntity() }
     }
 
-    override suspend fun getSignalById(signalId: String): Signal? {
-        // Try local memory first for stable identification
-        val localSignal = withContext(dispatcherProvider.default) {
-            signalDao.getById(signalId)?.toDomain()
+    override fun getSignalsByCategories(categories: List<SignalCategory>): Flow<List<Signal>> {
+        return signalDao.getByCategoriesFlow(categories).map { entities ->
+            entities.map { it.toDomainFromEntity() }
         }
-        if (localSignal != null) return localSignal
+    }
 
-        return try {
-            val remoteSignal = withContext(dispatcherProvider.default) {
-                signalDataSource.getSignalById(signalId).toDomain()
-            }
-            signalDao.upsert(remoteSignal.toEntity())
-            remoteSignal
-        } catch (e: Exception) {
-            null
-        }
+    override suspend fun getSignalById(signalId: String): Signal? = withContext(dispatcherProvider.io) {
+        signalDao.getById(signalId)?.toDomainFromEntity()
     }
 }

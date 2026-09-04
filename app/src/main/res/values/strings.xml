@@ -131,6 +131,10 @@
     <string name="prevention_section_eat_smarter">Eat Smarter</string>
     <string name="prevention_section_eat_smarter_desc">Nutritional patterns that actually matter</string>
 
+    <!-- Environment Watch -->
+    <string name="prevention_section_environment">Environment Watch</string>
+    <string name="prevention_section_environment_desc">Understanding and mitigating external risks</string>
+
     <!-- Truth Check Detail -->
     <string name="truth_check_claim_label">The Claim:</string>
     <string name="truth_check_reality_label">The Evidence:</string>

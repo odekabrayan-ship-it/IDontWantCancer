@@ -1,6 +1,8 @@
 package com.idontwantcancer.app.domain.repository
 
 import com.idontwantcancer.app.domain.model.Signal
+import com.idontwantcancer.app.domain.model.SignalCategory
+import kotlinx.coroutines.flow.Flow
 
 interface SignalRepository {
     /**
@@ -17,6 +19,11 @@ interface SignalRepository {
      * Searches the available intelligence signals for a specific query.
      */
     suspend fun searchSignals(query: String): List<Signal>
+
+    /**
+     * Retrieves signals by their category.
+     */
+    fun getSignalsByCategories(categories: List<SignalCategory>): Flow<List<Signal>>
 
     /**
      * Retrieves a specific intelligence signal by its unique identifier.

@@ -270,6 +270,92 @@ class BaselineIntelligenceSeeder @Inject constructor(
         
         seedThread(cellPhoneSignal)
         seedThread(sugarMythSignal)
+
+        // --- ENVIRONMENTAL WATCH REGISTRY SEEDS (Feature 5) ---
+
+        // 12. Air Pollution (PM2.5)
+        val airPollutionSignal = Signal(
+            id = "seed-env-1",
+            title = "WHO Intelligence: Outdoor Air Pollution a Group 1 Carcinogen",
+            summary = "The World Health Organization has classified outdoor air pollution and particulate matter (PM) as carcinogenic to humans. PM2.5 is specifically linked to lung cancer.",
+            significance = "This is a major environmental health truth. Fine particulates can penetrate deep into the lungs and enter the bloodstream, causing systemic inflammation and DNA damage.",
+            significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
+            category = SignalCategory.ENVIRONMENT,
+            importance = SignalImportance.HIGH,
+            confidence = SignalConfidence.VERY_HIGH,
+            detectedAt = now.minusSeconds(3600 * 400),
+            publishedAt = now.minusSeconds(3600 * 400),
+            recommendedAction = "Monitor your local Air Quality Index (AQI). On high-pollution days, limit heavy outdoor exertion and use HEPA air filtration indoors where possible.",
+            source = SignalSource("WHO / IARC", "https://www.iarc.who.int/news-events/iarc-outdoor-air-pollution-a-leading-environmental-cause-of-cancer-deaths/"),
+            scope = GeographicScope.GLOBAL
+        )
+
+        // 13. Radon Gas
+        val radonSignal = Signal(
+            id = "seed-env-2",
+            title = "Invisible Risk: Radon Gas in Homes",
+            summary = "Radon is a naturally occurring radioactive gas that can accumulate in homes. It is the second leading cause of lung cancer globally, and the leading cause among non-smokers.",
+            significance = "Unlike outdoor pollution, radon levels vary by individual building. It is colorless and odorless, making detection impossible without specialized testing.",
+            significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
+            category = SignalCategory.ENVIRONMENT,
+            importance = SignalImportance.HIGH,
+            confidence = SignalConfidence.VERY_HIGH,
+            detectedAt = now.minusSeconds(3600 * 450),
+            publishedAt = now.minusSeconds(3600 * 450),
+            recommendedAction = "The agency recommends testing your home for radon. If levels are high (above 4 pCi/L or 148 Bq/m³), professional mitigation is highly effective.",
+            source = SignalSource("National Health Authorities", ""),
+            scope = GeographicScope.GLOBAL, // Keeping global for general awareness, though levels are local
+            isActionable = true,
+            actionType = ActionType.MONITOR
+        )
+
+        // 14. UV Radiation
+        val uvSignal = Signal(
+            id = "seed-env-3",
+            title = "Protective Intelligence: UV Radiation and Skin Cancer",
+            summary = "Ultraviolet (UV) radiation from the sun and tanning beds is a proven carcinogen. It causes DNA damage in skin cells that can lead to melanoma and other skin cancers.",
+            significance = "Skin cancer is one of the most preventable forms of cancer. UV exposure is cumulative, meaning protection at every age reduces long-term risk.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.ENVIRONMENT,
+            importance = SignalImportance.MODERATE,
+            confidence = SignalConfidence.VERY_HIGH,
+            detectedAt = now.minusSeconds(3600 * 500),
+            publishedAt = now.minusSeconds(3600 * 500),
+            recommendedAction = "Use broad-spectrum sunscreen (SPF 30+), wear protective clothing, and seek shade during peak sun hours. Avoid indoor tanning entirely.",
+            source = SignalSource("Skin Cancer Foundations", ""),
+            scope = GeographicScope.GLOBAL,
+            isActionable = true,
+            actionType = ActionType.AVOID
+        )
+
+        // 15. Night Shift Work
+        val shiftWorkSignal = Signal(
+            id = "seed-env-4",
+            title = "Occupational Intelligence: Night Shift Work Risks",
+            summary = "The IARC has classified night shift work as 'probably carcinogenic to humans' (Group 2A) due to its disruption of the circadian rhythm.",
+            significance = "Circadian disruption affects hormone levels and immune function. Evidence is strongest for links to breast, prostate, and colorectal cancers.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.OCCUPATIONAL,
+            importance = SignalImportance.MODERATE,
+            confidence = SignalConfidence.HIGH,
+            detectedAt = now.minusSeconds(3600 * 600),
+            publishedAt = now.minusSeconds(3600 * 600),
+            recommendedAction = "If you work nights, prioritize 'sleep hygiene' and healthy eating patterns. Discuss screening timing with your doctor, as risk profiles may differ.",
+            source = SignalSource("IARC", "https://www.iarc.who.int/news-events/iarc-monographs-evaluate-night-shift-work/"),
+            scope = GeographicScope.GLOBAL,
+            isActionable = true,
+            actionType = ActionType.MONITOR
+        )
+
+        memory.saveSignal(airPollutionSignal)
+        memory.saveSignal(radonSignal)
+        memory.saveSignal(uvSignal)
+        memory.saveSignal(shiftWorkSignal)
+        
+        seedThread(airPollutionSignal)
+        seedThread(radonSignal)
+        seedThread(uvSignal)
+        seedThread(shiftWorkSignal)
     }
 
     private suspend fun seedNutritionTruths() {

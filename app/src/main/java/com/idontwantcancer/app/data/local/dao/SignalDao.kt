@@ -3,6 +3,7 @@ package com.idontwantcancer.app.data.local.dao
 import androidx.room.*
 import com.idontwantcancer.app.data.local.entity.SignalEntity
 import com.idontwantcancer.app.domain.model.IntelligenceLifecycle
+import com.idontwantcancer.app.domain.model.SignalCategory
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -30,4 +31,7 @@ interface SignalDao {
 
     @Query("SELECT * FROM signals WHERE title LIKE '%' || :query || '%' OR summary LIKE '%' || :query || '%' OR affectedIngredientsJson LIKE '%' || :query || '%' ORDER BY publishedAt DESC")
     suspend fun search(query: String): List<SignalEntity>
+
+    @Query("SELECT * FROM signals WHERE category IN (:categories) ORDER BY publishedAt DESC")
+    fun getByCategoriesFlow(categories: List<SignalCategory>): Flow<List<SignalEntity>>
 }

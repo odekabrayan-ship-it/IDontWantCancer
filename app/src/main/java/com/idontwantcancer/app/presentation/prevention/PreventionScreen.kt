@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,7 +27,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.NutritionIntelligence
+import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.presentation.components.AgencyLoadingState
+import com.idontwantcancer.app.presentation.components.SignalCard
 
 @Composable
 fun PreventionScreen(
@@ -92,6 +95,23 @@ private fun PreventionContent(state: PreventionUiState.Success) {
         items(state.nutritionTruths, key = { it.id }) { truth ->
             NutritionTruthItem(truth)
         }
+
+        item {
+            Spacer(modifier = Modifier.height(spacing.large))
+            PreventionSectionHeader(
+                title = stringResource(R.string.prevention_section_environment),
+                subtitle = stringResource(R.string.prevention_section_environment_desc),
+                icon = Icons.Default.Public
+            )
+        }
+
+        items(state.environmentalSignals, key = { it.id }) { signal ->
+            SignalCard(
+                signal = signal,
+                isSelected = false,
+                onClick = { /* Step 223: Detail navigation */ }
+            )
+        }
         
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -100,12 +120,16 @@ private fun PreventionContent(state: PreventionUiState.Success) {
 }
 
 @Composable
-private fun PreventionSectionHeader(title: String, subtitle: String) {
+private fun PreventionSectionHeader(
+    title: String, 
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector = Icons.Default.Restaurant
+) {
     val spacing = LocalSpacing.current
     Column(modifier = Modifier.padding(horizontal = spacing.screenPadding, vertical = spacing.medium)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                imageVector = Icons.Default.Restaurant,
+                imageVector = icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp)

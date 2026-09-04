@@ -174,18 +174,30 @@ fun TruthCheckBadge(
     Surface(
         color = color.copy(alpha = 0.1f),
         shape = MaterialTheme.shapes.small,
-        border = BorderStroke(1.dp, color.copy(alpha = 0.2f)),
+        border = BorderStroke(1.dp, color.copy(alpha = 0.4f)),
         modifier = modifier
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Icon(
+                imageVector = when (verdict) {
+                    EvidenceVerdict.SUPPORTED -> Icons.Default.Verified
+                    EvidenceVerdict.MISLEADING, EvidenceVerdict.NOT_SUPPORTED -> Icons.Default.Block
+                    else -> Icons.Default.QuestionMark
+                },
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+                tint = color
+            )
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = stringResource(textRes),
-                style = MaterialTheme.typography.labelSmall,
+                style = MaterialTheme.typography.labelMedium,
                 color = color,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.Black,
+                letterSpacing = 0.5.sp
             )
         }
     }

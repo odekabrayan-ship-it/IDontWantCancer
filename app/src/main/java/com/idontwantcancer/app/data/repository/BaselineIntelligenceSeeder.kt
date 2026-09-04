@@ -224,6 +224,52 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedThread(benzeneSignal)
         seedThread(talcSignal)
         seedThread(pfasSignal)
+
+        // --- TRUTH CHECK REGISTRY SEEDS (Feature 4) ---
+
+        // 10. Cell Phones & 5G
+        val cellPhoneSignal = Signal(
+            id = "seed-cellphone-1",
+            title = "Truth Check: Do Cell Phones Cause Brain Cancer?",
+            summary = "Decades of research and large-scale population studies have found no consistent evidence that the non-ionizing radiation used by cell phones increases the risk of brain tumors.",
+            significance = "This address a common environmental health concern. Scientific consensus from WHO and major cancer institutes indicates that current exposure levels are safe.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.ENVIRONMENT,
+            importance = SignalImportance.LOW,
+            confidence = SignalConfidence.VERY_HIGH,
+            detectedAt = now.minusSeconds(3600 * 300),
+            publishedAt = now.minusSeconds(3600 * 300),
+            recommendedAction = "Follow standard manufacturer safety guidelines. Use hands-free options if you wish to further reduce exposure, though not required for cancer prevention.",
+            source = SignalSource("Agency Truth Check", ""),
+            verdict = EvidenceVerdict.NOT_SUPPORTED,
+            investigatedClaim = "Cell phones and 5G networks cause brain tumors.",
+            scope = GeographicScope.GLOBAL
+        )
+
+        // 11. Sugar "Feeds" Cancer
+        val sugarMythSignal = Signal(
+            id = "seed-sugar-1",
+            title = "Truth Check: Does Sugar 'Feed' Cancer Specifically?",
+            summary = "While all cells (including cancer cells) consume sugar (glucose) for energy, there is no evidence that eating sugar makes cancer grow faster or that avoiding sugar stops it.",
+            significance = "The primary link between sugar and cancer is indirect: high sugar consumption can lead to obesity, which is a known risk factor for 13 types of cancer.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.NUTRITION,
+            importance = SignalImportance.MODERATE,
+            confidence = SignalConfidence.HIGH,
+            detectedAt = now.minusSeconds(3600 * 350),
+            publishedAt = now.minusSeconds(3600 * 350),
+            recommendedAction = "Focus on a balanced eating pattern. Limiting added sugars is recommended for weight management and general health, rather than starving individual cells.",
+            source = SignalSource("Agency Truth Check", ""),
+            verdict = EvidenceVerdict.MISLEADING,
+            investigatedClaim = "Sugar feeds cancer cells and makes them grow faster than healthy cells.",
+            scope = GeographicScope.GLOBAL
+        )
+
+        memory.saveSignal(cellPhoneSignal)
+        memory.saveSignal(sugarMythSignal)
+        
+        seedThread(cellPhoneSignal)
+        seedThread(sugarMythSignal)
     }
 
     private suspend fun seedNutritionTruths() {

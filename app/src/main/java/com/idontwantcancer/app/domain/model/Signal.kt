@@ -32,8 +32,9 @@ data class Signal(
     val isActionable: Boolean = false,
     val actionType: ActionType = ActionType.NONE,
 
-    // Truth Check (Step 222)
+    // Truth Check (Step 222 - Feature 4)
     val verdict: EvidenceVerdict? = null,
+    val investigatedClaim: String? = null,
 
     // Geographical Scope (Step 222 - V2)
     val scope: GeographicScope = GeographicScope.GLOBAL,

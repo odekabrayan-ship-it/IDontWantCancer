@@ -47,6 +47,7 @@ fun SignalEntity.toDomain(): Signal {
         isActionable = isActionable,
         actionType = actionType,
         verdict = verdict,
+        investigatedClaim = investigatedClaim,
         scope = scope,
         targetCountryCode = targetCountryCode,
         affectedIngredients = try {
@@ -86,6 +87,7 @@ fun Signal.toEntity(
         isActionable = isActionable,
         actionType = actionType,
         verdict = verdict,
+        investigatedClaim = investigatedClaim,
         scope = scope,
         targetCountryCode = targetCountryCode,
         affectedIngredientsJson = Json.encodeToString(affectedIngredients),

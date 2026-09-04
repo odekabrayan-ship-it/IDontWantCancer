@@ -131,6 +131,11 @@
     <string name="prevention_section_eat_smarter">Eat Smarter</string>
     <string name="prevention_section_eat_smarter_desc">Nutritional patterns that actually matter</string>
 
+    <!-- Truth Check Detail -->
+    <string name="truth_check_claim_label">The Claim:</string>
+    <string name="truth_check_reality_label">The Evidence:</string>
+    <string name="truth_check_verdict_label">Agency Verdict:</string>
+
     <!-- Truth Detail -->
     <string name="truth_evidence_label">The Evidence:</string>
     <string name="truth_reality_label">The Reality:</string>

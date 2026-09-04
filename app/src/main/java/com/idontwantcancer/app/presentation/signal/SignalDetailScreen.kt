@@ -1,5 +1,6 @@
 package com.idontwantcancer.app.presentation.signal
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -118,6 +119,12 @@ fun SignalDetailView(
             SignalHeader(signal = signal)
         }
 
+        if (signal.investigatedClaim != null) {
+            item {
+                TruthCheckComparisonCard(signal = signal)
+            }
+        }
+
         item {
             IntelligenceSection(
                 title = stringResource(R.string.detail_section_summary),
@@ -158,6 +165,46 @@ fun SignalDetailView(
         
         item {
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun TruthCheckComparisonCard(signal: Signal) {
+    val spacing = LocalSpacing.current
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Column(modifier = Modifier.padding(spacing.cardPadding)) {
+            Text(
+                text = stringResource(R.string.truth_check_claim_label),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.secondary,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = signal.investigatedClaim ?: "",
+                style = MaterialTheme.typography.bodyLarge,
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+            
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stringResource(R.string.truth_check_verdict_label),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                signal.verdict?.let { TruthCheckBadge(it) }
+            }
         }
     }
 }

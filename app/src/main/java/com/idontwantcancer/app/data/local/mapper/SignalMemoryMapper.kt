@@ -49,6 +49,12 @@ fun SignalEntity.toDomain(): Signal {
         verdict = verdict,
         scope = scope,
         targetCountryCode = targetCountryCode,
+        affectedIngredients = try {
+            Json.decodeFromString(affectedIngredientsJson)
+        } catch (e: Exception) {
+            emptyList()
+        },
+        safetyLevel = safetyLevel,
         lastAdmittedStateEntryId = lastAdmittedStateEntryId
     )
 }
@@ -82,6 +88,8 @@ fun Signal.toEntity(
         verdict = verdict,
         scope = scope,
         targetCountryCode = targetCountryCode,
+        affectedIngredientsJson = Json.encodeToString(affectedIngredients),
+        safetyLevel = safetyLevel,
         lifecycle = lifecycle,
         isBriefed = isBriefed,
         firstObservedAt = firstObservedAt,

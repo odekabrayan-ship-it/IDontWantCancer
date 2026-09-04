@@ -2,6 +2,8 @@ package com.idontwantcancer.app.presentation.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -80,6 +82,75 @@ fun SignalCard(
                 Spacer(modifier = Modifier.height(spacing.small))
                 TruthCheckBadge(signal.verdict)
             }
+
+            if (signal.safetyLevel != SafetyLevel.UNDEFINED) {
+                Spacer(modifier = Modifier.height(spacing.small))
+                SafetyLevelBadge(signal.safetyLevel)
+            }
+
+            if (signal.recommendedAction != null) {
+                Spacer(modifier = Modifier.height(spacing.small))
+                Text(
+                    text = stringResource(R.string.agency_recommendation),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = signal.recommendedAction,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+
+/**
+ * A standard badge for displaying an agency safety level.
+ */
+@Composable
+fun SafetyLevelBadge(
+    level: SafetyLevel,
+    modifier: Modifier = Modifier
+) {
+    val (textRes, color) = when (level) {
+        SafetyLevel.VERIFIED_SAFE -> R.string.safety_safe to MaterialTheme.colorScheme.primary
+        SafetyLevel.MONITOR -> R.string.safety_monitor to MaterialTheme.colorScheme.secondary
+        SafetyLevel.CAUTION -> R.string.safety_caution to MaterialTheme.colorScheme.error
+        SafetyLevel.DANGER -> R.string.safety_danger to MaterialTheme.colorScheme.error
+        SafetyLevel.UNDEFINED -> return
+    }
+
+    Surface(
+        color = color.copy(alpha = 0.1f),
+        shape = MaterialTheme.shapes.small,
+        border = BorderStroke(1.dp, color.copy(alpha = 0.3f)),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = when (level) {
+                    SafetyLevel.VERIFIED_SAFE -> Icons.Default.CheckCircle
+                    SafetyLevel.DANGER -> Icons.Default.Dangerous
+                    else -> Icons.Default.Warning
+                },
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = color
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = stringResource(textRes),
+                style = MaterialTheme.typography.labelSmall,
+                color = color,
+                fontWeight = FontWeight.Black
+            )
         }
     }
 }

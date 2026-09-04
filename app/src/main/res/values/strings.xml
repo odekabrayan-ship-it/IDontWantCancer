@@ -89,6 +89,13 @@
     <string name="verdict_misleading">Misleading</string>
     <string name="verdict_not_supported">Not supported</string>
 
+    <!-- Safety Levels -->
+    <string name="safety_safe">Verified Safe</string>
+    <string name="safety_monitor">Monitor</string>
+    <string name="safety_caution">Caution</string>
+    <string name="safety_danger">Danger</string>
+    <string name="agency_recommendation">Agency Recommendation:</string>
+
     <!-- Notifications -->
     <string name="channel_briefing_name">Intelligence Briefings</string>
     <string name="channel_briefing_desc">Periodic summaries of cancer intelligence and research.</string>

@@ -38,6 +38,10 @@ data class Signal(
     // Geographical Scope (Step 222 - V2)
     val scope: GeographicScope = GeographicScope.GLOBAL,
     val targetCountryCode: String? = null,
+
+    // Consumer Safety (Step 222 - Feature 2)
+    val affectedIngredients: List<String> = emptyList(),
+    val safetyLevel: SafetyLevel = SafetyLevel.UNDEFINED,
     
     // Admission Context
     val lastAdmittedStateEntryId: String? = null

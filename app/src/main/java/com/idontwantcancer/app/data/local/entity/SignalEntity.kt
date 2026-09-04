@@ -38,6 +38,10 @@ data class SignalEntity(
     // Geographical Scope (Step 222 - V2)
     val scope: GeographicScope = GeographicScope.GLOBAL,
     val targetCountryCode: String? = null,
+
+    // Consumer Safety (Step 222 - Feature 2)
+    val affectedIngredientsJson: String = "[]", // Serialized list of String
+    val safetyLevel: SafetyLevel = SafetyLevel.UNDEFINED,
     
     // Memory/Lifecycle properties
     val lifecycle: IntelligenceLifecycle,

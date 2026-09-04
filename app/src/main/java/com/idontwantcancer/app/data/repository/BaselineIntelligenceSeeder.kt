@@ -147,6 +147,79 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedThread(nutritionSignal)
         seedThread(truthCheckSignal)
         seedThread(educationSignal)
+
+        // --- NEW CONSUMER SAFETY REGISTRY SEEDS (Feature 2) ---
+
+        // 7. Benzene in Aerosols
+        val benzeneSignal = Signal(
+            id = "seed-benzene-1",
+            title = "Safety Alert: Benzene Contamination in Aerosol Products",
+            summary = "Internal and independent testing has identified the presence of benzene, a known human carcinogen, in various brands of aerosol sunscreens and dry shampoos.",
+            significance = "Benzene is not an intended ingredient but a contaminant from the propellant process. Long-term exposure to benzene is linked to leukemia and other blood disorders.",
+            significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
+            category = SignalCategory.CONSUMER_PRODUCTS,
+            importance = SignalImportance.HIGH,
+            confidence = SignalConfidence.VERY_HIGH,
+            detectedAt = now.minusSeconds(3600 * 168),
+            publishedAt = now.minusSeconds(3600 * 168),
+            recommendedAction = "Check your aerosol sunscreens and dry shampoos for manufacturer recall notices. Switch to lotion or pump-spray alternatives when possible.",
+            source = SignalSource("Consumer Intelligence", ""),
+            isActionable = true,
+            actionType = ActionType.AVOID,
+            scope = GeographicScope.GLOBAL,
+            affectedIngredients = listOf("Benzene", "Aerosol", "Propellant"),
+            safetyLevel = SafetyLevel.DANGER
+        )
+
+        // 8. Asbestos in Talc
+        val talcSignal = Signal(
+            id = "seed-talc-1",
+            title = "Protective Watch: Asbestos Risks in Talc-Based Powders",
+            summary = "Talc mines can be naturally contaminated with asbestos. Authoritative investigations have led to multi-billion dollar settlements and product reformulations for major baby powder brands.",
+            significance = "Asbestos is a Group 1 carcinogen with no safe level of exposure. Inhalation or topical application of contaminated talc increases risk for mesothelioma and ovarian cancer.",
+            significanceLevel = SignificanceOutcome.CRITICAL,
+            category = SignalCategory.CONSUMER_PRODUCTS,
+            importance = SignalImportance.CRITICAL,
+            confidence = SignalConfidence.VERY_HIGH,
+            detectedAt = now.minusSeconds(3600 * 200),
+            publishedAt = now.minusSeconds(3600 * 200),
+            recommendedAction = "The agency recommends switching to cornstarch-based body powders and verifying that cosmetic products are labeled as 'talc-free'.",
+            source = SignalSource("Legal & Regulatory Intelligence", ""),
+            isActionable = true,
+            actionType = ActionType.AVOID,
+            scope = GeographicScope.GLOBAL,
+            affectedIngredients = listOf("Talc", "Asbestos", "Baby Powder", "Cosmetics"),
+            safetyLevel = SafetyLevel.DANGER
+        )
+
+        // 9. PFAS (Forever Chemicals)
+        val pfasSignal = Signal(
+            id = "seed-pfas-1",
+            title = "Environmental Intelligence: PFAS Exposure in Daily Goods",
+            summary = "Per- and polyfluoroalkyl substances (PFAS) are used in non-stick cookware, water-repellent clothing, and food packaging. They persist in the human body and environment almost indefinitely.",
+            significance = "New evidence increasingly links high PFAS exposure to kidney and testicular cancers, as well as immune system suppression.",
+            significanceLevel = SignificanceOutcome.SIGNIFICANT,
+            category = SignalCategory.ENVIRONMENT,
+            importance = SignalImportance.MODERATE,
+            confidence = SignalConfidence.HIGH,
+            detectedAt = now.minusSeconds(3600 * 240),
+            publishedAt = now.minusSeconds(3600 * 240),
+            recommendedAction = "Avoid non-stick cookware with PFOA/PFOS. Opt for stainless steel or cast iron. Look for 'PFAS-free' certifications in clothing and dental floss.",
+            source = SignalSource("Environmental Intelligence", ""),
+            isActionable = true,
+            actionType = ActionType.MONITOR,
+            scope = GeographicScope.GLOBAL,
+            affectedIngredients = listOf("PFAS", "PFOA", "PFOS", "Non-stick", "Forever Chemicals"),
+            safetyLevel = SafetyLevel.CAUTION
+        )
+
+        memory.saveSignal(benzeneSignal)
+        memory.saveSignal(talcSignal)
+        memory.saveSignal(pfasSignal)
+        
+        seedThread(benzeneSignal)
+        seedThread(talcSignal)
+        seedThread(pfasSignal)
     }
 
     private suspend fun seedThread(signal: Signal) {

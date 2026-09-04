@@ -153,7 +153,12 @@ fun SearchScreen(
                             .imePadding()
                         ) {
                             when (val state = uiState) {
-                                is SearchUiState.Idle -> SearchIdleState()
+                                is SearchUiState.Idle -> SearchIdleState(
+                                    onChipClick = {
+                                        query = it
+                                        onInteraction(IntelligenceUiInteraction.PerformSearch(it))
+                                    }
+                                )
                                 is SearchUiState.Searching -> AgencyLoadingState(message = stringResource(R.string.search_loading))
                                 is SearchUiState.Success -> SearchResultsList(
                                 signals = state.signals,
@@ -234,7 +239,8 @@ fun SearchScreen(
 }
 
 @Composable
-private fun SearchIdleState() {
+private fun SearchIdleState(onChipClick: (String) -> Unit) {
+    val spacing = LocalSpacing.current
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -245,11 +251,29 @@ private fun SearchIdleState() {
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(modifier = Modifier.height(LocalSpacing.current.small))
-        Text(stringResource(R.string.search_example_1), style = MaterialTheme.typography.bodyMedium)
-        Text(stringResource(R.string.search_example_2), style = MaterialTheme.typography.bodyMedium)
-        Text(stringResource(R.string.search_example_3), style = MaterialTheme.typography.bodyMedium)
-        Text(stringResource(R.string.search_example_4), style = MaterialTheme.typography.bodyMedium)
+        Spacer(modifier = Modifier.height(spacing.medium))
+        
+        FlowRow(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            val chips = listOf(
+                stringResource(R.string.search_example_1),
+                stringResource(R.string.search_example_2),
+                stringResource(R.string.search_example_3),
+                stringResource(R.string.search_example_4),
+                "Talc", "Benzene", "PFAS"
+            )
+            
+            chips.forEach { label ->
+                SuggestionChip(
+                    onClick = { onChipClick(label) },
+                    label = { Text(label) },
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+            }
+        }
     }
 }
 

@@ -135,6 +135,9 @@
     <string name="prevention_section_environment">Environment Watch</string>
     <string name="prevention_section_environment_desc">Understanding and mitigating external risks</string>
 
+    <string name="prevention_section_education">60-Second Prevention</string>
+    <string name="prevention_section_education_desc">Foundational literacy for long-term health</string>
+
     <!-- Truth Check Detail -->
     <string name="truth_check_claim_label">The Claim:</string>
     <string name="truth_check_reality_label">The Evidence:</string>

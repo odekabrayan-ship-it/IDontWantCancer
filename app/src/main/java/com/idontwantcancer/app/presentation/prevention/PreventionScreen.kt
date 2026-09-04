@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.School
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
+import com.idontwantcancer.app.domain.model.EducationLesson
 import com.idontwantcancer.app.domain.model.NutritionIntelligence
 import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.presentation.components.AgencyLoadingState
@@ -111,6 +113,19 @@ private fun PreventionContent(state: PreventionUiState.Success) {
                 isSelected = false,
                 onClick = { /* Step 223: Detail navigation */ }
             )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(spacing.large))
+            PreventionSectionHeader(
+                title = stringResource(R.string.prevention_section_education),
+                subtitle = stringResource(R.string.prevention_section_education_desc),
+                icon = Icons.Default.School
+            )
+        }
+
+        items(state.educationLessons, key = { it.id }) { lesson ->
+            EducationLessonItem(lesson)
         }
         
         item {
@@ -230,6 +245,97 @@ private fun NutritionTruthItem(truth: NutritionIntelligence) {
                             modifier = Modifier.padding(8.dp)
                         )
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EducationLessonItem(lesson: EducationLesson) {
+    var expanded by remember { mutableStateOf(false) }
+    val spacing = LocalSpacing.current
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spacing.screenPadding, vertical = spacing.extraSmall),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .clickable { expanded = !expanded }
+                .padding(spacing.cardPadding)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = lesson.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(
+                    imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    contentDescription = null
+                )
+            }
+            
+            Text(
+                text = lesson.summary,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+
+            AnimatedVisibility(
+                visible = expanded,
+                enter = expandVertically(),
+                exit = shrinkVertically()
+            ) {
+                Column(modifier = Modifier.padding(top = 16.dp)) {
+                    HorizontalDivider(modifier = Modifier.padding(bottom = 16.dp))
+                    
+                    Text(
+                        text = lesson.content,
+                        style = MaterialTheme.typography.bodyLarge,
+                        lineHeight = 24.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+                    
+                    Surface(
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "KEY TAKEAWAY",
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Black,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = lesson.keyTakeaway,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Source: ${lesson.source}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
         }

@@ -170,12 +170,20 @@ object DatabaseModule {
             }
         }
 
+        val migration18To19 = object : Migration(18, 19) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `education_lessons` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `summary` TEXT NOT NULL, `content` TEXT NOT NULL, `keyTakeaway` TEXT NOT NULL, `source` TEXT NOT NULL, `sourceUrl` TEXT, PRIMARY KEY(`id`))"
+                )
+            }
+        }
+
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
         )
-        .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18)
+        .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18, migration18To19)
         .fallbackToDestructiveMigration()
         .build()
     }
@@ -250,5 +258,11 @@ object DatabaseModule {
     @Singleton
     fun provideNutritionIntelligenceDao(database: AppDatabase): NutritionIntelligenceDao {
         return database.nutritionIntelligenceDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEducationLessonDao(database: AppDatabase): EducationLessonDao {
+        return database.educationLessonDao()
     }
 }

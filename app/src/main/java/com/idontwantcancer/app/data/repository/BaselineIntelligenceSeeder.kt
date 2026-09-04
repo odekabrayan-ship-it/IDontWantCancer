@@ -22,6 +22,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
         if (existingSignals.isNotEmpty()) return
 
         seedNutritionTruths()
+        seedEducationLessons()
         
         val now = Instant.now()
         
@@ -412,6 +413,52 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
         preventionRepository.saveNutritionIntelligence(nutritionTruths)
+    }
+
+    private suspend fun seedEducationLessons() {
+        val lessons = listOf(
+            EducationLesson(
+                id = "edu-1",
+                title = "What is a Carcinogen?",
+                summary = "Learn how authoritative bodies classify cancer-causing substances.",
+                content = "A carcinogen is any agent—substance, radiation, or organism—that can cause cancer. The IARC (WHO) classifies these into groups: Group 1 (Known), Group 2A (Probable), and Group 2B (Possible).",
+                keyTakeaway = "Group 1 means there is sufficient evidence of harm. Group 2A/2B means evidence is still developing.",
+                source = "IARC / WHO"
+            ),
+            EducationLesson(
+                id = "edu-2",
+                title = "Risk vs. Hazard",
+                summary = "Understanding why the amount of exposure is critical.",
+                content = "A 'hazard' is something that has the potential to cause harm. 'Risk' is the likelihood of that harm happening. Sun radiation is a hazard, but your risk depends on how long you stay in the sun without protection.",
+                keyTakeaway = "Being near a hazard doesn't always mean you are at high risk. Exposure level matters.",
+                source = "Agency Literacy"
+            ),
+            EducationLesson(
+                id = "edu-3",
+                title = "The 40% Prevention Rule",
+                summary = "Why your everyday choices are a powerful shield.",
+                content = "Research indicates that approximately 40% of all cancer cases are preventable through lifestyle choices, including avoiding tobacco, maintaining a healthy weight, and limiting UV exposure.",
+                keyTakeaway = "Cancer is not entirely up to chance; many significant risks are within your control.",
+                source = "Cancer Research UK / AICR"
+            ),
+            EducationLesson(
+                id = "edu-4",
+                title = "Why Science Changes",
+                summary = "Understanding the evolution of health recommendations.",
+                content = "As technology improves and more data is collected over decades, scientific consensus evolves. This is why a substance once thought 'safe' may be re-evaluated as evidence of long-term harm emerges.",
+                keyTakeaway = "Changing advice is a sign of a working intelligence system, not a failure of science.",
+                source = "Agency Intelligence"
+            ),
+            EducationLesson(
+                id = "edu-5",
+                title = "The Prevention Mindset",
+                summary = "Moving from fear to consistent, calm protection.",
+                content = "Prevention is not about one-time miracle foods or living in fear. It is about identifying known high-priority risks and consistently reducing your exposure to them over years and decades.",
+                keyTakeaway = "Think in patterns, not in poisons. Consistency is your strongest defense.",
+                source = "Agency Philosophy"
+            )
+        )
+        preventionRepository.saveEducationLessons(lessons)
     }
 
     private suspend fun seedThread(signal: Signal) {

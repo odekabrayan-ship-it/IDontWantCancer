@@ -1,5 +1,6 @@
 package com.idontwantcancer.app.domain.repository
 
+import com.idontwantcancer.app.domain.model.EducationLesson
 import com.idontwantcancer.app.domain.model.NutritionIntelligence
 import kotlinx.coroutines.flow.Flow
 
@@ -16,4 +17,14 @@ interface PreventionRepository {
      * Saves foundational nutritional intelligence.
      */
     suspend fun saveNutritionIntelligence(items: List<NutritionIntelligence>)
+
+    /**
+     * Retrieves all education lessons.
+     */
+    fun getEducationLessons(): Flow<List<EducationLesson>>
+
+    /**
+     * Saves foundational education lessons.
+     */
+    suspend fun saveEducationLessons(items: List<EducationLesson>)
 }

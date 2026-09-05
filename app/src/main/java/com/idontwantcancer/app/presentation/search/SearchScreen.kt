@@ -1,5 +1,6 @@
 package com.idontwantcancer.app.presentation.search
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
@@ -32,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idontwantcancer.app.R
@@ -95,19 +98,26 @@ fun SearchScreen(
                             .padding(innerPadding)
                             .padding(LocalSpacing.current.screenPadding)
                     ) {
-                        Text(
-                            text = stringResource(R.string.search_title),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .padding(bottom = 8.dp)
-                                .semantics { heading() }
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.HealthAndSafety,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = stringResource(R.string.search_title),
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Black,
+                                modifier = Modifier.semantics { heading() }
+                            )
+                        }
                         Text(
                             text = stringResource(R.string.search_subtitle),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(bottom = 24.dp)
+                            modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
                         )
 
                         OutlinedTextField(
@@ -246,32 +256,50 @@ private fun SearchIdleState(onChipClick: (String) -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = stringResource(R.string.search_idle_prompt),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(modifier = Modifier.height(spacing.medium))
-        
-        FlowRow(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Surface(
+            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+            shape = MaterialTheme.shapes.medium,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
         ) {
-            val chips = listOf(
-                stringResource(R.string.search_example_1),
-                stringResource(R.string.search_example_2),
-                stringResource(R.string.search_example_3),
-                stringResource(R.string.search_example_4),
-                "Talc", "Benzene", "PFAS"
-            )
-            
-            chips.forEach { label ->
-                SuggestionChip(
-                    onClick = { onChipClick(label) },
-                    label = { Text(label) },
-                    modifier = Modifier.padding(horizontal = 4.dp)
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.search_idle_prompt),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Black,
+                    letterSpacing = 1.sp
                 )
+                Spacer(modifier = Modifier.height(spacing.medium))
+                
+                FlowRow(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val chips = listOf(
+                        "🧪 " + stringResource(R.string.search_example_1),
+                        "🧴 " + stringResource(R.string.search_example_2),
+                        "🍳 " + stringResource(R.string.search_example_3),
+                        "💄 " + stringResource(R.string.search_example_4)
+                    )
+                    
+                    chips.forEach { label ->
+                        SuggestionChip(
+                            onClick = { onChipClick(label.substring(2)) },
+                            label = { 
+                                Text(
+                                    text = label,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold
+                                ) 
+                            },
+                            modifier = Modifier.padding(horizontal = 4.dp),
+                            shape = MaterialTheme.shapes.large
+                        )
+                    }
+                }
             }
         }
     }

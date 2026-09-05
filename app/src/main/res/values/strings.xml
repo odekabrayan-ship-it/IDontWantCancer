@@ -27,19 +27,19 @@
     <string name="alerts_select_desc">Choose an item from the list to view its complete intelligence briefing.</string>
 
     <!-- Search / Intelligence Inquiry Screen -->
-    <string name="search_title">Intelligence Inquiry</string>
-    <string name="search_subtitle">Ask the Agency a specific claim or topic</string>
-    <string name="search_placeholder">Is it true that [___] causes cancer?</string>
-    <string name="search_clear_content_desc">Clear search</string>
-    <string name="search_loading">Checking the intelligence&#8230;</string>
-    <string name="search_empty_title">No results</string>
-    <string name="search_empty_desc">We don\'t have a meaningful signal on this yet.</string>
-    <string name="search_idle_prompt">Verified evidence for common claims:</string>
-    <string name="search_example_1">Aspartame increases risk</string>
-    <string name="search_example_2">Red meat is carcinogenic</string>
-    <string name="search_example_3">Cell phones cause brain tumors</string>
-    <string name="search_example_4">Air pollution and lung cancer</string>
-    <string name="search_found_header">Intelligence found</string>
+    <string name="search_title">Safety Verification Lab</string>
+    <string name="search_subtitle">Verify product safety against the Agency registry</string>
+    <string name="search_placeholder">Enter product or ingredient name&#8230;</string>
+    <string name="search_clear_content_desc">Clear verification</string>
+    <string name="search_loading">Verifying safety status&#8230;</string>
+    <string name="search_empty_title">Registry scan complete</string>
+    <string name="search_empty_desc">No high-priority carcinogen matches found for this query.</string>
+    <string name="search_idle_prompt">HIGH-PRIORITY INVESTIGATIONS:</string>
+    <string name="search_example_1">Aerosol Sprays</string>
+    <string name="search_example_2">Body Powders</string>
+    <string name="search_example_3">Non-stick Pans</string>
+    <string name="search_example_4">Cosmetics</string>
+    <string name="search_found_header">Safety Directives Found</string>
     <string name="search_select_prompt">Select a search result</string>
     <string name="search_select_desc">Choose an item from the list to view its complete intelligence briefing.</string>
 

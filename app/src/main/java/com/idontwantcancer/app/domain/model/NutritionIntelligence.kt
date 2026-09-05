@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 /**
  * Represents a permanent, evidence-based nutritional truth for cancer prevention.
+ * Every item follows the 4-Point Directive Protocol: Truth, Command, Execution, Shield.
  */
 @Serializable
 data class NutritionIntelligence(
@@ -11,8 +12,10 @@ data class NutritionIntelligence(
     val title: String,
     val summary: String,
     val evidenceLevel: EvidenceStrength,
-    val reality: String,
-    val recommendation: String,
+    val theTruth: String,
+    val theCommand: String,
+    val theExecution: List<String>,
+    val theShield: String,
     val source: String,
     val sourceUrl: String? = null
 )

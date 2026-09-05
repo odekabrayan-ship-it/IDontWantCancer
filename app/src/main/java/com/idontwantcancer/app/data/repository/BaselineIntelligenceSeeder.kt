@@ -389,53 +389,83 @@ class BaselineIntelligenceSeeder @Inject constructor(
         val nutritionTruths = listOf(
             NutritionIntelligence(
                 id = "truth-nutrition-1",
-                title = "Processed Meat and Colorectal Cancer",
-                summary = "Processed meats like bacon, sausages, and ham are classified by IARC as Group 1 carcinogens.",
+                title = "Processed Heme and Nitrates",
+                summary = "Nitrosamines formed during meat processing are Group 1 carcinogens.",
                 evidenceLevel = EvidenceStrength.VERY_HIGH,
-                reality = "There is convincing evidence that processed meat causes colorectal cancer. Each 50-gram portion consumed daily increases the risk by about 18%.",
-                recommendation = "Avoid processed meat where possible. Choose fresh poultry, fish, or plant-based proteins (legumes, lentils) as healthy alternatives.",
+                theTruth = "Heme iron (found in red meat) when processed with nitrates and high heat creates DNA-damaging N-nitroso compounds in the gut.",
+                theCommand = "Reduce intake of meats preserved with salt, smoke, or chemical nitrates.",
+                theExecution = listOf(
+                    "Identify 'Sodium Nitrite' or 'Curing Salt' on local food labels.",
+                    "Choose fresh, unpreserved proteins: poultry, fish, or legumes.",
+                    "Limit traditional salted or smoked delicacies to very rare occasions."
+                ),
+                theShield = "Directly prevents the formation of DNA-mutating nitrosamines in the colon lining.",
                 source = "IARC / World Health Organization",
                 sourceUrl = "https://www.iarc.who.int/wp-content/uploads/2018/07/pr240_E.pdf"
             ),
             NutritionIntelligence(
                 id = "truth-nutrition-2",
-                title = "Alcohol and Multiple Cancer Types",
-                summary = "Alcohol consumption is a known cause of at least seven types of cancer, including breast, liver, and esophageal cancer.",
+                title = "Fiber and Carcinogen Transit",
+                summary = "Dietary fiber dilutes and removes carcinogens from the body.",
                 evidenceLevel = EvidenceStrength.VERY_HIGH,
-                reality = "When it comes to cancer prevention, there is no safe level of alcohol consumption. Risk increases with the amount consumed.",
-                recommendation = "For cancer prevention, it is best not to drink alcohol. If you do, limit consumption to national guidelines (e.g., no more than 2 drinks a day for men, 1 for women).",
-                source = "IARC / WCRF",
-                sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/alcoholic-drinks-and-cancer-risk/"
-            ),
-            NutritionIntelligence(
-                id = "truth-nutrition-3",
-                title = "Dietary Fiber and Colon Protection",
-                summary = "Consuming foods high in dietary fiber, particularly whole grains, strongly reduces the risk of colorectal cancer.",
-                evidenceLevel = EvidenceStrength.VERY_HIGH,
-                reality = "Fiber increases stool bulk and dilutes potential carcinogens in the colon, while whole grains contain various bioactive compounds with anti-cancer properties.",
-                recommendation = "Aim for at least 30g of fiber daily. Switch white bread and pasta for whole-grain versions and include beans and lentils in your meals.",
+                theTruth = "Low fiber intake increases 'transit time,' allowing carcinogens to stay in contact with the colon wall longer, increasing mutation risk.",
+                theCommand = "Shift your daily starch intake to at least 90% whole grain sources.",
+                theExecution = listOf(
+                    "Identify whole versions of your local staple (Whole Wheat, Brown Rice, Sorghum, Teff, Millet).",
+                    "Add one cup of legumes (beans, lentils, peas) to your largest meal.",
+                    "Replace refined 'white' flours with whole-grain alternatives."
+                ),
+                theShield = "Dilutes potential carcinogens and physically sweeps them out of the body faster.",
                 source = "WCRF / AICR",
                 sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/wholegrains-veg-fruit-beans-and-cancer-risk/"
             ),
             NutritionIntelligence(
-                id = "truth-nutrition-4",
-                title = "Red Meat: Probable Carcinogenicity",
-                summary = "Red meat (beef, lamb, pork) is classified as 'probably carcinogenic to humans' (Group 2A).",
+                id = "truth-nutrition-3",
+                title = "Acrylamide: Starch Overheating",
+                summary = "Overcooking starches creates a probable human carcinogen.",
                 evidenceLevel = EvidenceStrength.HIGH,
-                reality = "The evidence for red meat is strong but not as absolute as processed meat. High consumption is linked to colorectal, pancreatic, and prostate cancers.",
-                recommendation = "If you eat red meat, limit it to no more than about 3 portions (350–500g cooked weight) per week.",
-                source = "WCRF / IARC",
-                sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/meat-fish-dairy-and-cancer-risk/"
+                theTruth = "Acrylamide is formed when starchy foods (potatoes, grains) are cooked at very high temperatures (frying, roasting) for too long.",
+                theCommand = "Avoid dark-charred starches in your daily meals.",
+                theExecution = listOf(
+                    "Cook starches to a light golden yellow, not dark brown or black.",
+                    "Soak raw potato slices in water for 15-30 minutes before roasting to reduce acrylamide formation.",
+                    "Store potatoes in a cool, dark place, but NOT the refrigerator, as cold increases sugar levels and potential acrylamide."
+                ),
+                theShield = "Reduces systemic exposure to a known neurotoxin and DNA-damaging compound.",
+                source = "EFSA / FDA Intelligence",
+                sourceUrl = "https://www.efsa.europa.eu/en/topics/topic/acrylamide"
+            ),
+            NutritionIntelligence(
+                id = "truth-nutrition-4",
+                title = "Free Sugar and Systemic Inflammation",
+                summary = "Excess sugar drives cancer through insulin and obesity pathways.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                theTruth = "While sugar doesn't 'poison' cells directly, excess intake triggers high insulin levels and chronic inflammation, which are primary cancer fuelers.",
+                theCommand = "Limit added sweeteners and extracted fruit juices.",
+                theExecution = listOf(
+                    "Prioritize whole, water-rich fruits over syrups or concentrates.",
+                    "Gradually reduce sugar in local beverages (tea, coffee) until it is minimal or absent.",
+                    "Avoid products where sugar or syrup is listed in the first three ingredients."
+                ),
+                theShield = "Normalizes insulin signaling and reduces the chronic cellular stress that allows tumors to grow.",
+                source = "AICR / WCRF",
+                sourceUrl = "https://www.aicr.org/cancer-prevention/recommendations/limit-consumption-of-sugar-sweetened-drinks/"
             ),
             NutritionIntelligence(
                 id = "truth-nutrition-5",
-                title = "Sugar-Sweetened Drinks and Weight-Mediated Risk",
-                summary = "Sugary drinks are a cause of weight gain, overweight, and obesity, which in turn increase the risk of 13 types of cancer.",
-                evidenceLevel = EvidenceStrength.HIGH,
-                reality = "While sugar doesn't 'feed' cancer directly in a unique way, the metabolic changes caused by obesity (like inflammation and insulin levels) are major cancer drivers.",
-                recommendation = "Avoid sugar-sweetened drinks. Choose water or unsweetened tea/coffee instead.",
-                source = "AICR / WCRF",
-                sourceUrl = "https://www.aicr.org/cancer-prevention/recommendations/limit-consumption-of-sugar-sweetened-drinks/"
+                title = "Ethanol: Multi-Type Carcinogen",
+                summary = "Alcohol damages DNA across seven different organ systems.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                theTruth = "When the body breaks down ethanol, it creates acetaldehyde—a potent toxin that breaks DNA strands and prevents cells from repairing the damage.",
+                theCommand = "Minimize or eliminate ethanol consumption for cancer protection.",
+                theExecution = listOf(
+                    "Switch to alcohol-free alternatives during social gatherings.",
+                    "Be aware that there is no safe amount for cancer prevention; every reduction lowers risk.",
+                    "If you choose to drink, stay strictly below national 'low risk' guidelines (e.g., max 1 drink/day)."
+                ),
+                theShield = "Prevents the systemic flooding of your organs with DNA-breaking acetaldehyde.",
+                source = "IARC / WCRF",
+                sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/alcoholic-drinks-and-cancer-risk/"
             )
         )
         preventionRepository.saveNutritionIntelligence(nutritionTruths)

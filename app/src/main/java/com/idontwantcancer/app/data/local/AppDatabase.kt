@@ -28,7 +28,7 @@ import com.idontwantcancer.app.data.local.entity.*
         EducationLessonEntity::class,
         PreventionActionEntity::class
     ],
-    version = 24,
+    version = 25,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

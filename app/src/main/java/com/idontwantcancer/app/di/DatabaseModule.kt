@@ -227,12 +227,22 @@ object DatabaseModule {
             }
         }
 
+        val migration24To25 = object : Migration(24, 25) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                // Drop and recreate to handle schema overhaul for directive protocol
+                db.execSQL("DROP TABLE IF EXISTS `nutrition_intelligence`")
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `nutrition_intelligence` (`id` TEXT NOT NULL, `title` TEXT NOT NULL, `summary` TEXT NOT NULL, `evidenceLevel` TEXT NOT NULL, `theTruth` TEXT NOT NULL, `theCommand` TEXT NOT NULL, `theExecutionJson` TEXT NOT NULL, `theShield` TEXT NOT NULL, `source` TEXT NOT NULL, `sourceUrl` TEXT, PRIMARY KEY(`id`))"
+                )
+            }
+        }
+
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
         )
-        .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18, migration18To19, migration19To20, migration20To21, migration21To22, migration22To23, migration23To24)
+        .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18, migration18To19, migration19To20, migration20To21, migration21To22, migration22To23, migration23To24, migration24To25)
         .fallbackToDestructiveMigration()
         .build()
     }

@@ -260,6 +260,14 @@ private fun NutritionTruthItem(truth: NutritionIntelligence) {
             }
             
             Text(
+                text = truth.theCommand,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+            
+            Text(
                 text = truth.summary,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -281,14 +289,42 @@ private fun NutritionTruthItem(truth: NutritionIntelligence) {
                     )
                     
                     TruthDetailSection(
-                        label = stringResource(R.string.truth_reality_label),
-                        content = truth.reality
+                        label = "THE TRUTH",
+                        content = truth.theTruth
                     )
+
+                    Text(
+                        text = "THE EXECUTION",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    truth.theExecution.forEachIndexed { index, step ->
+                        Row(modifier = Modifier.padding(bottom = 8.dp)) {
+                            Text(
+                                text = "${index + 1}.",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.width(24.dp)
+                            )
+                            Text(
+                                text = step,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
                     
                     TruthDetailSection(
-                        label = stringResource(R.string.truth_recommendation_label),
-                        content = truth.recommendation,
-                        fontWeight = FontWeight.ExtraBold
+                        label = "THE SHIELD",
+                        content = truth.theShield,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = MaterialTheme.colorScheme.primary
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))

@@ -10,8 +10,10 @@ data class NutritionIntelligenceEntity(
     val title: String,
     val summary: String,
     val evidenceLevel: EvidenceStrength,
-    val reality: String,
-    val recommendation: String,
+    val theTruth: String,
+    val theCommand: String,
+    val theExecutionJson: String, // Serialized list of String
+    val theShield: String,
     val source: String,
     val sourceUrl: String?
 )

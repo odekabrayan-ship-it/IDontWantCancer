@@ -61,17 +61,28 @@ fun PrimaryDirectiveCard(
 
             Text(
                 text = signal.theCommand ?: signal.title,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.ExtraBold,
-                lineHeight = 32.sp
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Black,
+                lineHeight = 34.sp
             )
 
-            Spacer(modifier = Modifier.height(spacing.small))
+            if (signal.theCommand != null) {
+                Text(
+                    text = "Intelligence: ${signal.title}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = colorScheme.error.copy(alpha = 0.8f),
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(spacing.medium))
 
             Text(
-                text = signal.summary,
+                text = signal.theTruth ?: signal.summary,
                 style = MaterialTheme.typography.bodyLarge,
-                color = colorScheme.onSurfaceVariant
+                color = colorScheme.onSurface,
+                lineHeight = 24.sp
             )
 
             if (signal.theShield != null) {

@@ -99,9 +99,9 @@ private fun SanctuaryContent(state: HealingUiState.Success, viewModel: HealingVi
 
         item(span = { GridItemSpan(2) }) {
             Text(
-                text = stringResource(R.string.sanctuary_section_treatment),
+                text = "YOUR TREATMENT STEP-BY-STEP",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.ExtraBold,
+                fontWeight = FontWeight.Black,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(top = spacing.medium)
             )
@@ -117,13 +117,13 @@ private fun SanctuaryContent(state: HealingUiState.Success, viewModel: HealingVi
         item(span = { GridItemSpan(2) }) {
             Column(modifier = Modifier.padding(top = spacing.large)) {
                 Text(
-                    text = stringResource(R.string.sanctuary_section_symptoms),
+                    text = "IF YOU ARE FEELING UNWELL",
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = stringResource(R.string.sanctuary_symptoms_desc),
+                    text = "Immediate simple steps for treatment side-effects",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -140,13 +140,13 @@ private fun SanctuaryContent(state: HealingUiState.Success, viewModel: HealingVi
         item(span = { GridItemSpan(2) }) {
             Column(modifier = Modifier.padding(top = spacing.large)) {
                 Text(
-                    text = "DECEPTION SHIELD",
+                    text = "PROTECTION FROM FALSE CURES",
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.ExtraBold,
+                    fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.error
                 )
                 Text(
-                    text = "Protecting you from miracle cure scams",
+                    text = "Agency verification of common patient myths",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

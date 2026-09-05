@@ -66,14 +66,16 @@ fun SignalCard(
             Spacer(modifier = Modifier.height(spacing.small))
             Text(
                 text = signal.theCommand ?: signal.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.ExtraBold
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.onSurface
             )
             if (signal.theCommand != null) {
                 Text(
                     text = signal.title,
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondary,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 2.dp)
                 )
             }

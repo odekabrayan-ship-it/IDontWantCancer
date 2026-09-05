@@ -123,8 +123,8 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
         item {
             Spacer(modifier = Modifier.height(spacing.large))
             PreventionSectionHeader(
-                title = stringResource(R.string.prevention_section_eat_smarter),
-                subtitle = stringResource(R.string.prevention_section_eat_smarter_desc)
+                title = "FOOD & NUTRITION SAFETY",
+                subtitle = "Scientific patterns for your daily meals"
             )
         }
 
@@ -135,8 +135,8 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
         item {
             Spacer(modifier = Modifier.height(spacing.large))
             PreventionSectionHeader(
-                title = stringResource(R.string.prevention_section_preparation),
-                subtitle = stringResource(R.string.prevention_section_preparation_desc),
+                title = "COOKING & STORAGE SAFETY",
+                subtitle = "How to prepare food without creating risks",
                 icon = Icons.Default.Fireplace
             )
         }
@@ -148,8 +148,8 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
         item {
             Spacer(modifier = Modifier.height(spacing.large))
             PreventionSectionHeader(
-                title = "ENVIRONMENTAL SECURITY",
-                subtitle = "Practical directives for your surroundings",
+                title = "YOUR HOME & SURROUNDINGS",
+                subtitle = "Practical steps for a safe environment",
                 icon = Icons.Default.Public
             )
         }

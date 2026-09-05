@@ -82,6 +82,7 @@ fun HomeScreen(
                     HomeContent(
                         briefing = state.briefing,
                         userCountry = state.userCountry,
+                        adoptedActions = state.adoptedActions,
                         reconciliations = state.reconciliations,
                         finality = state.finality,
                         onInteraction = onInteraction
@@ -131,6 +132,7 @@ private fun HomeHeader(
 private fun HomeContent(
     briefing: IntelligenceBriefing,
     userCountry: String,
+    adoptedActions: List<PreventionAction>,
     reconciliations: Map<String, IntelligenceReentryReconciliationPresentationContract>,
     finality: CommandConsumptionFinalityPresentationContract,
     onInteraction: (IntelligenceUiInteraction) -> Unit
@@ -141,7 +143,15 @@ private fun HomeContent(
     val signals = remember(briefing) { 
         briefing.items.mapNotNull { briefing.signals[it.intelligenceId] } 
     }
-    val additionalSignals = remember(signals) { signals.drop(1) }
+    
+    // Stage 2 Overhaul: Identify Critical Directives (Importance >= HIGH)
+    val primaryDirectives = remember(signals) {
+        signals.filter { it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH }
+    }
+    val otherSignals = remember(signals, primaryDirectives) {
+        signals.filter { it !in primaryDirectives }
+    }
+    
     val isClear = remember(briefing, signals) { 
         briefing.status == BriefingStatus.NO_MAJOR_CHANGES && signals.isEmpty() 
     }
@@ -162,94 +172,91 @@ private fun HomeContent(
                 OperationalFinalityIndicator(finality)
             }
 
-            val topSignal = signals.firstOrNull()
-            if (topSignal != null) {
+            if (primaryDirectives.isNotEmpty()) {
                 item {
-                    BriefingSummarySection(
-                        headline = topSignal.title,
-                        summary = topSignal.summary,
-                        reconciliation = reconciliations[topSignal.id]
+                    SectionHeader(title = stringResource(R.string.section_directives))
+                }
+                items(primaryDirectives, key = { "directive-${it.id}" }) { signal ->
+                    PrimaryDirectiveCard(
+                        signal = signal,
+                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
                     )
                 }
             }
 
-            val additionalSignals = signals.drop(1)
-            if (additionalSignals.isNotEmpty()) {
+            if (adoptedActions.isNotEmpty()) {
+                item {
+                    SectionHeader(title = stringResource(R.string.section_prevention_focus))
+                }
+                items(adoptedActions, key = { "adopted-${it.id}" }) { action ->
+                    AdoptedActionCard(action)
+                }
+            }
+
+            if (otherSignals.isNotEmpty()) {
                 item {
                     SectionHeader(title = stringResource(R.string.section_additional_intelligence))
                 }
                 
-                if (layout == AdaptiveLayoutType.Compact) {
-                    items(
-                        items = additionalSignals,
-                        key = { it.id }
-                    ) { signal ->
-                        SignalCard(
-                            signal = signal,
-                            isSelected = false,
-                            onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) },
-                            reconciliationIndicator = {
-                                if (reconciliations[signal.id] is IntelligenceReentryReconciliationPresentationContract.InconsistentMismatch) {
-                                    Spacer(modifier = Modifier.height(spacing.small))
-                                    CompactReconciliationIndicator()
-                                }
-                            }
-                        )
-                    }
-                } else {
-                    // Multi-column grid for larger screens
-                    item {
-                        FlowRow(
-                            modifier = Modifier.padding(horizontal = spacing.small),
-                            maxItemsInEachRow = if (layout == AdaptiveLayoutType.Expanded) 3 else 2
-                        ) {
-                            additionalSignals.forEach { signal ->
-                                Box(modifier = Modifier.fillMaxWidth(if (layout == AdaptiveLayoutType.Expanded) 0.33f else 0.5f)) {
-                                    SignalCard(
-                                        signal = signal,
-                                        isSelected = false,
-                                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) },
-                                        reconciliationIndicator = {
-                                            if (reconciliations[signal.id] is IntelligenceReentryReconciliationPresentationContract.InconsistentMismatch) {
-                                                Spacer(modifier = Modifier.height(spacing.small))
-                                                CompactReconciliationIndicator()
-                                            }
-                                        }
-                                    )
-                                }
+                items(
+                    items = otherSignals,
+                    key = { it.id }
+                ) { signal ->
+                    SignalCard(
+                        signal = signal,
+                        isSelected = false,
+                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) },
+                        reconciliationIndicator = {
+                            if (reconciliations[signal.id] is IntelligenceReentryReconciliationPresentationContract.InconsistentMismatch) {
+                                Spacer(modifier = Modifier.height(spacing.small))
+                                CompactReconciliationIndicator()
                             }
                         }
-                    }
+                    )
                 }
             }
+        }
+    }
+}
 
-            if (briefing.actionItems.isNotEmpty()) {
-                item {
-                    SectionHeader(title = stringResource(R.string.section_prevention_focus))
-                }
-                
-                if (layout == AdaptiveLayoutType.Compact) {
-                    items(
-                        items = briefing.actionItems,
-                        key = { it.title } // Assuming title is unique for action items
-                    ) { action ->
-                        ActionItem(action = action)
-                    }
-                } else {
-                    item {
-                        FlowRow(
-                            modifier = Modifier.padding(horizontal = spacing.small),
-                            maxItemsInEachRow = 2
-                        ) {
-                            briefing.actionItems.forEach { action ->
-                                Box(modifier = Modifier.fillMaxWidth(0.5f)) {
-                                    ActionItem(action = action)
-                                }
-                            }
-                        }
-                    }
-                }
+@Composable
+private fun AdoptedActionCard(action: PreventionAction) {
+    val spacing = LocalSpacing.current
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spacing.screenPadding, vertical = spacing.extraSmall),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+    ) {
+        Row(
+            modifier = Modifier.padding(spacing.cardPadding),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val icon = when (action.iconName) {
+                "smoke_free" -> Icons.Default.SmokeFree
+                "sunny" -> Icons.Default.WbSunny
+                "no_drinks" -> Icons.Default.NoDrinks
+                "directions_run" -> Icons.Default.DirectionsRun
+                "grass" -> Icons.Default.Grass
+                "restaurant" -> Icons.Default.Restaurant
+                else -> Icons.Default.Verified
             }
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = action.title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
     }
 }
@@ -274,7 +281,7 @@ private fun BriefingStatusSection(status: BriefingStatus) {
         )
     }
 
-            Surface(
+    Surface(
         color = color.copy(alpha = 0.1f),
         shape = MaterialTheme.shapes.medium,
         modifier = Modifier
@@ -304,47 +311,6 @@ private fun BriefingStatusSection(status: BriefingStatus) {
 }
 
 @Composable
-private fun BriefingSummarySection(
-    headline: String, 
-    summary: String,
-    reconciliation: IntelligenceReentryReconciliationPresentationContract?
-) {
-    val spacing = LocalSpacing.current
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spacing.screenPadding, vertical = spacing.cardPadding)
-    ) {
-        Text(
-            text = stringResource(R.string.section_what_changed),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.ExtraBold,
-            letterSpacing = 2.sp
-        )
-        Spacer(modifier = Modifier.height(spacing.cardPadding))
-        Text(
-            text = headline,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            lineHeight = 32.sp
-        )
-        Spacer(modifier = Modifier.height(spacing.small))
-        Text(
-            text = summary,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            lineHeight = 24.sp
-        )
-        
-        if (reconciliation is IntelligenceReentryReconciliationPresentationContract.InconsistentMismatch) {
-            Spacer(modifier = Modifier.height(spacing.cardPadding))
-            ReconciliationWarning(reconciliation)
-        }
-    }
-}
-
-@Composable
 private fun SectionHeader(title: String) {
     val spacing = LocalSpacing.current
     Text(
@@ -356,30 +322,6 @@ private fun SectionHeader(title: String) {
             .padding(start = spacing.screenPadding, end = spacing.screenPadding, top = spacing.large, bottom = spacing.small)
             .semantics { heading() }
     )
-}
-
-@Composable
-private fun ActionItem(action: BriefingAction) {
-    val spacing = LocalSpacing.current
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spacing.screenPadding, vertical = spacing.small),
-        border = CardDefaults.outlinedCardBorder()
-    ) {
-        Column(modifier = Modifier.padding(spacing.cardPadding)) {
-            Text(
-                text = action.title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = action.description,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
 }
 
 @Composable

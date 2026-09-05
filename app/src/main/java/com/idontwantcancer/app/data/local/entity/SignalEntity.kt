@@ -43,6 +43,12 @@ data class SignalEntity(
     // Consumer Safety (Step 222 - Feature 2)
     val affectedIngredientsJson: String = "[]", // Serialized list of String
     val safetyLevel: SafetyLevel = SafetyLevel.UNDEFINED,
+
+    // Directive Protocol (Step 222 - Overhaul Stage 1)
+    val theTruth: String? = null,
+    val theCommand: String? = null,
+    val theExecutionJson: String = "[]", // Serialized list of String
+    val theShield: String? = null,
     
     // Memory/Lifecycle properties
     val lifecycle: IntelligenceLifecycle,

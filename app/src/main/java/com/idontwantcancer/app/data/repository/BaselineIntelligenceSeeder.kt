@@ -11,6 +11,7 @@ import javax.inject.Singleton
 /**
  * Responsible for seeding the agency with verified baseline intelligence 
  * to ensure a professional first-run experience.
+ * Every signal follows the 4-Point Directive Protocol: Truth, Command, Execution, Shield.
  */
 @Singleton
 class BaselineIntelligenceSeeder @Inject constructor(
@@ -30,145 +31,154 @@ class BaselineIntelligenceSeeder @Inject constructor(
         // 1. FDA Food Recall Baseline
         val fdaRecall = Signal(
             id = "seed-fda-1",
-            title = "Class I Recall: Listeria monocytogenes in Frozen Vegetables",
-            summary = "The FDA has issued a Class I recall for several brands of frozen organic vegetables due to potential contamination with Listeria monocytogenes. Class I is the most urgent recall category.",
-            significance = "Listeria contamination in ready-to-eat vegetables represents an immediate health risk, particularly for immunocompromised individuals and pregnant women.",
+            title = "Class I Recall: Listeria in Frozen Vegetables",
+            summary = "The FDA has issued a Class I recall for several brands of frozen organic vegetables due to potential contamination with Listeria monocytogenes.",
+            theTruth = "Testing confirmed Listeria monocytogenes in specific batches of frozen organic peas and corn. Listeria is a resilient bacteria that can survive freezing and cause serious infection.",
+            theCommand = "Check your freezer for the affected products immediately and do not consume them.",
+            theExecution = listOf(
+                "Locate any frozen organic vegetable bags in your freezer.",
+                "Check the 'Best By' dates and 'Lot Codes' against the official FDA list (linked in source).",
+                "If matched, dispose of the product in a sealed bag or return it to the place of purchase.",
+                "Sanitize any freezer drawers or counters that touched the packaging."
+            ),
+            theShield = "Listeriosis can cause severe illness in pregnant women, newborns, and the elderly. Immediate avoidance prevents potential systemic infection.",
             significanceLevel = SignificanceOutcome.CRITICAL,
             category = SignalCategory.FOOD,
             importance = SignalImportance.CRITICAL,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 24),
             publishedAt = now.minusSeconds(3600 * 24),
-            recommendedAction = "Immediately check your freezer for the affected brand names listed in the full briefing and return them for a refund.",
             source = SignalSource("U.S. FDA", "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts"),
             isActionable = true,
             actionType = ActionType.AVOID,
             scope = GeographicScope.NATIONAL,
-            targetCountryCode = "US"
+            targetCountryCode = "US",
+            safetyLevel = SafetyLevel.DANGER
         )
 
         // 2. IARC Classification Baseline
         val iarcSignal = Signal(
             id = "seed-iarc-1",
-            title = "IARC Monograph: Processed Meat Classified as Group 1 Carcinogen",
-            summary = "The International Agency for Research on Cancer (IARC) has classified processed meat as carcinogenic to humans (Group 1), based on sufficient evidence that it causes colorectal cancer.",
-            significance = "This classification places processed meat in the same category as tobacco and asbestos in terms of the strength of evidence for carcinogenicity.",
+            title = "IARC Monograph: Processed Meat a Group 1 Carcinogen",
+            summary = "The IARC has classified processed meat as carcinogenic to humans (Group 1), linked primarily to colorectal cancer.",
+            theTruth = "Strong evidence from over 800 studies confirms that regular consumption of processed meat causes colorectal cancer. Chemicals used in processing (like nitrates) form carcinogenic compounds in the body.",
+            theCommand = "Minimize or eliminate processed meats from your daily eating pattern.",
+            theExecution = listOf(
+                "Identify processed meats in your diet: bacon, sausages, ham, deli meats, and hot dogs.",
+                "Replace these with fresh proteins: chicken breast, fish, beans, or lentils.",
+                "Reserve processed meats for very occasional use rather than daily consumption."
+            ),
+            theShield = "Reducing processed meat intake directly lowers the exposure of the colon lining to DNA-damaging N-nitroso compounds.",
             significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
             category = SignalCategory.RESEARCH,
             importance = SignalImportance.HIGH,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 48),
             publishedAt = now.minusSeconds(3600 * 48),
-            recommendedAction = "Consider limiting consumption of processed meats (like sausages, ham, and bacon) as part of a long-term cancer prevention strategy.",
             source = SignalSource("IARC / WHO", "https://www.iarc.who.int/news-events/iarc-monographs-evaluate-consumption-of-red-meat-and-processed-meat/"),
             isActionable = true,
             actionType = ActionType.MONITOR,
-            scope = GeographicScope.GLOBAL
+            scope = GeographicScope.GLOBAL,
+            safetyLevel = SafetyLevel.CAUTION
         )
 
         // 3. Screening Guideline Baseline
         val screeningSignal = Signal(
             id = "seed-screening-1",
-            title = "Colorectal Cancer Screening Starting Age Lowered to 45",
-            summary = "Authoritative clinical guidelines now recommend that colorectal cancer screening for individuals at average risk should begin at age 45, rather than 50.",
-            significance = "This change follows a significant increase in colorectal cancer rates among younger adults and is expected to save lives through earlier detection.",
+            title = "Colorectal Cancer Screening Starting Age: 45",
+            summary = "Authoritative clinical guidelines now recommend that colorectal cancer screening for average-risk individuals should begin at age 45.",
+            theTruth = "Incidence of 'early-onset' colorectal cancer in adults under 50 has risen sharply. Screening at 45 catches precancerous polyps before they turn into cancer.",
+            theCommand = "If you are 45 or older, schedule a consultation for colorectal cancer screening.",
+            theExecution = listOf(
+                "Confirm your age and risk factors (family history, previous polyps).",
+                "Contact your primary care provider to discuss screening options: Colonoscopy or stool-based tests (FIT/Cologuard).",
+                "Schedule the procedure and follow the preparation instructions precisely."
+            ),
+            theShield = "Early screening allows for the removal of polyps, preventing cancer from ever starting. It is one of the most effective prevention actions available.",
             significanceLevel = SignificanceOutcome.SIGNIFICANT,
             category = SignalCategory.SCREENING,
             importance = SignalImportance.HIGH,
             confidence = SignalConfidence.HIGH,
             detectedAt = now.minusSeconds(3600 * 72),
             publishedAt = now.minusSeconds(3600 * 72),
-            recommendedAction = "If you are 45 or older, discuss colorectal cancer screening options with your primary care provider.",
             source = SignalSource("USPSTF", "https://www.uspreventiveservicestaskforce.org/"),
             isActionable = true,
             actionType = ActionType.SCREEN,
-            scope = GeographicScope.GLOBAL
+            scope = GeographicScope.GLOBAL,
+            safetyLevel = SafetyLevel.MONITOR
         )
 
-        // 4. Nutrition Intelligence Baseline (Step 222)
+        // 4. Nutrition Intelligence Baseline
         val nutritionSignal = Signal(
             id = "seed-nutrition-1",
-            title = "Evidence-Based Guidance: Whole Grains and Cancer Prevention",
-            summary = "Strong evidence indicates that consuming whole grains reduces the risk of colorectal cancer. This is one of the most consistent findings in nutritional oncology.",
-            significance = "Unlike many dietary claims, the link between whole grain fiber and reduced cancer risk is supported by a large body of corroborating research from multiple international agencies.",
+            title = "Evidence-Based Guidance: Whole Grains and Prevention",
+            summary = "Strong evidence indicates that consuming whole grains reduces the risk of colorectal cancer.",
+            theTruth = "Whole grains are rich in dietary fiber and bioactive compounds. Fiber dilutes carcinogens and speeds their transit through the colon.",
+            theCommand = "Shift your starch intake to at least 90% whole grain sources.",
+            theExecution = listOf(
+                "Check labels for '100% Whole Wheat' or 'Whole Grain'.",
+                "Replace white rice with brown or wild rice.",
+                "Incorporate oats, quinoa, or barley into at least one meal per day."
+            ),
+            theShield = "High fiber intake maintains gut health and reduces the time your digestive tract is exposed to potential dietary carcinogens.",
             significanceLevel = SignificanceOutcome.SIGNIFICANT,
             category = SignalCategory.NUTRITION,
             importance = SignalImportance.MODERATE,
             confidence = SignalConfidence.HIGH,
             detectedAt = now.minusSeconds(3600 * 96),
             publishedAt = now.minusSeconds(3600 * 96),
-            recommendedAction = "Integrate whole grains (oats, brown rice, whole wheat) into your daily eating pattern as a sustainable prevention action.",
             source = SignalSource("WCRF / AICR", "https://www.wcrf.org/diet-activity-and-cancer/dietary-patterns/eat-wholegrains-vegetables-fruit-and-beans/"),
             isActionable = true,
             actionType = ActionType.MONITOR,
-            scope = GeographicScope.GLOBAL
+            scope = GeographicScope.GLOBAL,
+            safetyLevel = SafetyLevel.VERIFIED_SAFE
         )
 
-        // 5. Truth Check Baseline (Step 222)
+        // 5. Truth Check Baseline
         val truthCheckSignal = Signal(
             id = "seed-truth-1",
             title = "Claim Check: Aspartame and Cancer Risk",
-            summary = "Following a review of available evidence, the IARC classified aspartame as 'possibly carcinogenic to humans' (Group 2B), while the JECFA reaffirmed the acceptable daily intake level.",
-            significance = "This update provides clarity on a widely circulated health claim. The 'possibly carcinogenic' label means evidence is limited, and current consumption levels remain within safety limits according to food safety authorities.",
+            summary = "IARC classified aspartame as 'possibly carcinogenic' (2B), but safety limits remain unchanged.",
+            theTruth = "The classification is based on 'limited' evidence. Authorities like JECFA maintain that the acceptable daily intake (40mg/kg) is safe.",
+            theCommand = "Maintain current consumption levels if within safety limits, or opt for water as a superior alternative.",
+            theExecution = listOf(
+                "Estimate your intake: A typical diet soda contains ~200mg. A 70kg adult would need 14 cans daily to exceed the limit.",
+                "If you consume large amounts, consider replacing some with sparkling water or tea.",
+                "Do not switch back to sugar-sweetened drinks, as they carry higher obesity-related risks."
+            ),
+            theShield = "This intelligence prevents unnecessary alarm while encouraging a shift toward safer, non-additive beverages.",
             significanceLevel = SignificanceOutcome.SIGNIFICANT,
             category = SignalCategory.RESEARCH,
             importance = SignalImportance.MODERATE,
             confidence = SignalConfidence.HIGH,
             detectedAt = now.minusSeconds(3600 * 120),
             publishedAt = now.minusSeconds(3600 * 120),
-            recommendedAction = "Maintain consumption within the established acceptable daily intake (ADI) of 40 mg/kg of body weight.",
             source = SignalSource("IARC / WHO", "https://www.who.int/news/item/14-07-2023-aspartame-hazard-and-risk-assessment-results-released"),
             verdict = EvidenceVerdict.PARTLY_SUPPORTED,
-            scope = GeographicScope.GLOBAL
+            investigatedClaim = "Aspartame in diet soda causes cancer and should be banned.",
+            scope = GeographicScope.GLOBAL,
+            safetyLevel = SafetyLevel.MONITOR
         )
 
-        // 6. Education Baseline (Step 222)
-        val educationSignal = Signal(
-            id = "seed-edu-1",
-            title = "Intelligence Foundation: What is a Carcinogen?",
-            summary = "A carcinogen is any substance or agent that can cause cancer. These are classified by authoritative bodies like the IARC based on the strength of evidence.",
-            significance = "Understanding what a carcinogen is—and how they are classified—helps you navigate health claims and understand why certain products are recalled or regulated.",
-            significanceLevel = SignificanceOutcome.SIGNIFICANT,
-            category = SignalCategory.RESEARCH,
-            importance = SignalImportance.LOW,
-            confidence = SignalConfidence.VERY_HIGH,
-            detectedAt = now.minusSeconds(3600 * 144),
-            publishedAt = now.minusSeconds(3600 * 144),
-            source = SignalSource("Agency Education", ""),
-            isActionable = false,
-            scope = GeographicScope.GLOBAL
-        )
-
-        memory.saveSignal(fdaRecall)
-        memory.saveSignal(iarcSignal)
-        memory.saveSignal(screeningSignal)
-        memory.saveSignal(nutritionSignal)
-        memory.saveSignal(truthCheckSignal)
-        memory.saveSignal(educationSignal)
-
-        // Seed corresponding threads to ensure they appear in briefings
-        seedThread(fdaRecall)
-        seedThread(iarcSignal)
-        seedThread(screeningSignal)
-        seedThread(nutritionSignal)
-        seedThread(truthCheckSignal)
-        seedThread(educationSignal)
-
-        // --- NEW CONSUMER SAFETY REGISTRY SEEDS (Feature 2) ---
-
-        // 7. Benzene in Aerosols
+        // 6. Benzene in Aerosols
         val benzeneSignal = Signal(
             id = "seed-benzene-1",
-            title = "Safety Alert: Benzene Contamination in Aerosol Products",
-            summary = "Internal and independent testing has identified the presence of benzene, a known human carcinogen, in various brands of aerosol sunscreens and dry shampoos.",
-            significance = "Benzene is not an intended ingredient but a contaminant from the propellant process. Long-term exposure to benzene is linked to leukemia and other blood disorders.",
+            title = "Safety Alert: Benzene in Aerosol Products",
+            summary = "Benzene contamination has been identified in various aerosol sunscreens and dry shampoos.",
+            theTruth = "Benzene is a human carcinogen linked to leukemia. It was found as a contaminant in the propellant used for spray products.",
+            theCommand = "Stop using aerosolized sunscreens and dry shampoos until you verify they are benzene-free.",
+            theExecution = listOf(
+                "Check your bathroom and gym bag for aerosol spray cans.",
+                "Compare the brand and lot number against the Valisure or FDA recall lists.",
+                "Switch to lotion-based sunscreens or powder/non-aerosol dry shampoos."
+            ),
+            theShield = "Eliminating aerosol use prevents the inhalation of benzene-contaminated particles, removing a direct path to the bloodstream.",
             significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
             category = SignalCategory.CONSUMER_PRODUCTS,
             importance = SignalImportance.HIGH,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 168),
             publishedAt = now.minusSeconds(3600 * 168),
-            recommendedAction = "Check your aerosol sunscreens and dry shampoos for manufacturer recall notices. Switch to lotion or pump-spray alternatives when possible.",
             source = SignalSource("Consumer Intelligence", ""),
             isActionable = true,
             actionType = ActionType.AVOID,
@@ -177,189 +187,198 @@ class BaselineIntelligenceSeeder @Inject constructor(
             safetyLevel = SafetyLevel.DANGER
         )
 
-        // 8. Asbestos in Talc
+        // 7. Asbestos in Talc
         val talcSignal = Signal(
             id = "seed-talc-1",
-            title = "Protective Watch: Asbestos Risks in Talc-Based Powders",
-            summary = "Talc mines can be naturally contaminated with asbestos. Authoritative investigations have led to multi-billion dollar settlements and product reformulations for major baby powder brands.",
-            significance = "Asbestos is a Group 1 carcinogen with no safe level of exposure. Inhalation or topical application of contaminated talc increases risk for mesothelioma and ovarian cancer.",
+            title = "Protective Watch: Asbestos in Talc-Based Powders",
+            summary = "Talc can be naturally contaminated with asbestos, a Group 1 carcinogen.",
+            theTruth = "Asbestos and talc often occur together in the earth. Contaminated talc used in body powders is linked to mesothelioma and ovarian cancer.",
+            theCommand = "Discontinue use of talc-based body powders, especially for personal hygiene.",
+            theExecution = listOf(
+                "Check the ingredient list for 'Talc' or 'Talcum Powder'.",
+                "Switch to cornstarch-based alternatives.",
+                "Ensure any cosmetic powders are explicitly labeled as 'Talc-Free'."
+            ),
+            theShield = "Avoiding talc removes the risk of inhaling or absorbing microscopic asbestos fibers that cause permanent DNA damage.",
             significanceLevel = SignificanceOutcome.CRITICAL,
             category = SignalCategory.CONSUMER_PRODUCTS,
             importance = SignalImportance.CRITICAL,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 200),
             publishedAt = now.minusSeconds(3600 * 200),
-            recommendedAction = "The agency recommends switching to cornstarch-based body powders and verifying that cosmetic products are labeled as 'talc-free'.",
             source = SignalSource("Legal & Regulatory Intelligence", ""),
             isActionable = true,
             actionType = ActionType.AVOID,
             scope = GeographicScope.GLOBAL,
-            affectedIngredients = listOf("Talc", "Asbestos", "Baby Powder", "Cosmetics"),
+            affectedIngredients = listOf("Talc", "Asbestos", "Baby Powder"),
             safetyLevel = SafetyLevel.DANGER
         )
 
-        // 9. PFAS (Forever Chemicals)
+        // 8. PFAS (Forever Chemicals)
         val pfasSignal = Signal(
             id = "seed-pfas-1",
-            title = "Environmental Intelligence: PFAS Exposure in Daily Goods",
-            summary = "Per- and polyfluoroalkyl substances (PFAS) are used in non-stick cookware, water-repellent clothing, and food packaging. They persist in the human body and environment almost indefinitely.",
-            significance = "New evidence increasingly links high PFAS exposure to kidney and testicular cancers, as well as immune system suppression.",
+            title = "Environmental Intelligence: PFAS Exposure",
+            summary = "PFAS chemicals used in non-stick and water-repellent goods persist in the body.",
+            theTruth = "PFAS exposure is linked to kidney and testicular cancers. These 'forever chemicals' are found in many household products and water supplies.",
+            theCommand = "Reduce your household exposure to PFAS by phasing out specific products.",
+            theExecution = listOf(
+                "Replace old non-stick (Teflon) cookware with stainless steel or cast iron.",
+                "Avoid grease-resistant fast-food packaging and microwave popcorn bags.",
+                "Use water filtration (carbon or reverse osmosis) if local supplies are known to contain PFAS."
+            ),
+            theShield = "Lowering PFAS levels in your environment reduces the cumulative toxic load on your organs over time.",
             significanceLevel = SignificanceOutcome.SIGNIFICANT,
             category = SignalCategory.ENVIRONMENT,
             importance = SignalImportance.MODERATE,
             confidence = SignalConfidence.HIGH,
             detectedAt = now.minusSeconds(3600 * 240),
             publishedAt = now.minusSeconds(3600 * 240),
-            recommendedAction = "Avoid non-stick cookware with PFOA/PFOS. Opt for stainless steel or cast iron. Look for 'PFAS-free' certifications in clothing and dental floss.",
             source = SignalSource("Environmental Intelligence", ""),
             isActionable = true,
             actionType = ActionType.MONITOR,
             scope = GeographicScope.GLOBAL,
-            affectedIngredients = listOf("PFAS", "PFOA", "PFOS", "Non-stick", "Forever Chemicals"),
+            affectedIngredients = listOf("PFAS", "PFOA", "PFOS", "Non-stick"),
             safetyLevel = SafetyLevel.CAUTION
         )
 
-        memory.saveSignal(benzeneSignal)
-        memory.saveSignal(talcSignal)
-        memory.saveSignal(pfasSignal)
-        
-        seedThread(benzeneSignal)
-        seedThread(talcSignal)
-        seedThread(pfasSignal)
-
-        // --- TRUTH CHECK REGISTRY SEEDS (Feature 4) ---
-
-        // 10. Cell Phones & 5G
+        // 9. Cell Phones & 5G
         val cellPhoneSignal = Signal(
             id = "seed-cellphone-1",
-            title = "Truth Check: Do Cell Phones Cause Brain Cancer?",
-            summary = "Decades of research and large-scale population studies have found no consistent evidence that the non-ionizing radiation used by cell phones increases the risk of brain tumors.",
-            significance = "This address a common environmental health concern. Scientific consensus from WHO and major cancer institutes indicates that current exposure levels are safe.",
+            title = "Truth Check: Cell Phones and Brain Cancer",
+            summary = "No consistent evidence links non-ionizing radiation from phones to brain tumors.",
+            theTruth = "Radiofrequency (RF) waves are non-ionizing and do not have enough energy to damage DNA directly. Large population studies show no correlation with tumor rates.",
+            theCommand = "You do not need to avoid cell phone use for cancer prevention reasons.",
+            theExecution = listOf(
+                "Use your device as normal.",
+                "If you are concerned about heat or minor RF exposure, use speakerphone or wired headsets.",
+                "Ignore viral claims about 5G radiation, as they lack scientific basis."
+            ),
+            theShield = "This intelligence protects you from unnecessary anxiety and from investing in fraudulent 'anti-radiation' stickers or devices.",
             significanceLevel = SignificanceOutcome.SIGNIFICANT,
             category = SignalCategory.ENVIRONMENT,
             importance = SignalImportance.LOW,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 300),
             publishedAt = now.minusSeconds(3600 * 300),
-            recommendedAction = "Follow standard manufacturer safety guidelines. Use hands-free options if you wish to further reduce exposure, though not required for cancer prevention.",
             source = SignalSource("Agency Truth Check", ""),
             verdict = EvidenceVerdict.NOT_SUPPORTED,
             investigatedClaim = "Cell phones and 5G networks cause brain tumors.",
-            scope = GeographicScope.GLOBAL
+            scope = GeographicScope.GLOBAL,
+            safetyLevel = SafetyLevel.VERIFIED_SAFE
         )
 
-        // 11. Sugar "Feeds" Cancer
-        val sugarMythSignal = Signal(
-            id = "seed-sugar-1",
-            title = "Truth Check: Does Sugar 'Feed' Cancer Specifically?",
-            summary = "While all cells (including cancer cells) consume sugar (glucose) for energy, there is no evidence that eating sugar makes cancer grow faster or that avoiding sugar stops it.",
-            significance = "The primary link between sugar and cancer is indirect: high sugar consumption can lead to obesity, which is a known risk factor for 13 types of cancer.",
-            significanceLevel = SignificanceOutcome.SIGNIFICANT,
-            category = SignalCategory.NUTRITION,
-            importance = SignalImportance.MODERATE,
-            confidence = SignalConfidence.HIGH,
-            detectedAt = now.minusSeconds(3600 * 350),
-            publishedAt = now.minusSeconds(3600 * 350),
-            recommendedAction = "Focus on a balanced eating pattern. Limiting added sugars is recommended for weight management and general health, rather than starving individual cells.",
-            source = SignalSource("Agency Truth Check", ""),
-            verdict = EvidenceVerdict.MISLEADING,
-            investigatedClaim = "Sugar feeds cancer cells and makes them grow faster than healthy cells.",
-            scope = GeographicScope.GLOBAL
-        )
-
-        memory.saveSignal(cellPhoneSignal)
-        memory.saveSignal(sugarMythSignal)
-        
-        seedThread(cellPhoneSignal)
-        seedThread(sugarMythSignal)
-
-        // --- ENVIRONMENTAL WATCH REGISTRY SEEDS (Feature 5) ---
-
-        // 12. Air Pollution (PM2.5)
+        // 10. Air Pollution (PM2.5)
         val airPollutionSignal = Signal(
             id = "seed-env-1",
-            title = "WHO Intelligence: Outdoor Air Pollution a Group 1 Carcinogen",
-            summary = "The World Health Organization has classified outdoor air pollution and particulate matter (PM) as carcinogenic to humans. PM2.5 is specifically linked to lung cancer.",
-            significance = "This is a major environmental health truth. Fine particulates can penetrate deep into the lungs and enter the bloodstream, causing systemic inflammation and DNA damage.",
+            title = "WHO: Outdoor Air Pollution a Group 1 Carcinogen",
+            summary = "Outdoor air pollution is officially classified as carcinogenic to humans.",
+            theTruth = "Fine particulate matter (PM2.5) enters the lungs and causes chronic inflammation, a primary driver of lung cancer.",
+            theCommand = "Take protective measures during high-pollution events.",
+            theExecution = listOf(
+                "Install a reliable Air Quality Index (AQI) app or check local weather reports.",
+                "When AQI is above 100, keep windows closed and avoid jogging near busy roads.",
+                "Use an air purifier with a HEPA filter in bedrooms."
+            ),
+            theShield = "Reducing PM2.5 inhalation protects lung tissue from the cellular stress that leads to malignant mutations.",
             significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
             category = SignalCategory.ENVIRONMENT,
             importance = SignalImportance.HIGH,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 400),
             publishedAt = now.minusSeconds(3600 * 400),
-            recommendedAction = "Monitor your local Air Quality Index (AQI). On high-pollution days, limit heavy outdoor exertion and use HEPA air filtration indoors where possible.",
             source = SignalSource("WHO / IARC", "https://www.iarc.who.int/news-events/iarc-outdoor-air-pollution-a-leading-environmental-cause-of-cancer-deaths/"),
-            scope = GeographicScope.GLOBAL
+            scope = GeographicScope.GLOBAL,
+            safetyLevel = SafetyLevel.CAUTION
         )
 
-        // 13. Radon Gas
+        // 11. Radon Gas
         val radonSignal = Signal(
             id = "seed-env-2",
             title = "Invisible Risk: Radon Gas in Homes",
-            summary = "Radon is a naturally occurring radioactive gas that can accumulate in homes. It is the second leading cause of lung cancer globally, and the leading cause among non-smokers.",
-            significance = "Unlike outdoor pollution, radon levels vary by individual building. It is colorless and odorless, making detection impossible without specialized testing.",
+            summary = "Radon is the leading cause of lung cancer among non-smokers.",
+            theTruth = "Radon gas comes from the natural breakdown of uranium in soil and enters homes through cracks in foundations. Long-term exposure damages lung DNA.",
+            theCommand = "Test your home for radon every 2–5 years.",
+            theExecution = listOf(
+                "Purchase a low-cost radon test kit from a hardware store or health department.",
+                "Follow the instructions for a 48-hour or long-term test in the lowest living level of your home.",
+                "If levels exceed 4 pCi/L, contact a certified radon mitigation professional."
+            ),
+            theShield = "Detection and mitigation can reduce radon levels by up to 99%, virtually eliminating this specific lung cancer risk.",
             significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
             category = SignalCategory.ENVIRONMENT,
             importance = SignalImportance.HIGH,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 450),
             publishedAt = now.minusSeconds(3600 * 450),
-            recommendedAction = "The agency recommends testing your home for radon. If levels are high (above 4 pCi/L or 148 Bq/m³), professional mitigation is highly effective.",
             source = SignalSource("National Health Authorities", ""),
-            scope = GeographicScope.GLOBAL, // Keeping global for general awareness, though levels are local
+            scope = GeographicScope.GLOBAL,
             isActionable = true,
-            actionType = ActionType.MONITOR
+            actionType = ActionType.MONITOR,
+            safetyLevel = SafetyLevel.CAUTION
         )
 
-        // 14. UV Radiation
+        // 12. UV Radiation
         val uvSignal = Signal(
             id = "seed-env-3",
-            title = "Protective Intelligence: UV Radiation and Skin Cancer",
-            summary = "Ultraviolet (UV) radiation from the sun and tanning beds is a proven carcinogen. It causes DNA damage in skin cells that can lead to melanoma and other skin cancers.",
-            significance = "Skin cancer is one of the most preventable forms of cancer. UV exposure is cumulative, meaning protection at every age reduces long-term risk.",
+            title = "Protective Intelligence: UV Radiation",
+            summary = "UV radiation from the sun is a proven carcinogen linked to skin cancer.",
+            theTruth = "UV rays penetrate skin and cause mutations. Melanoma, the most dangerous skin cancer, is directly tied to intense, intermittent sun exposure.",
+            theCommand = "Adopt a daily 'Sun Defense' habit.",
+            theExecution = listOf(
+                "Apply SPF 30+ broad-spectrum sunscreen to exposed skin every morning.",
+                "Wear wide-brimmed hats and UV-rated sunglasses when outdoors.",
+                "Seek shade between 10 AM and 4 PM when UV intensity is highest."
+            ),
+            theShield = "Physical and chemical barriers block UV energy before it can reach and damage your cellular DNA.",
             significanceLevel = SignificanceOutcome.SIGNIFICANT,
             category = SignalCategory.ENVIRONMENT,
             importance = SignalImportance.MODERATE,
             confidence = SignalConfidence.VERY_HIGH,
             detectedAt = now.minusSeconds(3600 * 500),
             publishedAt = now.minusSeconds(3600 * 500),
-            recommendedAction = "Use broad-spectrum sunscreen (SPF 30+), wear protective clothing, and seek shade during peak sun hours. Avoid indoor tanning entirely.",
             source = SignalSource("Skin Cancer Foundations", ""),
             scope = GeographicScope.GLOBAL,
             isActionable = true,
-            actionType = ActionType.AVOID
+            actionType = ActionType.AVOID,
+            safetyLevel = SafetyLevel.CAUTION
         )
 
-        // 15. Night Shift Work
+        // 13. Night Shift Work
         val shiftWorkSignal = Signal(
             id = "seed-env-4",
-            title = "Occupational Intelligence: Night Shift Work Risks",
-            summary = "The IARC has classified night shift work as 'probably carcinogenic to humans' (Group 2A) due to its disruption of the circadian rhythm.",
-            significance = "Circadian disruption affects hormone levels and immune function. Evidence is strongest for links to breast, prostate, and colorectal cancers.",
+            title = "Occupational Intelligence: Night Shift Work",
+            summary = "Night shift work is classified as 'probably carcinogenic' due to circadian disruption.",
+            theTruth = "Artificial light at night suppresses melatonin production and disrupts the biological clock, which regulates cell repair and immune response.",
+            theCommand = "If working nights, implement strict circadian recovery protocols.",
+            theExecution = listOf(
+                "Use blackout curtains and a cool, quiet room for daytime sleep.",
+                "Wear blue-light blocking glasses during the second half of your shift.",
+                "Maintain a consistent sleep-wake schedule, even on days off, to minimize 'social jetlag'."
+            ),
+            theShield = "Optimizing sleep hygiene helps preserve the body's natural anti-tumor surveillance and repair mechanisms.",
             significanceLevel = SignificanceOutcome.SIGNIFICANT,
             category = SignalCategory.OCCUPATIONAL,
             importance = SignalImportance.MODERATE,
             confidence = SignalConfidence.HIGH,
             detectedAt = now.minusSeconds(3600 * 600),
             publishedAt = now.minusSeconds(3600 * 600),
-            recommendedAction = "If you work nights, prioritize 'sleep hygiene' and healthy eating patterns. Discuss screening timing with your doctor, as risk profiles may differ.",
             source = SignalSource("IARC", "https://www.iarc.who.int/news-events/iarc-monographs-evaluate-night-shift-work/"),
             scope = GeographicScope.GLOBAL,
             isActionable = true,
-            actionType = ActionType.MONITOR
+            actionType = ActionType.MONITOR,
+            safetyLevel = SafetyLevel.CAUTION
         )
 
-        memory.saveSignal(airPollutionSignal)
-        memory.saveSignal(radonSignal)
-        memory.saveSignal(uvSignal)
-        memory.saveSignal(shiftWorkSignal)
-        
-        seedThread(airPollutionSignal)
-        seedThread(radonSignal)
-        seedThread(uvSignal)
-        seedThread(shiftWorkSignal)
+        val signals = listOf(
+            fdaRecall, iarcSignal, screeningSignal, nutritionSignal, 
+            truthCheckSignal, benzeneSignal, talcSignal, pfasSignal, 
+            cellPhoneSignal, airPollutionSignal, radonSignal, uvSignal, shiftWorkSignal
+        )
 
-        seedPreventionActions()
+        signals.forEach { signal ->
+            memory.saveSignal(signal)
+            seedThread(signal)
+        }
     }
 
     private suspend fun seedNutritionTruths() {

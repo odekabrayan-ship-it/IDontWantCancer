@@ -65,10 +65,18 @@ fun SignalCard(
             }
             Spacer(modifier = Modifier.height(spacing.small))
             Text(
-                text = signal.title,
+                text = signal.theCommand ?: signal.title,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.ExtraBold
             )
+            if (signal.theCommand != null) {
+                Text(
+                    text = signal.title,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(top = 2.dp)
+                )
+            }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = signal.summary,

@@ -4,9 +4,12 @@
 
     <!-- Home Screen -->
     <string name="section_what_changed">WHAT CHANGED?</string>
+    <string name="section_directives">ACTIVE DIRECTIVES</string>
     <string name="section_additional_intelligence">ADDITIONAL INTELLIGENCE</string>
     <string name="section_recommended_actions">RECOMMENDED ACTIONS</string>
     <string name="section_prevention_focus">YOUR PREVENTION FOCUS</string>
+    <string name="directive_action_required">ACTION REQUIRED</string>
+    <string name="directive_shield_impact">WHY THIS PROTECTS YOU</string>
     <string name="briefing_clear_title">Nothing important changed today.</string>
     <string name="briefing_clear_desc">Your intelligence watch is clear.</string>
     <string name="briefing_monitoring_reassurance">The Agency is monitoring Global Research and %1$s Authorities for you.</string>

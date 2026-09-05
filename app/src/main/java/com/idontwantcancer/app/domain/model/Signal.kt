@@ -43,6 +43,12 @@ data class Signal(
     // Consumer Safety (Step 222 - Feature 2)
     val affectedIngredients: List<String> = emptyList(),
     val safetyLevel: SafetyLevel = SafetyLevel.UNDEFINED,
+
+    // Directive Protocol (Step 222 - Overhaul Stage 1)
+    val theTruth: String? = null,
+    val theCommand: String? = null,
+    val theExecution: List<String> = emptyList(),
+    val theShield: String? = null,
     
     // Admission Context
     val lastAdmittedStateEntryId: String? = null

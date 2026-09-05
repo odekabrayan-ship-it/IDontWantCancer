@@ -44,4 +44,9 @@ sealed interface IntelligenceUiInteraction {
      * User acknowledged or completed the directive associated with a signal.
      */
     data class AcknowledgeSignal(val signalId: String) : IntelligenceUiInteraction
+
+    /**
+     * User toggled the watch status for a retail or environmental signal.
+     */
+    data class ToggleWatch(val signalId: String) : IntelligenceUiInteraction
 }

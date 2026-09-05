@@ -150,7 +150,10 @@ private fun HomeContent(
         signals.filter { (it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH) && !it.isActionTaken }
     }
     val otherSignals = remember(signals, primaryDirectives) {
-        signals.filter { it !in primaryDirectives && !it.isActionTaken }
+        signals.filter { it !in primaryDirectives && !it.isActionTaken && !it.isWatched }
+    }
+    val watchedSignals = remember(signals) {
+        signals.filter { it.isWatched && !it.isActionTaken }
     }
     val securedSignals = remember(signals) {
         signals.filter { it.isActionTaken }
@@ -183,6 +186,19 @@ private fun HomeContent(
                 items(primaryDirectives, key = { "directive-${it.id}" }) { signal ->
                     PrimaryDirectiveCard(
                         signal = signal,
+                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
+                    )
+                }
+            }
+
+            if (watchedSignals.isNotEmpty()) {
+                item {
+                    SectionHeader(title = stringResource(R.string.section_active_store_watch))
+                }
+                items(watchedSignals, key = { "watched-${it.id}" }) { signal ->
+                    SignalCard(
+                        signal = signal,
+                        isSelected = false,
                         onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
                     )
                 }

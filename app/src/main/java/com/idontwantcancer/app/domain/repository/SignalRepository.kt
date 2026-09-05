@@ -34,4 +34,9 @@ interface SignalRepository {
      * Updates the user's action taken status for a specific signal.
      */
     suspend fun updateActionTakenStatus(signalId: String, isTaken: Boolean)
+
+    /**
+     * Updates the user's watch status for a specific signal.
+     */
+    suspend fun updateWatchStatus(signalId: String, isWatched: Boolean)
 }

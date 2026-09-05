@@ -37,4 +37,7 @@ interface SignalDao {
 
     @Query("UPDATE signals SET isActionTaken = :isTaken WHERE id = :id")
     suspend fun updateActionTakenStatus(id: String, isTaken: Boolean)
+
+    @Query("UPDATE signals SET isWatched = :isWatched WHERE id = :id")
+    suspend fun updateWatchStatus(id: String, isWatched: Boolean)
 }

@@ -70,6 +70,7 @@ fun SignalEntity.toDomain(): Signal {
         },
         theShield = theShield,
         isActionTaken = isActionTaken,
+        isWatched = isWatched,
         lastAdmittedStateEntryId = lastAdmittedStateEntryId
     )
 }
@@ -112,6 +113,7 @@ fun Signal.toEntity(
         theExecutionJson = Json.encodeToString(theExecution),
         theShield = theShield,
         isActionTaken = isActionTaken,
+        isWatched = isWatched,
         lifecycle = lifecycle,
         isBriefed = isBriefed,
         firstObservedAt = firstObservedAt,

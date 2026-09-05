@@ -8,6 +8,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -276,6 +278,40 @@ private fun TruthCheckComparisonCard(signal: Signal) {
                 Spacer(modifier = Modifier.width(8.dp))
                 signal.verdict?.let { TruthCheckBadge(it) }
             }
+        }
+    }
+}
+
+@Composable
+private fun WatchlistToggleButton(
+    signalId: String,
+    isWatched: Boolean,
+    onInteraction: (IntelligenceUiInteraction) -> Unit
+) {
+    OutlinedButton(
+        onClick = { onInteraction(IntelligenceUiInteraction.ToggleWatch(signalId)) },
+        modifier = Modifier.fillMaxWidth().height(48.dp),
+        colors = if (isWatched) 
+            ButtonDefaults.outlinedButtonColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
+        else 
+            ButtonDefaults.outlinedButtonColors(),
+        border = BorderStroke(1.dp, if (isWatched) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = if (isWatched) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = if (isWatched) 
+                    stringResource(R.string.detail_watching_for_store) 
+                else 
+                    stringResource(R.string.detail_add_to_watchlist),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

@@ -7,6 +7,7 @@ import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceReentryReconciliationConsumptionBoundary
 import com.idontwantcancer.app.domain.usecase.GetSignalByIdUseCase
 import com.idontwantcancer.app.domain.usecase.UpdateActionTakenStatusUseCase
+import com.idontwantcancer.app.domain.usecase.UpdateWatchStatusUseCase
 import com.idontwantcancer.app.presentation.boundary.*
 import com.idontwantcancer.app.presentation.mapper.toContract
 import com.idontwantcancer.app.presentation.mapper.toUiState
@@ -29,6 +30,7 @@ import javax.inject.Inject
 class SignalDetailViewModel @Inject constructor(
     private val getSignalByIdUseCase: GetSignalByIdUseCase,
     private val updateActionTakenStatusUseCase: UpdateActionTakenStatusUseCase,
+    private val updateWatchStatusUseCase: UpdateWatchStatusUseCase,
     private val reconciliationBoundary: IntelligenceReentryReconciliationConsumptionBoundary,
     private val resultHandoverBridge: IntelligenceCommandExecutionResultHandoverBoundary,
     private val lifecycleBoundary: IntelligenceCommandLifecycleBoundary,

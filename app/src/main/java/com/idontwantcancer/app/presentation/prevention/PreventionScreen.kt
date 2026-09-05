@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -147,13 +148,44 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
         item {
             Spacer(modifier = Modifier.height(spacing.large))
             PreventionSectionHeader(
-                title = stringResource(R.string.prevention_section_environment),
-                subtitle = stringResource(R.string.prevention_section_environment_desc),
+                title = "ENVIRONMENTAL SECURITY",
+                subtitle = "Practical directives for your surroundings",
                 icon = Icons.Default.Public
             )
         }
 
-        items(state.environmentalSignals, key = { it.id }) { signal ->
+        // Home Context
+        item {
+            ContextSubHeader(title = "AT HOME")
+        }
+        val homeSignals = state.environmentalSignals.filter { "Home" in it.interactionContexts }
+        items(homeSignals, key = { "home-${it.id}" }) { signal ->
+            SignalCard(
+                signal = signal,
+                isSelected = false,
+                onClick = { /* Step 223: Detail navigation */ }
+            )
+        }
+
+        // Work Context
+        item {
+            ContextSubHeader(title = "AT WORK")
+        }
+        val workSignals = state.environmentalSignals.filter { "Work" in it.interactionContexts }
+        items(workSignals, key = { "work-${it.id}" }) { signal ->
+            SignalCard(
+                signal = signal,
+                isSelected = false,
+                onClick = { /* Step 223: Detail navigation */ }
+            )
+        }
+
+        // Public Context
+        item {
+            ContextSubHeader(title = "IN PUBLIC")
+        }
+        val publicSignals = state.environmentalSignals.filter { "Public" in it.interactionContexts }
+        items(publicSignals, key = { "public-${it.id}" }) { signal ->
             SignalCard(
                 signal = signal,
                 isSelected = false,
@@ -178,6 +210,18 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
             Spacer(modifier = Modifier.height(32.dp))
         }
     }
+}
+
+@Composable
+private fun ContextSubHeader(title: String) {
+    val spacing = LocalSpacing.current
+    Text(
+        text = title,
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.secondary,
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(horizontal = spacing.screenPadding, vertical = spacing.small)
+    )
 }
 
 @Composable
@@ -242,7 +286,7 @@ private fun PreventionActionItem(
                 "smoke_free" -> Icons.Default.SmokeFree
                 "sunny" -> Icons.Default.WbSunny
                 "no_drinks" -> Icons.Default.NoDrinks
-                "directions_run" -> Icons.Default.DirectionsRun
+                "directions_run" -> Icons.AutoMirrored.Filled.DirectionsRun
                 "grass" -> Icons.Default.Grass
                 "restaurant" -> Icons.Default.Restaurant
                 else -> Icons.Default.Verified

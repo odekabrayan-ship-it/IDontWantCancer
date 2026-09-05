@@ -32,7 +32,7 @@ import com.idontwantcancer.app.data.local.entity.*
         PatientTruthCheckEntity::class,
         HealingLogEntity::class
     ],
-    version = 30,
+    version = 31,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

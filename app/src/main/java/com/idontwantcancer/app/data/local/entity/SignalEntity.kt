@@ -52,6 +52,7 @@ data class SignalEntity(
     val theShield: String? = null,
     val isActionTaken: Boolean = false,
     val isWatched: Boolean = false,
+    val interactionContextsJson: String = "[]", // Serialized list of String
     
     // Memory/Lifecycle properties
     val lifecycle: IntelligenceLifecycle,

@@ -52,6 +52,7 @@ data class Signal(
     val theShield: String? = null,
     val isActionTaken: Boolean = false,
     val isWatched: Boolean = false,
+    val interactionContexts: List<String> = emptyList(), // e.g., "Home", "Work", "Public"
     
     // Admission Context
     val lastAdmittedStateEntryId: String? = null

@@ -413,7 +413,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 theTruth = "Low fiber intake increases 'transit time,' allowing carcinogens to stay in contact with the colon wall longer, increasing mutation risk.",
                 theCommand = "Shift your daily starch intake to at least 90% whole grain sources.",
                 theExecution = listOf(
-                    "Identify whole versions of your local staple (Whole Wheat, Brown Rice, Sorghum, Teff, Millet).",
+                    "Identify whole versions of your local staple ({FIBER_STAPLE}).",
                     "Add one cup of legumes (beans, lentils, peas) to your largest meal.",
                     "Replace refined 'white' flours with whole-grain alternatives."
                 ),

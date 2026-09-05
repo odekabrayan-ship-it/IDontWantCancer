@@ -38,7 +38,7 @@ fun PreventionScreen(
 
     Scaffold(
         topBar = {
-            PreventionHeader()
+            PreventionHeader(userCountry = (uiState as? PreventionUiState.Success)?.userCountry)
         }
     ) { innerPadding ->
         Box(
@@ -55,8 +55,12 @@ fun PreventionScreen(
 }
 
 @Composable
-private fun PreventionHeader() {
+private fun PreventionHeader(userCountry: String? = null) {
     val spacing = LocalSpacing.current
+    val countryName = remember(userCountry) { 
+        if (userCountry != null) java.util.Locale("", userCountry).displayCountry else null 
+    }
+    
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -74,6 +78,22 @@ private fun PreventionHeader() {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        
+        if (countryName != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                shape = MaterialTheme.shapes.extraSmall
+            ) {
+                Text(
+                    text = stringResource(R.string.prevention_tailored_for, countryName),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                )
+            }
+        }
     }
 }
 

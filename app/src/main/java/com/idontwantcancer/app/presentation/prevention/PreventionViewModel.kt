@@ -2,7 +2,9 @@ package com.idontwantcancer.app.presentation.prevention
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idontwantcancer.app.domain.engine.NutritionInstructionTransformer
 import com.idontwantcancer.app.domain.model.*
+import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +20,9 @@ class PreventionViewModel @Inject constructor(
     getEnvironmentalIntelligenceUseCase: GetEnvironmentalIntelligenceUseCase,
     getEducationLessonsUseCase: GetEducationLessonsUseCase,
     getPreventionActionsUseCase: GetPreventionActionsUseCase,
-    private val toggleActionAdoptionUseCase: ToggleActionAdoptionUseCase
+    private val toggleActionAdoptionUseCase: ToggleActionAdoptionUseCase,
+    private val userContextRepository: UserContextRepository,
+    private val transformer: NutritionInstructionTransformer
 ) : ViewModel() {
 
     val uiState: StateFlow<PreventionUiState> = combine(
@@ -27,12 +31,23 @@ class PreventionViewModel @Inject constructor(
         getEducationLessonsUseCase(),
         getPreventionActionsUseCase()
     ) { nutrition, environmental, education, actions ->
+        val countryCode = userContextRepository.getUserCountryCode()
+        
         PreventionUiState.Success(
-            dietaryPatterns = nutrition.filter { it.category == NutritionCategory.PATTERN },
-            preparationDirectives = nutrition.filter { it.category == NutritionCategory.PREPARATION },
+            dietaryPatterns = nutrition
+                .filter { it.category == NutritionCategory.PATTERN }
+                .map { item ->
+                    item.copy(theExecution = transformer.transform(item.theExecution, countryCode))
+                },
+            preparationDirectives = nutrition
+                .filter { it.category == NutritionCategory.PREPARATION }
+                .map { item ->
+                    item.copy(theExecution = transformer.transform(item.theExecution, countryCode))
+                },
             environmentalSignals = environmental,
             educationLessons = education,
-            preventionActions = actions
+            preventionActions = actions,
+            userCountry = countryCode
         )
     }.stateIn(
         scope = viewModelScope,
@@ -54,6 +69,7 @@ sealed interface PreventionUiState {
         val preparationDirectives: List<NutritionIntelligence>,
         val environmentalSignals: List<Signal>,
         val educationLessons: List<EducationLesson>,
-        val preventionActions: List<PreventionAction>
+        val preventionActions: List<PreventionAction>,
+        val userCountry: String
     ) : PreventionUiState
 }

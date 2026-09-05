@@ -27,10 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
-import com.idontwantcancer.app.domain.model.PatientTruthCheck
-import com.idontwantcancer.app.domain.model.PatientVerdict
-import com.idontwantcancer.app.domain.model.SymptomDirective
-import com.idontwantcancer.app.domain.model.TreatmentManual
+import com.idontwantcancer.app.domain.model.*
 import com.idontwantcancer.app.presentation.components.AgencyLoadingState
 import com.idontwantcancer.app.presentation.components.ExecutionStepItem
 
@@ -74,14 +71,14 @@ fun HealingSanctuaryScreen(
         ) {
             when (val state = uiState) {
                 is HealingUiState.Loading -> AgencyLoadingState()
-                is HealingUiState.Success -> SanctuaryContent(state)
+                is HealingUiState.Success -> SanctuaryContent(state, viewModel)
             }
         }
     }
 }
 
 @Composable
-private fun SanctuaryContent(state: HealingUiState.Success) {
+private fun SanctuaryContent(state: HealingUiState.Success, viewModel: HealingViewModel) {
     val spacing = LocalSpacing.current
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -92,6 +89,12 @@ private fun SanctuaryContent(state: HealingUiState.Success) {
     ) {
         item(span = { GridItemSpan(2) }) {
             SanctuaryWelcomeCard()
+        }
+
+        if (state.healingLogEntries.isNotEmpty()) {
+            item(span = { GridItemSpan(2) }) {
+                HealingProgressLedger(entries = state.healingLogEntries)
+            }
         }
 
         item(span = { GridItemSpan(2) }) {
@@ -105,7 +108,10 @@ private fun SanctuaryContent(state: HealingUiState.Success) {
         }
 
         items(state.treatmentManuals, key = { "manual-${it.id}" }, span = { GridItemSpan(2) }) { manual ->
-            TreatmentManualItem(manual)
+            TreatmentManualItem(
+                manual = manual,
+                onComplete = { viewModel.logHealingAction(manual.id, manual.title, HealingLogType.MANUAL) }
+            )
         }
 
         item(span = { GridItemSpan(2) }) {
@@ -125,7 +131,10 @@ private fun SanctuaryContent(state: HealingUiState.Success) {
         }
 
         items(state.symptomDirectives, key = { "symptom-${it.id}" }) { symptom ->
-            SymptomSentinelCard(symptom)
+            SymptomSentinelCard(
+                symptom = symptom,
+                onComplete = { viewModel.logHealingAction(symptom.id, symptom.name, HealingLogType.SYMPTOM) }
+            )
         }
 
         item(span = { GridItemSpan(2) }) {
@@ -150,6 +159,48 @@ private fun SanctuaryContent(state: HealingUiState.Success) {
         
         item(span = { GridItemSpan(2) }) {
             Spacer(modifier = Modifier.height(32.dp))
+        }
+    }
+}
+
+@Composable
+private fun HealingProgressLedger(entries: List<HealingLogEntry>) {
+    val spacing = LocalSpacing.current
+    val lastEntries = entries.take(5)
+
+    Surface(
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+    ) {
+        Column(modifier = Modifier.padding(spacing.cardPadding)) {
+            Text(
+                text = stringResource(R.string.sanctuary_section_progress),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                lastEntries.forEach { _ ->
+                    Icon(
+                        imageVector = Icons.Default.Shield,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.sanctuary_winning_affirmation),
+                style = MaterialTheme.typography.bodySmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }
@@ -192,7 +243,7 @@ private fun SanctuaryWelcomeCard() {
 }
 
 @Composable
-private fun TreatmentManualItem(manual: TreatmentManual) {
+private fun TreatmentManualItem(manual: TreatmentManual, onComplete: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val spacing = LocalSpacing.current
 
@@ -270,6 +321,18 @@ private fun TreatmentManualItem(manual: TreatmentManual) {
 
                     Spacer(modifier = Modifier.height(24.dp))
 
+                    Button(
+                        onClick = onComplete,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        Icon(imageVector = Icons.Default.CheckCircle, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(stringResource(R.string.sanctuary_action_completed), fontWeight = FontWeight.Bold)
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
                     Surface(
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                         shape = MaterialTheme.shapes.medium
@@ -306,7 +369,7 @@ private fun TreatmentManualItem(manual: TreatmentManual) {
 }
 
 @Composable
-private fun SymptomSentinelCard(symptom: SymptomDirective) {
+private fun SymptomSentinelCard(symptom: SymptomDirective, onComplete: () -> Unit) {
     var showDetails by remember { mutableStateOf(false) }
     val colorScheme = MaterialTheme.colorScheme
     
@@ -352,8 +415,16 @@ private fun SymptomSentinelCard(symptom: SymptomDirective) {
         AlertDialog(
             onDismissRequest = { showDetails = false },
             confirmButton = {
+                TextButton(onClick = { 
+                    onComplete()
+                    showDetails = false 
+                }) {
+                    Text(stringResource(R.string.sanctuary_action_completed), fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
                 TextButton(onClick = { showDetails = false }) {
-                    Text("DONE", fontWeight = FontWeight.Bold)
+                    Text("CLOSE")
                 }
             },
             title = {

@@ -1,5 +1,6 @@
 package com.idontwantcancer.app.domain.repository
 
+import com.idontwantcancer.app.domain.model.HealingLogEntry
 import com.idontwantcancer.app.domain.model.PatientTruthCheck
 import com.idontwantcancer.app.domain.model.SymptomDirective
 import com.idontwantcancer.app.domain.model.TreatmentManual
@@ -38,4 +39,14 @@ interface HealingRepository {
      * Saves foundational patient truth checks.
      */
     suspend fun savePatientTruthChecks(items: List<PatientTruthCheck>)
+
+    /**
+     * Retrieves the permanent record of healing acts.
+     */
+    fun getHealingLog(): Flow<List<HealingLogEntry>>
+
+    /**
+     * Logs a completed healing directive.
+     */
+    suspend fun logHealingAction(entry: HealingLogEntry)
 }

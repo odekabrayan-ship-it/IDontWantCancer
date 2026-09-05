@@ -1,10 +1,12 @@
 package com.idontwantcancer.app.data.repository
 
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
+import com.idontwantcancer.app.data.local.dao.HealingLogDao
 import com.idontwantcancer.app.data.local.dao.PatientTruthCheckDao
 import com.idontwantcancer.app.data.local.dao.SymptomDirectiveDao
 import com.idontwantcancer.app.data.local.dao.TreatmentManualDao
 import com.idontwantcancer.app.data.local.mapper.*
+import com.idontwantcancer.app.domain.model.HealingLogEntry
 import com.idontwantcancer.app.domain.model.PatientTruthCheck
 import com.idontwantcancer.app.domain.model.SymptomDirective
 import com.idontwantcancer.app.domain.model.TreatmentManual
@@ -20,6 +22,7 @@ class HealingRepositoryImpl @Inject constructor(
     private val treatmentManualDao: TreatmentManualDao,
     private val symptomDirectiveDao: SymptomDirectiveDao,
     private val patientTruthCheckDao: PatientTruthCheckDao,
+    private val healingLogDao: HealingLogDao,
     private val dispatcherProvider: CoroutineDispatcherProvider
 ) : HealingRepository {
 
@@ -51,5 +54,15 @@ class HealingRepositoryImpl @Inject constructor(
 
     override suspend fun savePatientTruthChecks(items: List<PatientTruthCheck>) = withContext(dispatcherProvider.io) {
         patientTruthCheckDao.upsertAll(items.map { it.toEntity() })
+    }
+
+    override fun getHealingLog(): Flow<List<HealingLogEntry>> {
+        return healingLogDao.getAllFlow().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
+    override suspend fun logHealingAction(entry: HealingLogEntry) = withContext(dispatcherProvider.io) {
+        healingLogDao.insert(entry.toEntity())
     }
 }

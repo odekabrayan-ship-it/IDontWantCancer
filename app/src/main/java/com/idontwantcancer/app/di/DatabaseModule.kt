@@ -261,12 +261,28 @@ object DatabaseModule {
             }
         }
 
+        val migration28To29 = object : Migration(28, 29) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `patient_truth_checks` (`id` TEXT NOT NULL, `claim` TEXT NOT NULL, `verdict` TEXT NOT NULL, `theTruth` TEXT NOT NULL, `theCommand` TEXT NOT NULL, `theExecutionJson` TEXT NOT NULL, `theShield` TEXT NOT NULL, `socialScript` TEXT NOT NULL, PRIMARY KEY(`id`))"
+                )
+            }
+        }
+
+        val migration29To30 = object : Migration(29, 30) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `healing_log` (`id` TEXT NOT NULL, `directiveId` TEXT NOT NULL, `directiveName` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `type` TEXT NOT NULL, PRIMARY KEY(`id`))"
+                )
+            }
+        }
+
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
             AppDatabase.DATABASE_NAME
         )
-        .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18, migration18To19, migration19To20, migration20To21, migration21To22, migration22To23, migration23To24, migration24To25, migration25To26, migration26To27, migration27To28)
+        .addMigrations(migration1To2, migration2To3, migration3To4, migration4To5, migration5To6, migration6To7, migration7To8, migration8To9, migration9To10, migration10To11, migration11To12, migration12To13, migration13To14, migration14To15, migration15To16, migration16To17, migration17To18, migration18To19, migration19To20, migration20To21, migration21To22, migration22To23, migration23To24, migration24To25, migration25To26, migration26To27, migration27To28, migration28To29, migration29To30)
         .fallbackToDestructiveMigration()
         .build()
     }
@@ -371,5 +387,11 @@ object DatabaseModule {
     @Singleton
     fun providePatientTruthCheckDao(database: AppDatabase): PatientTruthCheckDao {
         return database.patientTruthCheckDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideHealingLogDao(database: AppDatabase): HealingLogDao {
+        return database.healingLogDao()
     }
 }

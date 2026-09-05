@@ -33,6 +33,7 @@ import com.idontwantcancer.app.presentation.search.SearchViewModel
 import com.idontwantcancer.app.presentation.settings.SettingsScreen
 import com.idontwantcancer.app.presentation.signal.SignalDetailScreen
 import com.idontwantcancer.app.presentation.signal.SignalDetailViewModel
+import com.idontwantcancer.app.presentation.healing.HealingSanctuaryScreen
 import com.idontwantcancer.app.presentation.model.IntelligenceUiInteraction
 import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayout
 import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayoutType
@@ -100,6 +101,9 @@ fun AppNavigation(
                         viewModel.dispatch(interaction, homeViewModel) { action ->
                             when (action) {
                                 is DefaultIntelligenceCommandDispatcher.NavigateBackAction -> navController.popBackStack()
+                                is IntelligenceUiInteraction.EnterHealingSanctuary -> {
+                                    navController.navigate(Screen.HealingSanctuary)
+                                }
                                 is Screen -> navController.navigate(action)
                             }
                         }
@@ -155,6 +159,11 @@ fun AppNavigation(
             }
             composable<Screen.Settings> {
                 SettingsScreen()
+            }
+            composable<Screen.HealingSanctuary> {
+                HealingSanctuaryScreen(
+                    onBack = { navController.popBackStack() }
+                )
             }
             composable<Screen.SignalDetail> {
                 val detailViewModel: SignalDetailViewModel = hiltViewModel()

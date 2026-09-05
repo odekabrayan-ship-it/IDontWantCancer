@@ -172,6 +172,12 @@ private fun HomeContent(
             contentPadding = PaddingValues(bottom = spacing.extraLarge)
         ) {
             item {
+                PatientPortalCard(
+                    onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails("HEALING_PORTAL")) }
+                )
+            }
+
+            item {
                 BriefingStatusSection(status = briefing.status)
             }
             
@@ -290,6 +296,53 @@ private fun AdoptedActionCard(action: PreventionAction) {
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
+        }
+    }
+}
+
+@Composable
+private fun PatientPortalCard(
+    onClick: () -> Unit
+) {
+    val spacing = LocalSpacing.current
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spacing.screenPadding, vertical = spacing.medium),
+        onClick = onClick,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f))
+    ) {
+        Column(modifier = Modifier.padding(spacing.cardPadding)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Healing,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                Text(
+                    text = stringResource(R.string.portal_fighting_diagnosis),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Button(
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            ) {
+                Text(
+                    text = stringResource(R.string.portal_enter_sanctuary),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Black
+                )
+            }
         }
     }
 }

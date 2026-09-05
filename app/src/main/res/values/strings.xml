@@ -14,6 +14,8 @@
     <string name="briefing_clear_desc">Your intelligence watch is clear.</string>
     <string name="briefing_monitoring_reassurance">The Agency is monitoring Global Research and %1$s Authorities for you.</string>
     <string name="briefing_last_update">Last watch update: %1$s</string>
+    <string name="portal_fighting_diagnosis">I am fighting a diagnosis</string>
+    <string name="portal_enter_sanctuary">ENTER THE HEALING SANCTUARY</string>
     <string name="status_no_changes">Nothing important changed.</string>
     <string name="status_ready">Something changed.</string>
     <string name="status_attention">This needs your attention.</string>
@@ -174,4 +176,12 @@
     <!-- Education (60-Second Prevention) -->
     <string name="edu_carcinogen_title">What does “carcinogen” mean?</string>
     <string name="edu_carcinogen_summary">A carcinogen is a substance, organism, or agent capable of causing cancer. Carcinogens can be found in the environment, lifestyle choices (like tobacco), or certain workplace exposures.</string>
+
+    <!-- Healing Sanctuary -->
+    <string name="sanctuary_title">Healing Sanctuary</string>
+    <string name="sanctuary_subtitle">A safe harbor for your treatment journey</string>
+    <string name="sanctuary_welcome_headline">You are not alone in this fight.</string>
+    <string name="sanctuary_welcome_desc">The Agency provides specialized directives for those currently undergoing treatment. Here, we move from watching to active healing support.</string>
+    <string name="sanctuary_section_treatment">Treatment Manuals</string>
+    <string name="sanctuary_section_symptoms">Symptom Sentinel</string>
 </resources>

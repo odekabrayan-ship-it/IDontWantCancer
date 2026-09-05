@@ -27,6 +27,7 @@ class DefaultIntelligenceCommandResultClosureConsumptionFinalityDispatchAuthoriz
             is IntelligenceUiInteraction.CancelOperation,
             is IntelligenceUiInteraction.AcknowledgeSignal,
             is IntelligenceUiInteraction.ToggleWatch,
+            is IntelligenceUiInteraction.EnterHealingSanctuary,
             is IntelligenceUiInteraction.ClearSelection -> true
         }
 

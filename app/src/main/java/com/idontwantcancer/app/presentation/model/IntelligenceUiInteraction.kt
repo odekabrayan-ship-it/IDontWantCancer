@@ -49,4 +49,9 @@ sealed interface IntelligenceUiInteraction {
      * User toggled the watch status for a retail or environmental signal.
      */
     data class ToggleWatch(val signalId: String) : IntelligenceUiInteraction
+
+    /**
+     * User requested to enter the Healing Sanctuary.
+     */
+    data object EnterHealingSanctuary : IntelligenceUiInteraction
 }

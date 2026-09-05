@@ -1,6 +1,7 @@
 package com.idontwantcancer.app.data.repository
 
 import com.idontwantcancer.app.domain.model.*
+import com.idontwantcancer.app.domain.repository.HealingRepository
 import com.idontwantcancer.app.domain.repository.IntelligenceMemoryRepository
 import com.idontwantcancer.app.domain.repository.PreventionRepository
 import java.time.Instant
@@ -17,7 +18,8 @@ import javax.inject.Singleton
 @Singleton
 class BaselineIntelligenceSeeder @Inject constructor(
     private val memory: IntelligenceMemoryRepository,
-    private val preventionRepository: PreventionRepository
+    private val preventionRepository: PreventionRepository,
+    private val healingRepository: HealingRepository
 ) {
     suspend fun seedIfEmpty() {
         val existingSignals = memory.getAllSignals()
@@ -26,6 +28,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedNutritionTruths()
         seedEducationLessons()
         seedPreventionActions()
+        seedTreatmentManuals()
         
         val now = Instant.now()
         
@@ -397,7 +400,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 theCommand = "Reduce intake of meats preserved with salt, smoke, or chemical nitrates.",
                 theExecution = listOf(
                     "Identify 'Sodium Nitrite' or 'Curing Salt' on local food labels.",
-                    "Choose fresh, unpreserved proteins: poultry, fish, or legumes.",
+                    "Choose fresh, unpreserved proteins: {PROTEIN_STAPLE}.",
                     "Limit traditional salted or smoked delicacies to very rare occasions."
                 ),
                 theShield = "Directly prevents the formation of DNA-mutating nitrosamines in the colon lining.",
@@ -598,6 +601,57 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
         preventionRepository.savePreventionActions(actions)
+    }
+
+    private suspend fun seedTreatmentManuals() {
+        val manuals = listOf(
+            TreatmentManual(
+                id = "treat-1",
+                title = "Chemotherapy Prep",
+                summary = "Critical preparation protocol for chemotherapy sessions.",
+                category = TreatmentCategory.CHEMO,
+                theTruth = "Chemotherapy targets all fast-growing cells. Preparing your body's buffer systems can significantly reduce off-target damage and side-effect severity.",
+                theCommand = "Activate the 'Systemic Hydration & Buffer' protocol 24 hours prior to session.",
+                theExecution = listOf(
+                    "Consume 2.5 to 3 liters of water in the 24 hours leading up to your infusion.",
+                    "Prepare an 'Oral Recovery' kit: Non-alcohol mouthwash or a mild salt-soda rinse (1/4 tsp each in 1 cup water).",
+                    "Eat a light, high-protein meal 2-3 hours before treatment to stabilize blood sugar.",
+                    "Avoid high-fiber or gas-producing foods (cabbage, beans) on the day of treatment to minimize gut distress."
+                ),
+                theShield = "Ensures rapid clearance of drug metabolites through the kidneys and provides a protective moisture barrier for oral and gut linings."
+            ),
+            TreatmentManual(
+                id = "treat-2",
+                title = "Radiation Care",
+                summary = "Site-specific protective protocol for localized radiation.",
+                category = TreatmentCategory.RADIATION,
+                theTruth = "Radiation affects skin cells in the treatment field. Damage is cumulative and requires specific barrier protection to prevent breakdown.",
+                theCommand = "Implement the 'Site-Specific Skin Shield' protocol daily.",
+                theExecution = listOf(
+                    "Cleanse the treatment area only with lukewarm water and fragrance-free, Agency-verified soap.",
+                    "Apply recommended moisturizers *only after* your daily session, never within 4 hours before treatment.",
+                    "Wear loose-fitting, soft cotton clothing over the treatment site to prevent friction.",
+                    "Strictly shield the treatment area from all direct sun exposure using UV-rated clothing."
+                ),
+                theShield = "Maintains skin integrity and prevents secondary infections or permanent 'radiation burn' scarring."
+            ),
+            TreatmentManual(
+                id = "treat-3",
+                title = "Surgical Recovery",
+                summary = "Biological recovery roadmap after tumor resection.",
+                category = TreatmentCategory.SURGERY,
+                theTruth = "Post-surgical healing requires high metabolic energy and rapid tissue repair. Early mobilization prevents systemic complications like blood clots.",
+                theCommand = "Adopt the 'Metabolic Repair & Mobilization' protocol.",
+                theExecution = listOf(
+                    "Perform deep breathing exercises (10 repetitions) every hour while awake to clear anesthesia from lungs.",
+                    "If authorized by your surgeon, perform gentle 5-minute walks every 4 hours to stimulate circulation.",
+                    "Prioritize 'Tissue Repair' foods: High-quality protein and Vitamin C rich local fruits.",
+                    "Monitor incision sites daily for 'Alert Signals': Increased redness, warmth, or unusual discharge."
+                ),
+                theShield = "Accelerates wound closure and prevents post-operative pneumonia and deep vein thrombosis (DVT)."
+            )
+        )
+        healingRepository.saveTreatmentManuals(manuals)
     }
 
     private suspend fun seedThread(signal: Signal) {

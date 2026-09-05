@@ -338,4 +338,10 @@ object DatabaseModule {
     fun providePreventionActionDao(database: AppDatabase): PreventionActionDao {
         return database.preventionActionDao()
     }
+
+    @Provides
+    @Singleton
+    fun provideTreatmentManualDao(database: AppDatabase): TreatmentManualDao {
+        return database.treatmentManualDao()
+    }
 }

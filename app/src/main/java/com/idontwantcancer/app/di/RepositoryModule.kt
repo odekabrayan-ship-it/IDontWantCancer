@@ -1,11 +1,6 @@
 package com.idontwantcancer.app.di
 
-import com.idontwantcancer.app.data.repository.BriefingRepositoryImpl
-import com.idontwantcancer.app.data.repository.IntelligenceMemoryRepositoryImpl
-import com.idontwantcancer.app.data.repository.PreventionRepositoryImpl
-import com.idontwantcancer.app.data.repository.SignalRepositoryImpl
-import com.idontwantcancer.app.data.repository.StaticIntelligenceSourceRegistry
-import com.idontwantcancer.app.data.repository.UserContextRepositoryImpl
+import com.idontwantcancer.app.data.repository.*
 import com.idontwantcancer.app.domain.repository.*
 import dagger.Binds
 import dagger.Module
@@ -52,4 +47,10 @@ abstract class RepositoryModule {
     abstract fun bindPreventionRepository(
         preventionRepositoryImpl: PreventionRepositoryImpl
     ): PreventionRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHealingRepository(
+        healingRepositoryImpl: HealingRepositoryImpl
+    ): HealingRepository
 }

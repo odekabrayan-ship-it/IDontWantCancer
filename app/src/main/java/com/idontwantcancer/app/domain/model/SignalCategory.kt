@@ -14,5 +14,7 @@ enum class SignalCategory {
     PREVENTION,
     LIFESTYLE,
     NUTRITION,
-    OCCUPATIONAL
+    OCCUPATIONAL,
+    COSMETICS,
+    CLEANING
 }

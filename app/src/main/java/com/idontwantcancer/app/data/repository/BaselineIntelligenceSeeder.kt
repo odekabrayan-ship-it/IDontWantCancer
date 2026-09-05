@@ -31,6 +31,9 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedTreatmentManuals()
         seedSymptomDirectives()
         seedPatientTruthChecks()
+        seedCosmeticShield()
+        seedHouseholdSentinel()
+        seedFoodAdditiveRegistry()
         
         val now = Instant.now()
         
@@ -571,6 +574,379 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
         healingRepository.savePatientTruthChecks(defenses)
+    }
+
+    private suspend fun seedCosmeticShield() {
+        val now = Instant.now()
+        val cosmetics = listOf(
+            Signal(
+                id = "cos-1",
+                title = "Parabens: Hormonal Disruptors",
+                summary = "Endocrine-disrupting preservatives common in lotions and makeup.",
+                theTruth = "Parabens can mimic the hormone estrogen and have been found in breast tumor tissue. They are absorbed directly through the skin.",
+                theCommand = "Avoid ingredients ending in '-paraben' (Methyl-, Ethyl-, Propyl-, Butyl-).",
+                theExecution = listOf(
+                    "Scan the ingredient label for anything ending in 'paraben'.",
+                    "Switch to products labeled 'Paraben-Free'.",
+                    "Prefer preservatives like Vitamin E (Tocopherol) or Grapefruit Seed Extract."
+                ),
+                theShield = "Reduces cumulative endocrine disruption and lowers metabolic stress on breast tissue.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("EU SCCS / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Methylparaben", "Propylparaben", "Butylparaben", "Ethylparaben"),
+                safeAlternatives = listOf("Tocopherol (Vitamin E)", "Sodium Benzoate", "Potassium Sorbate")
+            ),
+            Signal(
+                id = "cos-2",
+                title = "Phthalates: Hidden Plasticizers",
+                summary = "Synthetic chemicals used to make fragrances last longer.",
+                theTruth = "Phthalates are reproductive toxins and linked to increased risk of hormone-sensitive cancers. They are often hidden under the word 'Fragrance'.",
+                theCommand = "Avoid unlisted 'Fragrance' or 'Parfum'; choose Essential Oils.",
+                theExecution = listOf(
+                    "Check labels for 'Phthalate-Free' or 'BPA-Free'.",
+                    "Avoid products that just list 'Fragrance' or 'Parfum' without a source.",
+                    "Look for 'Diethyl phthalate (DEP)' which is the most common in cosmetics."
+                ),
+                theShield = "Eliminates a primary route for persistent plasticizing chemicals into your endocrine system.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("NIEHS / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("DEP", "DBP", "DEHP", "Fragrance", "Parfum"),
+                safeAlternatives = listOf("Essential Oils", "Natural Extracts", "Fragrance-Free")
+            ),
+            Signal(
+                id = "cos-3",
+                title = "Formaldehyde-Releasers: DMDM Hydantoin",
+                summary = "Preservatives that slowly release known human carcinogens.",
+                theTruth = "DMDM Hydantoin and Quaternium-15 release small amounts of formaldehyde, a Group 1 carcinogen, to prevent bacterial growth.",
+                theCommand = "Discontinue use of hair and skin products containing formaldehyde-releasers.",
+                theExecution = listOf(
+                    "Scan labels for 'DMDM Hydantoin', 'Imidazolidinyl Urea', or 'Diazolidinyl Urea'.",
+                    "Avoid Quaternium-15, which is a potent sensitizer and formaldehyde donor.",
+                    "Switch to air-less pump packaging which requires fewer harsh preservatives."
+                ),
+                theShield = "Stops the chronic low-level inhalation and absorption of a proven human carcinogen.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("IARC / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("DMDM Hydantoin", "Quaternium-15", "Imidazolidinyl Urea", "Diazolidinyl Urea"),
+                safeAlternatives = listOf("Phenoxyethanol", "Caprylyl Glycol")
+            ),
+            Signal(
+                id = "cos-4",
+                title = "Coal Tar: The Dandruff Risk",
+                summary = "Complex chemical mixture used in specialty shampoos and soaps.",
+                theTruth = "Coal tar is a Group 1 human carcinogen. While allowed in low concentrations, long-term exposure increases the risk of skin and bladder cancer.",
+                theCommand = "Avoid coal tar in shampoos; use Salicylic Acid or Zinc instead.",
+                theExecution = listOf(
+                    "Check labels for 'Coal Tar', 'Piroctone Olamine', or 'P-phenylenediamine'.",
+                    "Choose alternative dandruff treatments with Salicylic Acid.",
+                    "Ensure hair dyes are labeled as 'PPD-Free' or use natural henna."
+                ),
+                theShield = "Prevents systemic absorption of polycyclic hydrocarbons through the scalp.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("IARC / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Coal Tar", "PPD", "Aminophenol"),
+                safeAlternatives = listOf("Salicylic Acid", "Zinc Pyrithione", "Ketoconazole")
+            ),
+            Signal(
+                id = "cos-5",
+                title = "Synthetic Musks: Galaxolide",
+                summary = "Endocrine disruptors that make scents last for days.",
+                theTruth = "Synthetic musks like Galaxolide (HHCB) and Tonalide (AHTN) build up in human fat tissue and interfere with hormonal balance.",
+                theCommand = "Discard 'long-lasting' synthetic perfumes and colognes.",
+                theExecution = listOf(
+                    "Identify products that boast '48-hour scent' as high-risk for musks.",
+                    "Avoid Galaxolide and Tonalide on labels (often hidden in 'Parfum').",
+                    "Switch to natural botanical fragrances or perfume oils."
+                ),
+                theShield = "Reduces the cumulative bio-burden of persistent pollutants in your cells.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Endocrine Watch", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Galaxolide", "Tonalide", "Musk Xylene"),
+                safeAlternatives = listOf("Botanical Essential Oils", "Phthalate-Free Fragrance")
+            ),
+            Signal(
+                id = "cos-6",
+                title = "Oxybenzone: Sunscreen Risks",
+                summary = "Chemical UV filter that absorbs into the body at high rates.",
+                theTruth = "Oxybenzone (Benzophenone-3) is a hormone disruptor and can cause allergic skin reactions. It has been detected in 96% of human urine samples in the US.",
+                theCommand = "Switch to 'Mineral' sunscreens containing Zinc or Titanium.",
+                theExecution = listOf(
+                    "Check sunscreen labels for 'Oxybenzone', 'Octinoxate', or 'Avobenzone'.",
+                    "Choose 'Mineral-Based' or 'Physical' sunscreens.",
+                    "Look for 'Non-Nano Zinc Oxide' as the primary active ingredient."
+                ),
+                theShield = "Prevents systemic chemical absorption while maintaining superior surface-level UV protection.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("FDA / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Oxybenzone", "Octinoxate", "Benzophenone-3"),
+                safeAlternatives = listOf("Zinc Oxide", "Titanium Dioxide")
+            ),
+            Signal(
+                id = "cos-7",
+                title = "Aluminum: Deodorant Concern",
+                summary = "Metal salts used to block sweat glands, often found in breast tissue.",
+                theTruth = "While studies are ongoing, aluminum salts are known to interfere with estrogen receptors. Some research shows accumulation in the outer quadrants of the breast.",
+                theCommand = "Prefer Aluminum-Free deodorants for daily use.",
+                theExecution = listOf(
+                    "Scan labels for 'Aluminum Chlorohydrate' or 'Aluminum Zirconium'.",
+                    "Understand that 'Antiperspirant' almost always contains aluminum; 'Deodorant' often does not.",
+                    "Switch to magnesium or baking-soda based alternatives."
+                ),
+                theShield = "Reduces the direct application of metallic compounds to skin near sensitive lymphatic nodes.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.MODERATE,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Endocrine Watch", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Aluminum Chlorohydrate", "Aluminum Zirconium"),
+                safeAlternatives = listOf("Magnesium Hydroxide", "Sodium Bicarbonate", "Arrowroot")
+            ),
+            Signal(
+                id = "cos-8",
+                title = "PFAS in Waterproof Makeup",
+                summary = "Water-resistant chemicals found in mascaras and foundations.",
+                theTruth = "Testing has revealed high levels of fluorine (indicative of PFAS) in waterproof makeup. PFAS are linked to cancer and immune system suppression.",
+                theCommand = "Avoid 'waterproof' makeup; prefer washable formulas.",
+                theExecution = listOf(
+                    "Identify products marketed as 'long-wear' or 'water-resistant'.",
+                    "Scan labels for 'PTFE', 'Polyperfluoromethylisopropyl Ether', or 'Perfluoro-'.",
+                    "Choose clean beauty brands that explicitly ban 'Forever Chemicals'."
+                ),
+                theShield = "Reduces the direct application of extremely persistent industrial pollutants near your eyes and skin.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Environmental Science & Technology", ""),
+                isActionable = true,
+                affectedIngredients = listOf("PTFE", "PFAS", "Teflon", "Fluorine"),
+                safeAlternatives = listOf("Washable Mascara", "Beeswax-based formulas")
+            )
+        )
+        cosmetics.forEach { memory.saveSignal(it); seedThread(it) }
+    }
+
+    private suspend fun seedHouseholdSentinel() {
+        val now = Instant.now()
+        val cleaning = listOf(
+            Signal(
+                id = "clean-1",
+                title = "Triclosan: Antibacterial Risk",
+                summary = "Harsh antibacterial agent used in soaps and toothpastes.",
+                theTruth = "Triclosan is linked to thyroid dysfunction and may contribute to antibiotic resistance. It can also form chloroform when reacting with tap water chlorine.",
+                theCommand = "Switch to plain soap and water; avoid 'Antibacterial' labels.",
+                theExecution = listOf(
+                    "Check hand soaps, dish soaps, and toothpastes for 'Triclosan' or 'Tlocarban'.",
+                    "Understand that plain soap is just as effective at removing viruses and bacteria.",
+                    "Choose mechanical cleaning (scrubbing) over chemical 'killing' of germs."
+                ),
+                theShield = "Protects your microbiome and thyroid health from a persistent pesticide-like chemical.",
+                category = SignalCategory.CLEANING,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("FDA / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Triclosan", "Triclocarban"),
+                safeAlternatives = listOf("Plain Soap", "Castile Soap", "Alcohol-based Sanitizer")
+            ),
+            Signal(
+                id = "clean-2",
+                title = "1,4-Dioxane: The Hidden Contaminant",
+                summary = "A probable carcinogen created during chemical processing.",
+                theTruth = "1,4-Dioxane is a byproduct of 'ethoxylation.' It is not listed on labels but is found in 46% of personal care and cleaning products.",
+                theCommand = "Avoid ingredients containing 'PEG', 'polyethylene', or '-eth'.",
+                theExecution = listOf(
+                    "Identify 'Sodium Laureth Sulfate' (SLES) as a primary risk for 1,4-Dioxane.",
+                    "Look for 'PEG' followed by a number (e.g., PEG-100) on labels.",
+                    "Choose products certified by 'MADE SAFE' or 'EWG Verified' to ensure testing for contaminants."
+                ),
+                theShield = "Reduces exposure to a persistent kidney and liver carcinogen that is legally allowed as a 'contaminant'.",
+                category = SignalCategory.CLEANING,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("EPA / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("PEG", "Sodium Laureth Sulfate", "Polysorbate", "Ceteareth"),
+                safeAlternatives = listOf("Sodium Coco Sulfate", "Glucosides", "Saponified Oils")
+            ),
+            Signal(
+                id = "clean-3",
+                title = "Quats: Fabric Softener Risks",
+                summary = "Disinfectants and fabric softeners that can trigger asthma.",
+                theTruth = "Quaternary Ammonium Compounds ('Quats') are potent lung irritants and may disrupt cellular respiration.",
+                theCommand = "Eliminate liquid fabric softeners and dryer sheets.",
+                theExecution = listOf(
+                    "Identify 'Benzalkonium Chloride' or 'Distearyldimonium Chloride'.",
+                    "Replace dryer sheets with wool dryer balls.",
+                    "Use 1/2 cup of white vinegar in the rinse cycle to naturally soften clothes."
+                ),
+                theShield = "Reduces the chemical film left on your clothing and bedding that touches your skin 24/7.",
+                category = SignalCategory.CLEANING,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Respiratory Watch", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Benzalkonium Chloride", "Distearyldimonium Chloride"),
+                safeAlternatives = listOf("White Vinegar", "Wool Dryer Balls")
+            )
+        )
+        cleaning.forEach { memory.saveSignal(it); seedThread(it) }
+    }
+
+    private suspend fun seedFoodAdditiveRegistry() {
+        val now = Instant.now()
+        val food = listOf(
+            Signal(
+                id = "food-add-1",
+                title = "Sodium Nitrite (E250)",
+                summary = "Curing salt used in local meats that forms Nitrosamines.",
+                theTruth = "E250 preserves the pink color of meat but reacts with stomach acid and protein to form N-nitroso compounds, which damage colon DNA.",
+                theCommand = "Choose 'Nitrite-Free' or brown/grey natural sausages and hams.",
+                theExecution = listOf(
+                    "Scan the ingredient list of any local meat product for 'Sodium Nitrite' or 'E250'.",
+                    "Avoid 'Celery Powder' if it is used as a hidden source of nitrates for 'natural' marketing.",
+                    "Prioritize fresh, frozen, or salted-only meats that have no pink preservatives."
+                ),
+                theShield = "Blocks the formation of high-energy mutagens in your digestive tract.",
+                category = SignalCategory.FOOD,
+                importance = SignalImportance.CRITICAL,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("IARC / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Sodium Nitrite", "E250", "Curing Salt", "Prague Powder"),
+                safeAlternatives = listOf("Fresh Meat", "Nitrite-Free Cured Meat", "Sea Salt Only")
+            ),
+            Signal(
+                id = "food-add-2",
+                title = "Titanium Dioxide (E171)",
+                summary = "Whitening pigment used in sweets, cakes, and supplements.",
+                theTruth = "E171 contains nanoparticles that can cross the gut barrier and cause chronic inflammation. It is banned in the EU but common elsewhere.",
+                theCommand = "Avoid products with bright white coatings or 'E171'.",
+                theExecution = listOf(
+                    "Check the labels of candies, chewing gum, and white cake frostings.",
+                    "Look for 'Titanium Dioxide' or 'E171' on supplement and vitamin labels.",
+                    "Opt for products that use natural whitening like calcium carbonate."
+                ),
+                theShield = "Protects the integrity of your gut lining and prevents the accumulation of industrial nanoparticles.",
+                category = SignalCategory.FOOD,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("EFSA / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Titanium Dioxide", "E171"),
+                safeAlternatives = listOf("Calcium Carbonate", "Natural Coloring", "Untinted products")
+            ),
+            Signal(
+                id = "food-add-3",
+                title = "Potassium Bromate (E924)",
+                summary = "Flour improver and oxidizing agent linked to cancer.",
+                theTruth = "E924 helps bread dough rise and stay white, but it is a known kidney and thyroid carcinogen. It is banned in most countries except the USA.",
+                theCommand = "Check flour and bread labels for 'Bromated' or 'E924'.",
+                theExecution = listOf(
+                    "Switch to 'Unbromated' flour and bread products.",
+                    "Look for organic breads which never allow bromate.",
+                    "Choose artisan breads that use long-fermentation instead of chemical improvers."
+                ),
+                theShield = "Ensures your daily bread does not contribute to your oxidative stress load.",
+                category = SignalCategory.FOOD,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("IARC / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Potassium Bromate", "E924", "Bromated Flour"),
+                safeAlternatives = listOf("Unbromated Flour", "Organic Wheat", "Sourdough")
+            ),
+            Signal(
+                id = "food-add-4",
+                title = "Azo Dyes: Red 40 & Yellow 5",
+                summary = "Synthetic colorings linked to DNA damage in animals.",
+                theTruth = "Azo dyes like Red 40, Yellow 5 (Tartrazine), and Yellow 6 are derived from petroleum. Some studies link them to immune system disruption and cellular mutations.",
+                theCommand = "Minimize consumption of neon-colored processed foods.",
+                theExecution = listOf(
+                    "Check labels for 'Red 40', 'Yellow 5', 'Yellow 6', or 'E129', 'E102', 'E110'.",
+                    "Choose products colored with turmeric, beet juice, or paprika.",
+                    "Avoid brightly colored sodas, candies, and fruit snacks."
+                ),
+                theShield = "Reduces the ingestion of high-energy synthetic dyes that can cross cellular membranes.",
+                category = SignalCategory.FOOD,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("CSPI / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Red 40", "Yellow 5", "Yellow 6", "E129", "E102", "E110"),
+                safeAlternatives = listOf("Beet Juice", "Turmeric", "Annatto", "Chlorophyll")
+            ),
+            Signal(
+                id = "food-add-5",
+                title = "BHA & BHT Preservatives",
+                summary = "Synthetic antioxidants used to prevent oils from going rancid.",
+                theTruth = "Butylated hydroxyanisole (BHA) is listed by the NTP as 'reasonably anticipated to be a human carcinogen.' It disrupts the endocrine system.",
+                theCommand = "Avoid snacks and cereals containing BHA or BHT.",
+                theExecution = listOf(
+                    "Check labels of potato chips, preserved meats, and dry cereals for 'BHA' or 'BHT'.",
+                    "Choose products that use natural Vitamin E (Mixed Tocopherols) or Rosemary Extract as preservatives.",
+                    "Limit intake of highly processed 'shelf-stable' snack foods."
+                ),
+                theShield = "Prevents chronic low-level ingestion of synthetic petroleum-derived antioxidants.",
+                category = SignalCategory.FOOD,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("NTP / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("BHA", "BHT", "Butylated Hydroxyanisole", "E320", "E321"),
+                safeAlternatives = listOf("Mixed Tocopherols", "Rosemary Extract", "Ascorbic Acid")
+            )
+        )
+        food.forEach { memory.saveSignal(it); seedThread(it) }
     }
 
     private suspend fun seedThread(signal: Signal) {

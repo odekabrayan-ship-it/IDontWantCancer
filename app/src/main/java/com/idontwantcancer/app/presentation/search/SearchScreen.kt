@@ -279,15 +279,18 @@ private fun SearchIdleState(onChipClick: (String) -> Unit) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     val chips = listOf(
-                        "🧪 " + stringResource(R.string.search_example_1),
-                        "🧴 " + stringResource(R.string.search_example_2),
-                        "🍳 " + stringResource(R.string.search_example_3),
-                        "💄 " + stringResource(R.string.search_example_4)
+                        "💄 " + stringResource(R.string.cat_cosmetics),
+                        "🧪 " + stringResource(R.string.cat_cleaning),
+                        "🍎 " + stringResource(R.string.cat_food),
+                        "🧬 " + stringResource(R.string.cat_nutrition),
+                        "🩺 " + stringResource(R.string.cat_screening),
+                        "🏭 " + stringResource(R.string.cat_occupational)
                     )
                     
                     chips.forEach { label ->
+                        val queryText = label.substring(2)
                         SuggestionChip(
-                            onClick = { onChipClick(label.substring(2)) },
+                            onClick = { onChipClick(queryText) },
                             label = { 
                                 Text(
                                     text = label,

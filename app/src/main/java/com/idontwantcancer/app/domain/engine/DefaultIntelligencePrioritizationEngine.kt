@@ -55,7 +55,7 @@ class DefaultIntelligencePrioritizationEngine @Inject constructor() : Intelligen
         // 3. Category weighting
         score += when (signal.category) {
             SignalCategory.SCREENING, SignalCategory.FOOD -> 10
-            SignalCategory.CONSUMER_PRODUCTS, SignalCategory.ENVIRONMENT, SignalCategory.OCCUPATIONAL -> 8
+            SignalCategory.CONSUMER_PRODUCTS, SignalCategory.COSMETICS, SignalCategory.CLEANING, SignalCategory.ENVIRONMENT, SignalCategory.OCCUPATIONAL -> 8
             SignalCategory.REGULATION, SignalCategory.MEDICINE -> 6
             SignalCategory.PREVENTION, SignalCategory.RESEARCH, SignalCategory.LIFESTYLE, SignalCategory.NUTRITION -> 4
         }

@@ -64,6 +64,34 @@ class StaticIntelligenceSourceRegistry @Inject constructor() : IntelligenceSourc
                 updateReliability = SourceTrustLevel.MODERATE
             ),
             scope = GeographicScope.GLOBAL
+        ),
+        IntelligenceSource(
+            id = "eu_sccs",
+            name = "EU Scientific Committee on Consumer Safety",
+            type = IntelligenceSourceType.PUBLIC_HEALTH,
+            authority = SourceAuthority.REGULATORY_BODY,
+            reliability = SourceReliability(
+                trustLevel = SourceTrustLevel.VERY_HIGH,
+                isTransparent = true,
+                updateReliability = SourceTrustLevel.HIGH,
+                specialization = SignalCategory.COSMETICS
+            ),
+            scope = GeographicScope.REGIONAL,
+            countryCode = "EU"
+        ),
+        IntelligenceSource(
+            id = "epa_iris",
+            name = "EPA IRIS - Integrated Risk Information System",
+            type = IntelligenceSourceType.PUBLIC_HEALTH,
+            authority = SourceAuthority.NATIONAL,
+            reliability = SourceReliability(
+                trustLevel = SourceTrustLevel.HIGH,
+                isTransparent = true,
+                updateReliability = SourceTrustLevel.HIGH,
+                specialization = SignalCategory.CLEANING
+            ),
+            scope = GeographicScope.NATIONAL,
+            countryCode = "US"
         )
     )
 

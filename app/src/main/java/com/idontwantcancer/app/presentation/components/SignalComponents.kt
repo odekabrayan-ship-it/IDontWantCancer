@@ -437,6 +437,8 @@ fun formatCategory(category: SignalCategory): String {
         SignalCategory.LIFESTYLE -> stringResource(R.string.cat_lifestyle)
         SignalCategory.NUTRITION -> stringResource(R.string.cat_nutrition)
         SignalCategory.OCCUPATIONAL -> stringResource(R.string.cat_occupational)
+        SignalCategory.COSMETICS -> stringResource(R.string.cat_cosmetics)
+        SignalCategory.CLEANING -> stringResource(R.string.cat_cleaning)
     }
 }
 

@@ -81,6 +81,8 @@
     <string name="cat_lifestyle">Lifestyle</string>
     <string name="cat_nutrition">Nutrition</string>
     <string name="cat_occupational">Occupational</string>
+    <string name="cat_cosmetics">Cosmetics</string>
+    <string name="cat_cleaning">Cleaning</string>
 
     <!-- Signal Importance -->
     <string name="imp_low">Low importance</string>

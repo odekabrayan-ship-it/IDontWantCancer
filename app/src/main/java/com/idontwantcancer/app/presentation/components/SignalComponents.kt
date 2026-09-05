@@ -272,6 +272,118 @@ fun SignalHeader(
     }
 }
 
+/**
+ * A high-impact header for signal detail views that leads with the Command.
+ */
+@Composable
+fun DirectiveHeader(
+    signal: Signal,
+    modifier: Modifier = Modifier
+) {
+    val spacing = LocalSpacing.current
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(spacing.small)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = formatCategory(signal.category),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.secondary,
+                fontWeight = FontWeight.Bold
+            )
+            SignalImportanceBadge(signal.importance)
+        }
+
+        Text(
+            text = signal.theCommand ?: signal.title,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.ExtraBold,
+            lineHeight = 36.sp,
+            modifier = Modifier.semantics { heading() }
+        )
+
+        if (signal.theCommand != null) {
+            Text(
+                text = signal.title,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontStyle = FontStyle.Italic
+            )
+        }
+
+        if (signal.safetyLevel != SafetyLevel.UNDEFINED) {
+            Spacer(modifier = Modifier.height(4.dp))
+            SafetyLevelBadge(signal.safetyLevel)
+        }
+    }
+}
+
+/**
+ * A component for individual steps in a protection roadmap.
+ */
+@Composable
+fun ExecutionStepItem(
+    stepNumber: Int,
+    content: String,
+    isLast: Boolean
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+            .padding(vertical = 4.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.width(32.dp).fillMaxHeight()
+        ) {
+            Surface(
+                shape = androidx.compose.foundation.shape.CircleShape,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Text(
+                        text = stepNumber.toString(),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+            if (!isLast) {
+                VerticalDivider(
+                    modifier = Modifier.fillMaxHeight().padding(vertical = 4.dp),
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                    thickness = 2.dp
+                )
+            }
+        }
+        
+        Spacer(modifier = Modifier.width(16.dp))
+        
+        Card(
+            modifier = Modifier.weight(1f),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            ),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        ) {
+            Text(
+                text = content,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(12.dp),
+                lineHeight = 24.sp
+            )
+        }
+    }
+}
+
 @Composable
 fun formatCategory(category: SignalCategory): String {
     return when (category) {

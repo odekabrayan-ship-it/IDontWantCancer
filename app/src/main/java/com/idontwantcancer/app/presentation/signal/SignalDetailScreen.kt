@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -116,7 +117,19 @@ fun SignalDetailView(
         }
 
         item {
-            SignalHeader(signal = signal)
+            DirectiveHeader(signal = signal)
+        }
+
+        if (signal.theExecution.isNotEmpty()) {
+            item {
+                HowToSection(steps = signal.theExecution)
+            }
+        }
+
+        if (signal.theShield != null) {
+            item {
+                ShieldSection(content = signal.theShield)
+            }
         }
 
         if (signal.investigatedClaim != null) {
@@ -125,36 +138,21 @@ fun SignalDetailView(
             }
         }
 
-        item {
-            IntelligenceSection(
-                title = stringResource(R.string.detail_section_summary),
-                content = signal.summary
-            )
-        }
-
-        signal.significance?.let { significance ->
+        signal.theTruth?.let { truth ->
             item {
                 IntelligenceSection(
-                    title = stringResource(R.string.detail_section_significance),
-                    content = significance
+                    title = "THE TRUTH",
+                    content = truth
                 )
             }
         }
 
-        signal.explanation?.let { explanation ->
+        // Legacy summary if Truth is missing
+        if (signal.theTruth == null) {
             item {
                 IntelligenceSection(
-                    title = stringResource(R.string.detail_section_explanation),
-                    content = explanation
-                )
-            }
-        }
-
-        signal.recommendedAction?.let { action ->
-            item {
-                IntelligenceSection(
-                    title = stringResource(R.string.detail_section_action),
-                    content = action
+                    title = stringResource(R.string.detail_section_summary),
+                    content = signal.summary
                 )
             }
         }
@@ -164,7 +162,65 @@ fun SignalDetailView(
         }
         
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+    }
+}
+
+@Composable
+private fun HowToSection(steps: List<String>) {
+    val spacing = LocalSpacing.current
+    Column(verticalArrangement = Arrangement.spacedBy(spacing.medium)) {
+        Text(
+            text = stringResource(R.string.detail_how_to_title),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.ExtraBold,
+            letterSpacing = 2.sp,
+            modifier = Modifier.semantics { heading() }
+        )
+        
+        steps.forEachIndexed { index, step ->
+            ExecutionStepItem(
+                stepNumber = index + 1,
+                content = step,
+                isLast = index == steps.size - 1
+            )
+        }
+    }
+}
+
+@Composable
+private fun ShieldSection(content: String) {
+    val spacing = LocalSpacing.current
+    Surface(
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+    ) {
+        Column(modifier = Modifier.padding(spacing.cardPadding)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.Shield,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.detail_shield_verified),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Black
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = content,
+                style = MaterialTheme.typography.bodyLarge,
+                lineHeight = 24.sp,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }

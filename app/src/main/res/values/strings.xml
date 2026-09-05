@@ -53,6 +53,9 @@
     <string name="detail_section_action">What you can do</string>
     <string name="detail_section_provenance">Where this came from</string>
     <string name="detail_source_label">Source: %1$s</string>
+    <string name="detail_how_to_title">HOW TO DO THIS</string>
+    <string name="detail_step_label">STEP %1$d</string>
+    <string name="detail_shield_verified">PROTECTION VERIFIED</string>
 
     <!-- Signal Categories -->
     <string name="cat_food">Food</string>

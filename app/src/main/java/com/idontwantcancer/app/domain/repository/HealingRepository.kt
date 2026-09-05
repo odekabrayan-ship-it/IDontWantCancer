@@ -1,5 +1,6 @@
 package com.idontwantcancer.app.domain.repository
 
+import com.idontwantcancer.app.domain.model.PatientTruthCheck
 import com.idontwantcancer.app.domain.model.SymptomDirective
 import com.idontwantcancer.app.domain.model.TreatmentManual
 import kotlinx.coroutines.flow.Flow
@@ -27,4 +28,14 @@ interface HealingRepository {
      * Saves foundational symptom directives.
      */
     suspend fun saveSymptomDirectives(items: List<SymptomDirective>)
+
+    /**
+     * Retrieves all specialized truth checks for patients.
+     */
+    fun getPatientTruthChecks(): Flow<List<PatientTruthCheck>>
+
+    /**
+     * Saves foundational patient truth checks.
+     */
+    suspend fun savePatientTruthChecks(items: List<PatientTruthCheck>)
 }

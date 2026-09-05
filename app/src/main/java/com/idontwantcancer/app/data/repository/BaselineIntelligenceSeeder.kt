@@ -30,6 +30,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedPreventionActions()
         seedTreatmentManuals()
         seedSymptomDirectives()
+        seedPatientTruthChecks()
         
         val now = Instant.now()
         
@@ -701,6 +702,54 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
         healingRepository.saveSymptomDirectives(symptoms)
+    }
+
+    private suspend fun seedPatientTruthChecks() {
+        val defenses = listOf(
+            PatientTruthCheck(
+                id = "ptc-1",
+                claim = "The 'Miracle Fruit' Cure",
+                verdict = PatientVerdict.SCAM,
+                theTruth = "No specific fruit or 'superfood' has been clinically proven to cure cancer. Claims of such fruits being '10,000 times stronger than chemo' are fraudulent and based on misinterpreted laboratory studies in test tubes, not humans.",
+                theCommand = "Do NOT replace your prescribed medical treatment with alternative fruits or diets.",
+                theExecution = listOf(
+                    "Continue all scheduled medical appointments and infusions.",
+                    "View fruits as a complementary part of a healthy diet, not as a replacement for medicine.",
+                    "Report any 'secret cure' advertisements to the Agency for investigation."
+                ),
+                theShield = "Prevents a fatal security breach in your medical plan, ensuring you continue receiving evidence-based care while protecting your immune system.",
+                socialScript = "I appreciate your concern, but my Agency has verified that this is not a substitute for my medical plan. I'm sticking to the science."
+            ),
+            PatientTruthCheck(
+                id = "ptc-2",
+                claim = "Alkaline Water / Diet",
+                verdict = PatientVerdict.UNCERTAIN,
+                theTruth = "Body pH is strictly regulated by the lungs and kidneys. You cannot significantly change the pH of your blood or internal organs through diet.",
+                theCommand = "Use alkaline water only as hydration; ignore all 'cancer-starving' claims.",
+                theExecution = listOf(
+                    "Drink water (alkaline or regular) for hydration purposes only.",
+                    "Do not invest in expensive alkaline machines or restrictive diets based on this myth.",
+                    "Maintain a balanced diet that supports your overall strength during treatment."
+                ),
+                theShield = "Protects you from financial exploitation and from the stress of a restrictive, biologically unnecessary diet.",
+                socialScript = "Actually, the science shows that blood pH is regulated by the body regardless of what we drink. I'm focusing on hydration and my treatment plan."
+            ),
+            PatientTruthCheck(
+                id = "ptc-3",
+                claim = "The 'Detox' Protocol",
+                verdict = PatientVerdict.UNCERTAIN,
+                theTruth = "Many 'detox' herbs and high-dose supplements can interfere with chemotherapy drugs by altering liver enzymes. This can make your treatment less effective or more toxic.",
+                theCommand = "Avoid all unverified 'detox' supplements during your treatment cycles.",
+                theExecution = listOf(
+                    "Consult your oncologist before starting any new herbal supplement or 'cleanse'.",
+                    "Focus on hydration and whole foods to support your liver's natural metabolic processes.",
+                    "Be wary of any protocol that promises to 'flush out chemo' while you are still undergoing therapy."
+                ),
+                theShield = "Ensures your prescribed drugs remain at the intended therapeutic levels in your bloodstream.",
+                socialScript = "My doctors and the Agency have warned me that 'detox' herbs can interfere with my treatment. I'm not taking any chances right now."
+            )
+        )
+        healingRepository.savePatientTruthChecks(defenses)
     }
 
     private suspend fun seedThread(signal: Signal) {

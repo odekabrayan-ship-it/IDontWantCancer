@@ -2,6 +2,7 @@ package com.idontwantcancer.app.presentation.healing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.idontwantcancer.app.domain.model.PatientTruthCheck
 import com.idontwantcancer.app.domain.model.SymptomDirective
 import com.idontwantcancer.app.domain.model.TreatmentManual
 import com.idontwantcancer.app.domain.repository.HealingRepository
@@ -19,11 +20,13 @@ class HealingViewModel @Inject constructor(
 
     val uiState: StateFlow<HealingUiState> = combine(
         healingRepository.getTreatmentManuals(),
-        healingRepository.getSymptomDirectives()
-    ) { manuals, symptoms ->
+        healingRepository.getSymptomDirectives(),
+        healingRepository.getPatientTruthChecks()
+    ) { manuals, symptoms, truthChecks ->
         HealingUiState.Success(
             treatmentManuals = manuals,
-            symptomDirectives = symptoms
+            symptomDirectives = symptoms,
+            patientTruthChecks = truthChecks
         )
     }.stateIn(
         scope = viewModelScope,
@@ -36,6 +39,7 @@ sealed interface HealingUiState {
     data object Loading : HealingUiState
     data class Success(
         val treatmentManuals: List<TreatmentManual>,
-        val symptomDirectives: List<SymptomDirective>
+        val symptomDirectives: List<SymptomDirective>,
+        val patientTruthChecks: List<PatientTruthCheck>
     ) : HealingUiState
 }

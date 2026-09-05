@@ -366,4 +366,10 @@ object DatabaseModule {
     fun provideSymptomDirectiveDao(database: AppDatabase): SymptomDirectiveDao {
         return database.symptomDirectiveDao()
     }
+
+    @Provides
+    @Singleton
+    fun providePatientTruthCheckDao(database: AppDatabase): PatientTruthCheckDao {
+        return database.patientTruthCheckDao()
+    }
 }

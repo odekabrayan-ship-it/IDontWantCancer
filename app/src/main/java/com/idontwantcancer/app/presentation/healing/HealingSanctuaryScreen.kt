@@ -27,6 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
+import com.idontwantcancer.app.domain.model.PatientTruthCheck
+import com.idontwantcancer.app.domain.model.PatientVerdict
 import com.idontwantcancer.app.domain.model.SymptomDirective
 import com.idontwantcancer.app.domain.model.TreatmentManual
 import com.idontwantcancer.app.presentation.components.AgencyLoadingState
@@ -124,6 +126,26 @@ private fun SanctuaryContent(state: HealingUiState.Success) {
 
         items(state.symptomDirectives, key = { "symptom-${it.id}" }) { symptom ->
             SymptomSentinelCard(symptom)
+        }
+
+        item(span = { GridItemSpan(2) }) {
+            Column(modifier = Modifier.padding(top = spacing.large)) {
+                Text(
+                    text = "DECEPTION SHIELD",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.error
+                )
+                Text(
+                    text = "Protecting you from miracle cure scams",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        items(state.patientTruthChecks, key = { "truth-${it.id}" }, span = { GridItemSpan(2) }) { truth ->
+            PatientTruthCard(truth)
         }
         
         item(span = { GridItemSpan(2) }) {
@@ -386,5 +408,116 @@ private fun SymptomSentinelCard(symptom: SymptomDirective) {
                 }
             }
         )
+    }
+}
+
+@Composable
+private fun PatientTruthCard(truth: PatientTruthCheck) {
+    var expanded by remember { mutableStateOf(false) }
+    val colorScheme = MaterialTheme.colorScheme
+    val spacing = LocalSpacing.current
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = colorScheme.errorContainer.copy(alpha = 0.1f)
+        ),
+        border = BorderStroke(1.dp, colorScheme.error.copy(alpha = 0.3f))
+    ) {
+        Column(
+            modifier = Modifier
+                .clickable { expanded = !expanded }
+                .padding(spacing.cardPadding)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "THE CLAIM",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = colorScheme.error,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = truth.claim,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+                Surface(
+                    color = colorScheme.error,
+                    shape = MaterialTheme.shapes.extraSmall
+                ) {
+                    Text(
+                        text = truth.verdict.name,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = colorScheme.onError,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+            }
+
+            if (expanded) {
+                Column(modifier = Modifier.padding(top = 16.dp)) {
+                    HorizontalDivider(color = colorScheme.error.copy(alpha = 0.2f), modifier = Modifier.padding(bottom = 16.dp))
+                    
+                    Text(
+                        text = "THE TRUTH",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = colorScheme.secondary,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = truth.theTruth,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "THE COMMAND",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = colorScheme.error,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = truth.theCommand,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = colorScheme.error,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Surface(
+                        color = colorScheme.primary.copy(alpha = 0.05f),
+                        shape = MaterialTheme.shapes.medium,
+                        border = BorderStroke(1.dp, colorScheme.primary.copy(alpha = 0.2f))
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "WHAT TO SAY TO FRIENDS",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = colorScheme.primary,
+                                fontWeight = FontWeight.Black
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "\"${truth.socialScript}\"",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

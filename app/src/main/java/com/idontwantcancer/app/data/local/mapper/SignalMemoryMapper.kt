@@ -56,6 +56,11 @@ fun SignalEntity.toDomain(): Signal {
             emptyList()
         },
         safetyLevel = safetyLevel,
+        safeAlternatives = try {
+            Json.decodeFromString(safeAlternativesJson)
+        } catch (e: Exception) {
+            emptyList()
+        },
         theTruth = theTruth,
         theCommand = theCommand,
         theExecution = try {
@@ -101,6 +106,7 @@ fun Signal.toEntity(
         targetCountryCode = targetCountryCode,
         affectedIngredientsJson = Json.encodeToString(affectedIngredients),
         safetyLevel = safetyLevel,
+        safeAlternativesJson = Json.encodeToString(safeAlternatives),
         theTruth = theTruth,
         theCommand = theCommand,
         theExecutionJson = Json.encodeToString(theExecution),

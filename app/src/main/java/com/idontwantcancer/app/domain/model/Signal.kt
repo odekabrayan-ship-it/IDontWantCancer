@@ -43,6 +43,7 @@ data class Signal(
     // Consumer Safety (Step 222 - Feature 2)
     val affectedIngredients: List<String> = emptyList(),
     val safetyLevel: SafetyLevel = SafetyLevel.UNDEFINED,
+    val safeAlternatives: List<String> = emptyList(),
 
     // Directive Protocol (Step 222 - Overhaul Stage 1)
     val theTruth: String? = null,

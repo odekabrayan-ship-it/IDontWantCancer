@@ -12,6 +12,7 @@ import javax.inject.Singleton
  * Responsible for seeding the agency with verified baseline intelligence 
  * to ensure a professional first-run experience.
  * Every signal follows the 4-Point Directive Protocol: Truth, Command, Execution, Shield.
+ * Updated for Retail Sentinel (Action 2 Overhaul): Includes safe alternatives for products.
  */
 @Singleton
 class BaselineIntelligenceSeeder @Inject constructor(
@@ -184,7 +185,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             actionType = ActionType.AVOID,
             scope = GeographicScope.GLOBAL,
             affectedIngredients = listOf("Benzene", "Aerosol", "Propellant"),
-            safetyLevel = SafetyLevel.DANGER
+            safetyLevel = SafetyLevel.DANGER,
+            safeAlternatives = listOf("Mineral lotions", "Mechanical pump sprays", "Non-aerosol dry shampoos")
         )
 
         // 7. Asbestos in Talc
@@ -211,7 +213,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             actionType = ActionType.AVOID,
             scope = GeographicScope.GLOBAL,
             affectedIngredients = listOf("Talc", "Asbestos", "Baby Powder"),
-            safetyLevel = SafetyLevel.DANGER
+            safetyLevel = SafetyLevel.DANGER,
+            safeAlternatives = listOf("Zea Mays (Corn) Starch", "Arrowroot Powder", "Kaolin Clay")
         )
 
         // 8. PFAS (Forever Chemicals)
@@ -238,7 +241,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             actionType = ActionType.MONITOR,
             scope = GeographicScope.GLOBAL,
             affectedIngredients = listOf("PFAS", "PFOA", "PFOS", "Non-stick"),
-            safetyLevel = SafetyLevel.CAUTION
+            safetyLevel = SafetyLevel.CAUTION,
+            safeAlternatives = listOf("Cast Iron", "Stainless Steel", "Ceramic Coating", "Glass")
         )
 
         // 9. Cell Phones & 5G

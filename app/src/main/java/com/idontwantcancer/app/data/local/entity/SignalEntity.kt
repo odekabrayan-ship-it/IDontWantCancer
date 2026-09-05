@@ -43,6 +43,7 @@ data class SignalEntity(
     // Consumer Safety (Step 222 - Feature 2)
     val affectedIngredientsJson: String = "[]", // Serialized list of String
     val safetyLevel: SafetyLevel = SafetyLevel.UNDEFINED,
+    val safeAlternativesJson: String = "[]", // Serialized list of String
 
     // Directive Protocol (Step 222 - Overhaul Stage 1)
     val theTruth: String? = null,

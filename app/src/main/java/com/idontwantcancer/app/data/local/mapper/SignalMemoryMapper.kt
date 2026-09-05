@@ -64,6 +64,7 @@ fun SignalEntity.toDomain(): Signal {
             emptyList()
         },
         theShield = theShield,
+        isActionTaken = isActionTaken,
         lastAdmittedStateEntryId = lastAdmittedStateEntryId
     )
 }
@@ -104,6 +105,7 @@ fun Signal.toEntity(
         theCommand = theCommand,
         theExecutionJson = Json.encodeToString(theExecution),
         theShield = theShield,
+        isActionTaken = isActionTaken,
         lifecycle = lifecycle,
         isBriefed = isBriefed,
         firstObservedAt = firstObservedAt,

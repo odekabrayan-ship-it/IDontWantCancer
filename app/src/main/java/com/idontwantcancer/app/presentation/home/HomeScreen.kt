@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -144,12 +145,15 @@ private fun HomeContent(
         briefing.items.mapNotNull { briefing.signals[it.intelligenceId] } 
     }
     
-    // Stage 2 Overhaul: Identify Critical Directives (Importance >= HIGH)
+    // Stage 4 Overhaul: User Agency filtering
     val primaryDirectives = remember(signals) {
-        signals.filter { it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH }
+        signals.filter { (it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH) && !it.isActionTaken }
     }
     val otherSignals = remember(signals, primaryDirectives) {
-        signals.filter { it !in primaryDirectives }
+        signals.filter { it !in primaryDirectives && !it.isActionTaken }
+    }
+    val securedSignals = remember(signals) {
+        signals.filter { it.isActionTaken }
     }
     
     val isClear = remember(briefing, signals) { 
@@ -215,6 +219,19 @@ private fun HomeContent(
                     )
                 }
             }
+
+            if (securedSignals.isNotEmpty()) {
+                item {
+                    SectionHeader(title = stringResource(R.string.section_safety_secured))
+                }
+                items(securedSignals, key = { "secured-${it.id}" }) { signal ->
+                    SignalCard(
+                        signal = signal,
+                        isSelected = false,
+                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
+                    )
+                }
+            }
         }
     }
 }
@@ -239,7 +256,7 @@ private fun AdoptedActionCard(action: PreventionAction) {
                 "smoke_free" -> Icons.Default.SmokeFree
                 "sunny" -> Icons.Default.WbSunny
                 "no_drinks" -> Icons.Default.NoDrinks
-                "directions_run" -> Icons.Default.DirectionsRun
+                "directions_run" -> Icons.AutoMirrored.Filled.DirectionsRun
                 "grass" -> Icons.Default.Grass
                 "restaurant" -> Icons.Default.Restaurant
                 else -> Icons.Default.Verified

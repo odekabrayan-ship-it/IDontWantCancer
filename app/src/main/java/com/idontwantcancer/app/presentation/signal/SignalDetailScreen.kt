@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -261,6 +263,39 @@ private fun TruthCheckComparisonCard(signal: Signal) {
                 Spacer(modifier = Modifier.width(8.dp))
                 signal.verdict?.let { TruthCheckBadge(it) }
             }
+        }
+    }
+}
+
+@Composable
+private fun SafetyClosureButton(
+    signalId: String,
+    isTaken: Boolean,
+    onInteraction: (IntelligenceUiInteraction) -> Unit
+) {
+    Button(
+        onClick = { onInteraction(IntelligenceUiInteraction.AcknowledgeSignal(signalId)) },
+        modifier = Modifier.fillMaxWidth().height(56.dp),
+        colors = if (isTaken) 
+            ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary) 
+        else 
+            ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+        shape = MaterialTheme.shapes.medium
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                imageVector = if (isTaken) Icons.Default.CheckCircle else Icons.Default.VerifiedUser,
+                contentDescription = null
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = if (isTaken) 
+                    stringResource(R.string.detail_safety_secured) 
+                else 
+                    stringResource(R.string.detail_action_completed),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

@@ -30,6 +30,7 @@ class DefaultIntelligenceCommandRetryBoundary @Inject constructor() :
             is IntelligenceUiInteraction.NavigateBack,
             is IntelligenceUiInteraction.ClearSearch,
             is IntelligenceUiInteraction.CancelOperation,
+            is IntelligenceUiInteraction.AcknowledgeSignal,
             is IntelligenceUiInteraction.ClearSelection -> {
                 CommandRetryStatus.EXTERNALLY_MANAGED
             }

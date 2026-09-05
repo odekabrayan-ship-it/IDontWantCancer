@@ -34,4 +34,7 @@ interface SignalDao {
 
     @Query("SELECT * FROM signals WHERE category IN (:categories) ORDER BY publishedAt DESC")
     fun getByCategoriesFlow(categories: List<SignalCategory>): Flow<List<SignalEntity>>
+
+    @Query("UPDATE signals SET isActionTaken = :isTaken WHERE id = :id")
+    suspend fun updateActionTakenStatus(id: String, isTaken: Boolean)
 }

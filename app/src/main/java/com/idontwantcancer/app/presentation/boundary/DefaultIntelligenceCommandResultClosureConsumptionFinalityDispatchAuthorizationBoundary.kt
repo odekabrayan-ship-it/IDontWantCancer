@@ -25,6 +25,7 @@ class DefaultIntelligenceCommandResultClosureConsumptionFinalityDispatchAuthoriz
             is IntelligenceUiInteraction.PerformSearch,
             is IntelligenceUiInteraction.ClearSearch,
             is IntelligenceUiInteraction.CancelOperation,
+            is IntelligenceUiInteraction.AcknowledgeSignal,
             is IntelligenceUiInteraction.ClearSelection -> true
         }
 

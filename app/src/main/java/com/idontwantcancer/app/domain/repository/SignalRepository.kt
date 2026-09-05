@@ -29,4 +29,9 @@ interface SignalRepository {
      * Retrieves a specific intelligence signal by its unique identifier.
      */
     suspend fun getSignalById(signalId: String): Signal?
+
+    /**
+     * Updates the user's action taken status for a specific signal.
+     */
+    suspend fun updateActionTakenStatus(signalId: String, isTaken: Boolean)
 }

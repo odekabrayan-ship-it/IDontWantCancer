@@ -77,4 +77,8 @@ class SignalRepositoryImpl @Inject constructor(
     override suspend fun getSignalById(signalId: String): Signal? = withContext(dispatcherProvider.io) {
         signalDao.getById(signalId)?.toDomainFromEntity()
     }
+
+    override suspend fun updateActionTakenStatus(signalId: String, isTaken: Boolean) = withContext(dispatcherProvider.io) {
+        signalDao.updateActionTakenStatus(signalId, isTaken)
+    }
 }

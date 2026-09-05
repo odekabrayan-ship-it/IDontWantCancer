@@ -39,4 +39,9 @@ sealed interface IntelligenceUiInteraction {
      * User requested to clear the current selection (e.g. closing a detail pane).
      */
     data object ClearSelection : IntelligenceUiInteraction
+
+    /**
+     * User acknowledged or completed the directive associated with a signal.
+     */
+    data class AcknowledgeSignal(val signalId: String) : IntelligenceUiInteraction
 }

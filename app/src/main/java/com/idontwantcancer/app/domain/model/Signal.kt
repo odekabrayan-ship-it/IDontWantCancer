@@ -49,6 +49,7 @@ data class Signal(
     val theCommand: String? = null,
     val theExecution: List<String> = emptyList(),
     val theShield: String? = null,
+    val isActionTaken: Boolean = false,
     
     // Admission Context
     val lastAdmittedStateEntryId: String? = null

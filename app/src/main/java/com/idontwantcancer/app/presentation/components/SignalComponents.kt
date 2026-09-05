@@ -91,6 +91,11 @@ fun SignalCard(
                 TruthCheckBadge(signal.verdict)
             }
 
+            if (signal.safeAlternatives.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(spacing.small))
+                SubstitutionBadge()
+            }
+
             if (signal.safetyLevel != SafetyLevel.UNDEFINED) {
                 Spacer(modifier = Modifier.height(spacing.small))
                 SafetyLevelBadge(signal.safetyLevel)
@@ -112,6 +117,40 @@ fun SignalCard(
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
             }
+        }
+    }
+}
+
+/**
+ * A badge indicating that the agency has identified safe alternatives for this risk.
+ */
+@Composable
+fun SubstitutionBadge(
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+        shape = MaterialTheme.shapes.small,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.SwapHoriz,
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = stringResource(R.string.detail_substitution_badge),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }

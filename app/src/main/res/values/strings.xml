@@ -56,6 +56,10 @@
     <string name="detail_how_to_title">HOW TO DO THIS</string>
     <string name="detail_step_label">STEP %1$d</string>
     <string name="detail_shield_verified">PROTECTION VERIFIED</string>
+    <string name="detail_retail_avoid">WHAT TO AVOID</string>
+    <string name="detail_retail_safe">VERIFIED SAFE ALTERNATIVES</string>
+    <string name="detail_retail_scan_protocol">LABEL SCAN PROTOCOL</string>
+    <string name="detail_substitution_badge">Substitution Intelligence Available</string>
     <string name="detail_action_completed">I HAVE TAKEN THIS ACTION</string>
     <string name="detail_safety_secured">SAFETY SECURED</string>
     <string name="section_safety_secured">SAFETY SECURED</string>

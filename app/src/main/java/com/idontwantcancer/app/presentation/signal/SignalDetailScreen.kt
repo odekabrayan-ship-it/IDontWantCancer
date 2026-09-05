@@ -25,6 +25,8 @@ import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.presentation.components.*
+import com.idontwantcancer.app.presentation.components.RetailSubstitutionCard
+import com.idontwantcancer.app.presentation.components.LabelScanProtocolHeader
 import com.idontwantcancer.app.presentation.model.CommandConsumptionFinalityPresentationContract
 import com.idontwantcancer.app.presentation.model.IntelligenceReentryReconciliationPresentationContract
 import com.idontwantcancer.app.presentation.model.IntelligenceUiInteraction
@@ -122,9 +124,27 @@ fun SignalDetailView(
             DirectiveHeader(signal = signal)
         }
 
+        if (signal.safeAlternatives.isNotEmpty()) {
+            item {
+                RetailSubstitutionCard(signal = signal)
+            }
+        }
+
         if (signal.theExecution.isNotEmpty()) {
             item {
-                HowToSection(steps = signal.theExecution)
+                if (signal.safeAlternatives.isNotEmpty()) {
+                    LabelScanProtocolHeader()
+                } else {
+                    HowToHeader()
+                }
+            }
+            
+            items(signal.theExecution.size) { index ->
+                ExecutionStepItem(
+                    stepNumber = index + 1,
+                    content = signal.theExecution[index],
+                    isLast = index == signal.theExecution.size - 1
+                )
             }
         }
 
@@ -170,26 +190,19 @@ fun SignalDetailView(
 }
 
 @Composable
-private fun HowToSection(steps: List<String>) {
+private fun HowToHeader() {
     val spacing = LocalSpacing.current
-    Column(verticalArrangement = Arrangement.spacedBy(spacing.medium)) {
-        Text(
-            text = stringResource(R.string.detail_how_to_title),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.ExtraBold,
-            letterSpacing = 2.sp,
-            modifier = Modifier.semantics { heading() }
-        )
-        
-        steps.forEachIndexed { index, step ->
-            ExecutionStepItem(
-                stepNumber = index + 1,
-                content = step,
-                isLast = index == steps.size - 1
-            )
-        }
-    }
+    Text(
+        text = stringResource(R.string.detail_how_to_title),
+        style = MaterialTheme.typography.titleLarge,
+        color = MaterialTheme.colorScheme.primary,
+        fontWeight = FontWeight.ExtraBold,
+        letterSpacing = 2.sp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = spacing.medium)
+            .semantics { heading() }
+    )
 }
 
 @Composable

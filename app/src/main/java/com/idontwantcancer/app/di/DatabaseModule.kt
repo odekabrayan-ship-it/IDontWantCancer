@@ -265,4 +265,10 @@ object DatabaseModule {
     fun provideEducationLessonDao(database: AppDatabase): EducationLessonDao {
         return database.educationLessonDao()
     }
+
+    @Provides
+    @Singleton
+    fun providePreventionActionDao(database: AppDatabase): PreventionActionDao {
+        return database.preventionActionDao()
+    }
 }

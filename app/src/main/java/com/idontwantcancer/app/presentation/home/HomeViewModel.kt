@@ -6,6 +6,7 @@ import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
 import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.GetCurrentBriefingUseCase
+import com.idontwantcancer.app.domain.usecase.GetPreventionActionsUseCase
 import com.idontwantcancer.app.presentation.boundary.*
 import com.idontwantcancer.app.presentation.mapper.toContract
 import com.idontwantcancer.app.presentation.mapper.toUiState
@@ -15,6 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -29,6 +31,7 @@ class HomeViewModel @Inject constructor(
     private val getCurrentBriefingUseCase: GetCurrentBriefingUseCase,
     private val coordinator: IntelligenceCycleCoordinator,
     private val userContextRepository: UserContextRepository,
+    private val getPreventionActionsUseCase: GetPreventionActionsUseCase,
     private val resultHandoverBridge: IntelligenceCommandExecutionResultHandoverBoundary,
     private val lifecycleBoundary: IntelligenceCommandLifecycleBoundary,
     private val renderingLifecycleBoundary: IntelligenceCommandRenderingLifecycleBoundary,
@@ -45,6 +48,7 @@ class HomeViewModel @Inject constructor(
     init {
         loadBriefing()
         observeFinality()
+        observeAdoptedActions()
     }
 
     private fun observeFinality() {
@@ -53,6 +57,17 @@ class HomeViewModel @Inject constructor(
                 val currentState = _uiState.value
                 if (currentState is HomeUiState.Success) {
                     _uiState.value = currentState.copy(finality = contract)
+                }
+            }
+        }
+    }
+
+    private fun observeAdoptedActions() {
+        viewModelScope.launch {
+            getPreventionActionsUseCase().collect { actions ->
+                val currentState = _uiState.value
+                if (currentState is HomeUiState.Success) {
+                    _uiState.value = currentState.copy(adoptedActions = actions.filter { it.isAdopted })
                 }
             }
         }
@@ -128,6 +143,8 @@ class HomeViewModel @Inject constructor(
                         item.intelligenceId to item.reconciliationContract?.toUiState().toContract()
                     }
                 }
+
+                val adoptedActions = getPreventionActionsUseCase().first().filter { it.isAdopted }
                 
                 // Step 112 / 157 / 172 / 187: Report success outcome
                 interaction?.let { 
@@ -140,7 +157,8 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = HomeUiState.Success(
                     briefing = briefing,
                     userCountry = userContextRepository.getUserCountryCode(),
-                    reconciliations = reconciliations
+                    reconciliations = reconciliations,
+                    adoptedActions = adoptedActions
                 )
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e

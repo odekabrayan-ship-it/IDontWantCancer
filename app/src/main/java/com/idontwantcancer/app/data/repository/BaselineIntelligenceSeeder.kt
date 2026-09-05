@@ -23,6 +23,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
 
         seedNutritionTruths()
         seedEducationLessons()
+        seedPreventionActions()
         
         val now = Instant.now()
         
@@ -357,6 +358,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedThread(radonSignal)
         seedThread(uvSignal)
         seedThread(shiftWorkSignal)
+
+        seedPreventionActions()
     }
 
     private suspend fun seedNutritionTruths() {
@@ -459,6 +462,48 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
         preventionRepository.saveEducationLessons(lessons)
+    }
+
+    private suspend fun seedPreventionActions() {
+        val actions = listOf(
+            PreventionAction(
+                id = "action-1",
+                title = "Avoid Tobacco",
+                description = "The most significant avoidable risk factor for cancer.",
+                iconName = "smoke_free"
+            ),
+            PreventionAction(
+                id = "action-2",
+                title = "Protect from UV",
+                description = "Consistent use of sunscreen and shade during peak hours.",
+                iconName = "sunny"
+            ),
+            PreventionAction(
+                id = "action-3",
+                title = "Limit Alcohol",
+                description = "Reducing consumption directly impacts multiple cancer risks.",
+                iconName = "no_drinks"
+            ),
+            PreventionAction(
+                id = "action-4",
+                title = "Move More",
+                description = "Daily physical activity reduces risk for 13 types of cancer.",
+                iconName = "directions_run"
+            ),
+            PreventionAction(
+                id = "action-5",
+                title = "Whole Grains First",
+                description = "Choosing whole grains over refined ones for colorectal health.",
+                iconName = "grass"
+            ),
+            PreventionAction(
+                id = "action-6",
+                title = "Limit Red Meat",
+                description = "Keep consumption below 500g per week to reduce risk.",
+                iconName = "restaurant"
+            )
+        )
+        preventionRepository.savePreventionActions(actions)
     }
 
     private suspend fun seedThread(signal: Signal) {

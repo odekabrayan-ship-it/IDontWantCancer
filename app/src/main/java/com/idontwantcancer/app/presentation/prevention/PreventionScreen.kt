@@ -8,11 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Public
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,6 +25,7 @@ import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.EducationLesson
 import com.idontwantcancer.app.domain.model.NutritionIntelligence
+import com.idontwantcancer.app.domain.model.PreventionAction
 import com.idontwantcancer.app.domain.model.Signal
 import com.idontwantcancer.app.presentation.components.AgencyLoadingState
 import com.idontwantcancer.app.presentation.components.SignalCard
@@ -51,7 +48,7 @@ fun PreventionScreen(
         ) {
             when (val state = uiState) {
                 is PreventionUiState.Loading -> AgencyLoadingState()
-                is PreventionUiState.Success -> PreventionContent(state)
+                is PreventionUiState.Success -> PreventionContent(state, viewModel)
             }
         }
     }
@@ -81,13 +78,29 @@ private fun PreventionHeader() {
 }
 
 @Composable
-private fun PreventionContent(state: PreventionUiState.Success) {
+private fun PreventionContent(state: PreventionUiState.Success, viewModel: PreventionViewModel) {
     val spacing = LocalSpacing.current
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = spacing.medium)
     ) {
         item {
+            PreventionSectionHeader(
+                title = stringResource(R.string.prevention_section_actions),
+                subtitle = stringResource(R.string.prevention_section_actions_desc),
+                icon = Icons.Default.TrackChanges
+            )
+        }
+
+        items(state.preventionActions, key = { it.id }) { action ->
+            PreventionActionItem(
+                action = action,
+                onToggle = { viewModel.toggleActionAdoption(action.id) }
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(spacing.large))
             PreventionSectionHeader(
                 title = stringResource(R.string.prevention_section_eat_smarter),
                 subtitle = stringResource(R.string.prevention_section_eat_smarter_desc)
@@ -163,6 +176,52 @@ private fun PreventionSectionHeader(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
+}
+
+@Composable
+private fun PreventionActionItem(
+    action: PreventionAction,
+    onToggle: () -> Unit
+) {
+    val spacing = LocalSpacing.current
+    ListItem(
+        headlineContent = {
+            Text(
+                text = action.title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        },
+        supportingContent = {
+            Text(
+                text = action.description,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        },
+        trailingContent = {
+            Checkbox(
+                checked = action.isAdopted,
+                onCheckedChange = { onToggle() }
+            )
+        },
+        leadingContent = {
+            val icon = when (action.iconName) {
+                "smoke_free" -> Icons.Default.SmokeFree
+                "sunny" -> Icons.Default.WbSunny
+                "no_drinks" -> Icons.Default.NoDrinks
+                "directions_run" -> Icons.Default.DirectionsRun
+                "grass" -> Icons.Default.Grass
+                "restaurant" -> Icons.Default.Restaurant
+                else -> Icons.Default.Verified
+            }
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (action.isAdopted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        },
+        modifier = Modifier.clickable { onToggle() }
+    )
 }
 
 @Composable

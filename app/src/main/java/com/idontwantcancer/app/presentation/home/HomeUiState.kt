@@ -1,6 +1,7 @@
 package com.idontwantcancer.app.presentation.home
 
 import com.idontwantcancer.app.domain.model.IntelligenceBriefing
+import com.idontwantcancer.app.domain.model.PreventionAction
 import com.idontwantcancer.app.presentation.model.CommandConsumptionFinalityPresentationContract
 import com.idontwantcancer.app.presentation.model.IntelligenceReentryReconciliationPresentationContract
 
@@ -19,6 +20,7 @@ sealed interface HomeUiState {
     data class Success(
         val briefing: IntelligenceBriefing,
         val userCountry: String,
+        val adoptedActions: List<PreventionAction> = emptyList(),
         /**
          * Map of signal ID to its verified re-entry reconciliation status.
          */

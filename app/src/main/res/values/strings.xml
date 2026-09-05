@@ -134,7 +134,8 @@
     <!-- Environment Watch -->
     <string name="prevention_section_environment">Environment Watch</string>
     <string name="prevention_section_environment_desc">Understanding and mitigating external risks</string>
-
+    <string name="prevention_section_actions">Your Action Plan</string>
+    <string name="prevention_section_actions_desc">Adopt evidence-based habits for long-term protection</string>
     <string name="prevention_section_education">60-Second Prevention</string>
     <string name="prevention_section_education_desc">Foundational literacy for long-term health</string>
 

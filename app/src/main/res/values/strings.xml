@@ -148,6 +148,8 @@
     <string name="prevention_subtitle">Evidence-based foundations for long-term health</string>
     <string name="prevention_section_eat_smarter">Eat Smarter</string>
     <string name="prevention_section_eat_smarter_desc">Nutritional patterns that actually matter</string>
+    <string name="prevention_section_preparation">Preparation Sentinel</string>
+    <string name="prevention_section_preparation_desc">Safe cooking and storage protocols</string>
 
     <!-- Environment Watch -->
     <string name="prevention_section_environment">Environment Watch</string>

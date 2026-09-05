@@ -2,15 +2,8 @@ package com.idontwantcancer.app.presentation.prevention
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idontwantcancer.app.domain.model.EducationLesson
-import com.idontwantcancer.app.domain.model.NutritionIntelligence
-import com.idontwantcancer.app.domain.model.PreventionAction
-import com.idontwantcancer.app.domain.model.Signal
-import com.idontwantcancer.app.domain.usecase.GetEducationLessonsUseCase
-import com.idontwantcancer.app.domain.usecase.GetEnvironmentalIntelligenceUseCase
-import com.idontwantcancer.app.domain.usecase.GetNutritionIntelligenceUseCase
-import com.idontwantcancer.app.domain.usecase.GetPreventionActionsUseCase
-import com.idontwantcancer.app.domain.usecase.ToggleActionAdoptionUseCase
+import com.idontwantcancer.app.domain.model.*
+import com.idontwantcancer.app.domain.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -35,7 +28,8 @@ class PreventionViewModel @Inject constructor(
         getPreventionActionsUseCase()
     ) { nutrition, environmental, education, actions ->
         PreventionUiState.Success(
-            nutritionTruths = nutrition,
+            dietaryPatterns = nutrition.filter { it.category == NutritionCategory.PATTERN },
+            preparationDirectives = nutrition.filter { it.category == NutritionCategory.PREPARATION },
             environmentalSignals = environmental,
             educationLessons = education,
             preventionActions = actions
@@ -56,7 +50,8 @@ class PreventionViewModel @Inject constructor(
 sealed interface PreventionUiState {
     data object Loading : PreventionUiState
     data class Success(
-        val nutritionTruths: List<NutritionIntelligence>,
+        val dietaryPatterns: List<NutritionIntelligence>,
+        val preparationDirectives: List<NutritionIntelligence>,
         val environmentalSignals: List<Signal>,
         val educationLessons: List<EducationLesson>,
         val preventionActions: List<PreventionAction>

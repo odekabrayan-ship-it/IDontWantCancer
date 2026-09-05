@@ -392,6 +392,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 title = "Processed Heme and Nitrates",
                 summary = "Nitrosamines formed during meat processing are Group 1 carcinogens.",
                 evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.PATTERN,
                 theTruth = "Heme iron (found in red meat) when processed with nitrates and high heat creates DNA-damaging N-nitroso compounds in the gut.",
                 theCommand = "Reduce intake of meats preserved with salt, smoke, or chemical nitrates.",
                 theExecution = listOf(
@@ -408,6 +409,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 title = "Fiber and Carcinogen Transit",
                 summary = "Dietary fiber dilutes and removes carcinogens from the body.",
                 evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.PATTERN,
                 theTruth = "Low fiber intake increases 'transit time,' allowing carcinogens to stay in contact with the colon wall longer, increasing mutation risk.",
                 theCommand = "Shift your daily starch intake to at least 90% whole grain sources.",
                 theExecution = listOf(
@@ -424,6 +426,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 title = "Acrylamide: Starch Overheating",
                 summary = "Overcooking starches creates a probable human carcinogen.",
                 evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.PATTERN,
                 theTruth = "Acrylamide is formed when starchy foods (potatoes, grains) are cooked at very high temperatures (frying, roasting) for too long.",
                 theCommand = "Avoid dark-charred starches in your daily meals.",
                 theExecution = listOf(
@@ -440,6 +443,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 title = "Free Sugar and Systemic Inflammation",
                 summary = "Excess sugar drives cancer through insulin and obesity pathways.",
                 evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.PATTERN,
                 theTruth = "While sugar doesn't 'poison' cells directly, excess intake triggers high insulin levels and chronic inflammation, which are primary cancer fuelers.",
                 theCommand = "Limit added sweeteners and extracted fruit juices.",
                 theExecution = listOf(
@@ -456,6 +460,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 title = "Ethanol: Multi-Type Carcinogen",
                 summary = "Alcohol damages DNA across seven different organ systems.",
                 evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.PATTERN,
                 theTruth = "When the body breaks down ethanol, it creates acetaldehyde—a potent toxin that breaks DNA strands and prevents cells from repairing the damage.",
                 theCommand = "Minimize or eliminate ethanol consumption for cancer protection.",
                 theExecution = listOf(
@@ -466,6 +471,42 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 theShield = "Prevents the systemic flooding of your organs with DNA-breaking acetaldehyde.",
                 source = "IARC / WCRF",
                 sourceUrl = "https://www.wcrf.org/diet-activity-and-cancer/risk-factors/alcoholic-drinks-and-cancer-risk/"
+            ),
+            NutritionIntelligence(
+                id = "truth-nutrition-6",
+                title = "Pyrolysis Control (Charring)",
+                summary = "Direct flame contact with proteins creates DNA-damaging PAHs.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.PREPARATION,
+                theTruth = "High-heat grilling or frying of meat creates polycyclic aromatic hydrocarbons (PAHs) and heterocyclic amines (HCAs) which are mutagenic.",
+                theCommand = "Avoid direct flame contact and dark charring on meats.",
+                theExecution = listOf(
+                    "Trim visible fat before grilling to reduce flare-ups and smoke.",
+                    "Use acidic marinades (lemon juice, vinegar) which have been shown to reduce PAH formation.",
+                    "Pre-cook meat in a microwave for 1-2 minutes to reduce time spent on the high-heat grill.",
+                    "Remove and discard any black, charred sections before consumption."
+                ),
+                theShield = "Reduces the ingestion of high-energy chemical mutagens that cause permanent DNA strand breaks.",
+                source = "AICR / National Cancer Institute",
+                sourceUrl = "https://www.cancer.gov/about-cancer/causes-prevention/risk/diet/cooked-meats-fact-sheet"
+            ),
+            NutritionIntelligence(
+                id = "truth-nutrition-7",
+                title = "Aflatoxin Defense (Safe Storage)",
+                summary = "Mould on stored grains creates a potent liver carcinogen.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.PREPARATION,
+                theTruth = "Aflatoxins are toxins produced by certain fungi (Aspergillus) that grow on grains and nuts in warm, humid conditions. It is a leading cause of liver cancer.",
+                theCommand = "Ensure grains and nuts are stored in dry, airtight conditions.",
+                theExecution = listOf(
+                    "Visually inspect grains and nuts; sort and discard any that are discolored, shriveled, or mouldy.",
+                    "Store all staples in airtight glass or high-quality plastic containers.",
+                    "Ensure storage areas are cool and dry; in humid climates, avoid long-term bulk storage without climate control.",
+                    "Only buy grains and nuts from reputable vendors who follow standard drying protocols."
+                ),
+                theShield = "Prevents systemic poisoning by one of the most potent naturally occurring biological carcinogens.",
+                source = "WHO / IARC",
+                sourceUrl = "https://www.who.int/news-room/fact-sheets/detail/aflatoxins"
             )
         )
         preventionRepository.saveNutritionIntelligence(nutritionTruths)

@@ -107,7 +107,20 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
             )
         }
 
-        items(state.nutritionTruths, key = { it.id }) { truth ->
+        items(state.dietaryPatterns, key = { it.id }) { truth ->
+            NutritionTruthItem(truth)
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(spacing.large))
+            PreventionSectionHeader(
+                title = stringResource(R.string.prevention_section_preparation),
+                subtitle = stringResource(R.string.prevention_section_preparation_desc),
+                icon = Icons.Default.Fireplace
+            )
+        }
+
+        items(state.preparationDirectives, key = { it.id }) { truth ->
             NutritionTruthItem(truth)
         }
 

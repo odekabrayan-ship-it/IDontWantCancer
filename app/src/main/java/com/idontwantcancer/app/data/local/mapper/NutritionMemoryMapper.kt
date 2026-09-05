@@ -11,6 +11,7 @@ fun NutritionIntelligenceEntity.toDomain(): NutritionIntelligence {
         title = title,
         summary = summary,
         evidenceLevel = evidenceLevel,
+        category = category,
         theTruth = theTruth,
         theCommand = theCommand,
         theExecution = try {
@@ -30,6 +31,7 @@ fun NutritionIntelligence.toEntity(): NutritionIntelligenceEntity {
         title = title,
         summary = summary,
         evidenceLevel = evidenceLevel,
+        category = category,
         theTruth = theTruth,
         theCommand = theCommand,
         theExecutionJson = Json.encodeToString(theExecution),

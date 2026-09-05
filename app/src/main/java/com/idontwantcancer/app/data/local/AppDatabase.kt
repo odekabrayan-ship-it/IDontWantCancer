@@ -27,9 +27,10 @@ import com.idontwantcancer.app.data.local.entity.*
         NutritionIntelligenceEntity::class,
         EducationLessonEntity::class,
         PreventionActionEntity::class,
-        TreatmentManualEntity::class
+        TreatmentManualEntity::class,
+        SymptomDirectiveEntity::class
     ],
-    version = 27,
+    version = 28,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -49,6 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun educationLessonDao(): EducationLessonDao
     abstract fun preventionActionDao(): PreventionActionDao
     abstract fun treatmentManualDao(): TreatmentManualDao
+    abstract fun symptomDirectiveDao(): SymptomDirectiveDao
 
     companion object {
         const val DATABASE_NAME = "intelligence_memory.db"

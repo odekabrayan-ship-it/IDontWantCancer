@@ -29,6 +29,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedEducationLessons()
         seedPreventionActions()
         seedTreatmentManuals()
+        seedSymptomDirectives()
         
         val now = Instant.now()
         
@@ -69,8 +70,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             theCommand = "Minimize or eliminate processed meats from your daily eating pattern.",
             theExecution = listOf(
                 "Identify processed meats in your diet: bacon, sausages, ham, deli meats, and hot dogs.",
-                "Replace these with fresh proteins: chicken breast, fish, beans, or lentils.",
-                "Reserve processed meats for very occasional use rather than daily consumption."
+                "Replace these with fresh proteins: {PROTEIN_STAPLE}.",
+                "Limit traditional salted or smoked delicacies to very rare occasions."
             ),
             theShield = "Reducing processed meat intake directly lowers the exposure of the colon lining to DNA-damaging N-nitroso compounds.",
             significanceLevel = SignificanceOutcome.HIGH_SIGNIFICANCE,
@@ -652,6 +653,54 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
         healingRepository.saveTreatmentManuals(manuals)
+    }
+
+    private suspend fun seedSymptomDirectives() {
+        val symptoms = listOf(
+            SymptomDirective(
+                id = "symp-1",
+                name = "Nausea",
+                iconName = "sick",
+                theTruth = "Treatment-induced nausea occurs when chemotherapy triggers the chemoreceptor trigger zone in the brain or damages the GI lining.",
+                theCommand = "Activate the 'Non-Pharmaceutical Gastric Buffer' protocol immediately.",
+                theExecution = listOf(
+                    "Sip room-temperature ginger water or suck on natural ginger candies.",
+                    "Consume dry, plain starches (crackers, toast) in small, frequent amounts.",
+                    "Use acupressure: Apply steady pressure to the P6 point (three finger-widths above the wrist crease).",
+                    "Maintain an upright position for at least 30 minutes after any oral intake."
+                ),
+                theShield = "Stabilizes the gastric environment and interrupts the neurological 'loop' that leads to vomiting."
+            ),
+            SymptomDirective(
+                id = "symp-2",
+                name = "Treatment Fatigue",
+                iconName = "battery_alert",
+                theTruth = "Cancer-related fatigue is a systemic biological response to cell repair and drug metabolism. It is not solved by sleep alone.",
+                theCommand = "Execute the 'Strategic Energy Preservation' roadmap.",
+                theExecution = listOf(
+                    "Limit high-energy activities to your identified 'Peak Strength' hours.",
+                    "Incorporate structured 20-minute rests throughout the day, even if not feeling 'sleepy'.",
+                    "Prioritize hydration (2L+ daily) to assist the liver in clearing treatment-related metabolites.",
+                    "Engage in very light movement (2-minute stretching) to prevent systemic stagnation."
+                ),
+                theShield = "Protects the nervous system from total exhaustion and prevents the accumulation of toxic metabolic waste."
+            ),
+            SymptomDirective(
+                id = "symp-3",
+                name = "Loss of Appetite",
+                iconName = "no_food",
+                theTruth = "Metabolic changes during treatment can alter taste receptors and suppress hunger hormones like ghrelin.",
+                theCommand = "Implement 'Low-Aroma Caloric Density' feeding.",
+                theExecution = listOf(
+                    "Prefer cold or room-temperature foods; heat intensifies aromas that trigger aversion.",
+                    "Choose liquid-based nutrients (smoothies, Agency-verified broths) which require less mechanical energy to consume.",
+                    "Set a timer to consume small amounts every 2 hours, bypassing the missing 'hunger signal'.",
+                    "Rinse mouth before eating to clear metallic tastes common with treatment."
+                ),
+                theShield = "Prevents muscle wasting (cachexia) and maintains the immune system's strength for the ongoing fight."
+            )
+        )
+        healingRepository.saveSymptomDirectives(symptoms)
     }
 
     private suspend fun seedThread(signal: Signal) {

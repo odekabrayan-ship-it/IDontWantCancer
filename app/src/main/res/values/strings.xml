@@ -184,4 +184,8 @@
     <string name="sanctuary_welcome_desc">The Agency provides specialized directives for those currently undergoing treatment. Here, we move from watching to active healing support.</string>
     <string name="sanctuary_section_treatment">Treatment Manuals</string>
     <string name="sanctuary_section_symptoms">Symptom Sentinel</string>
+    <string name="sanctuary_symptoms_desc">Immediate management directives</string>
+    <string name="sanctuary_symptom_nausea">NAUSEA</string>
+    <string name="sanctuary_symptom_fatigue">FATIGUE</string>
+    <string name="sanctuary_symptom_appetite">APPETITE</string>
 </resources>

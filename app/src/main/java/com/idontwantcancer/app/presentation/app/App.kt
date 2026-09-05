@@ -5,8 +5,8 @@ import com.idontwantcancer.app.core.ui.theme.IDontWantCancerTheme
 import com.idontwantcancer.app.presentation.navigation.AppNavigation
 
 @Composable
-fun App() {
+fun App(initialSignalId: String? = null) {
     IDontWantCancerTheme {
-        AppNavigation()
+        AppNavigation(initialSignalId = initialSignalId)
     }
 }

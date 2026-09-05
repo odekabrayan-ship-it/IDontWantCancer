@@ -12,6 +12,8 @@ import com.idontwantcancer.app.MainActivity
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.domain.model.BriefingStatus
 import com.idontwantcancer.app.domain.model.IntelligenceBriefing
+import com.idontwantcancer.app.domain.model.Signal
+import com.idontwantcancer.app.domain.model.SignalImportance
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -90,6 +92,50 @@ class IntelligenceNotificationManager @Inject constructor(
         with(NotificationManagerCompat.from(context)) {
             try {
                 notify(NOTIFICATION_ID_BRIEFING, builder.build())
+            } catch (e: SecurityException) {
+                // Permission not granted
+            }
+        }
+    }
+
+    fun showSignalDirectiveNotification(signal: Signal) {
+        val title = context.getString(R.string.notif_directive_prefix, signal.theCommand ?: signal.title)
+        
+        val bigText = buildString {
+            append(signal.summary)
+            if (signal.theExecution.isNotEmpty()) {
+                append("\n\n")
+                append(context.getString(R.string.detail_how_to_title))
+                append(":\n")
+                signal.theExecution.take(3).forEachIndexed { index, step ->
+                    append("${index + 1}. $step\n")
+                }
+            }
+            append("\n")
+            append(context.getString(R.string.notif_view_manual))
+        }
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("signalId", signal.id)
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            context, signal.id.hashCode(), intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID_URGENT)
+            .setSmallIcon(R.drawable.ic_notification)
+            .setContentTitle(title)
+            .setContentText(signal.summary)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(bigText))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(context)) {
+            try {
+                notify(signal.id.hashCode(), builder.build())
             } catch (e: SecurityException) {
                 // Permission not granted
             }

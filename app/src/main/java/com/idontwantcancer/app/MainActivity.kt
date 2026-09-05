@@ -12,8 +12,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        val initialSignalId = intent.getStringExtra("signalId")
+        
         setContent {
-            App()
+            App(initialSignalId = initialSignalId)
         }
     }
 }

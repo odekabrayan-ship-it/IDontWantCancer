@@ -112,6 +112,8 @@
     <string name="channel_urgent_desc">Immediate notifications regarding high-priority health recalls.</string>
     <string name="notif_ready_title">New Intelligence Briefing</string>
     <string name="notif_urgent_title">⚠️ URGENT HEALTH ALERT</string>
+    <string name="notif_directive_prefix">ACTION REQUIRED: %1$s</string>
+    <string name="notif_view_manual">Tap for full security manual</string>
     <string name="notif_generic_content">Something changed in the intelligence landscape. Tap to read the full briefing.</string>
 
     <!-- Settings Screen -->

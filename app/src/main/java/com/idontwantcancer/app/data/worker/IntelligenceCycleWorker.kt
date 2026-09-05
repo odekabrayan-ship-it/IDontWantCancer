@@ -6,6 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.idontwantcancer.app.data.notification.IntelligenceNotificationManager
 import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
+import com.idontwantcancer.app.domain.model.SignalImportance
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -24,9 +25,19 @@ class IntelligenceCycleWorker @AssistedInject constructor(
         return try {
             val result = coordinator.runCycle()
             
-            // Step 222: Show notification for significant briefings
-            result.briefing?.let {
-                notificationManager.showBriefingNotification(it)
+            // Step 222 Overhaul: Show specific directive notifications for high-priority signals
+            result.briefing?.let { briefing ->
+                val criticalSignals = briefing.items
+                    .mapNotNull { briefing.signals[it.intelligenceId] }
+                    .filter { it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH }
+
+                if (criticalSignals.isNotEmpty()) {
+                    criticalSignals.forEach { signal ->
+                        notificationManager.showSignalDirectiveNotification(signal)
+                    }
+                } else {
+                    notificationManager.showBriefingNotification(briefing)
+                }
             }
 
             Result.success()

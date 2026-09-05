@@ -8,6 +8,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -38,9 +39,18 @@ import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayoutType
 
 @Composable
 fun AppNavigation(
+    initialSignalId: String? = null,
     viewModel: NavigationViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
+    
+    // Stage 5 Overhaul: Handle initial deep link from notification
+    LaunchedEffect(initialSignalId) {
+        if (initialSignalId != null) {
+            navController.navigate(Screen.SignalDetail(initialSignalId))
+        }
+    }
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 

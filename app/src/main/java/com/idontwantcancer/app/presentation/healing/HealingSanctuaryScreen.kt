@@ -98,12 +98,32 @@ private fun SanctuaryContent(state: HealingUiState.Success, viewModel: HealingVi
         }
 
         item(span = { GridItemSpan(2) }) {
+            Column(modifier = Modifier.padding(top = spacing.medium)) {
+                Text(
+                    text = "WATCH FOR THESE SIGNS",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Black,
+                    color = MaterialTheme.colorScheme.error
+                )
+                Text(
+                    text = "High-priority red flags that need your attention",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        items(state.redFlagDirectives, key = { "rf-${it.id}" }, span = { GridItemSpan(2) }) { flag ->
+            RedFlagItem(flag)
+        }
+
+        item(span = { GridItemSpan(2) }) {
             Text(
                 text = "YOUR TREATMENT STEP-BY-STEP",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Black,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = spacing.medium)
+                modifier = Modifier.padding(top = spacing.large)
             )
         }
 
@@ -239,6 +259,121 @@ private fun SanctuaryWelcomeCard() {
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 8.dp)
         )
+    }
+}
+
+@Composable
+private fun RedFlagItem(flag: RedFlagDirective) {
+    var expanded by remember { mutableStateOf(false) }
+    val spacing = LocalSpacing.current
+    val colorScheme = MaterialTheme.colorScheme
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = colorScheme.errorContainer.copy(alpha = 0.1f)
+        ),
+        border = BorderStroke(1.dp, colorScheme.error.copy(alpha = 0.2f))
+    ) {
+        Column(
+            modifier = Modifier
+                .clickable { expanded = !expanded }
+                .padding(spacing.cardPadding)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "WATCH FOR",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = colorScheme.error,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = flag.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+                Icon(
+                    imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                    contentDescription = null,
+                    tint = colorScheme.error
+                )
+            }
+            
+            Text(
+                text = flag.summary,
+                style = MaterialTheme.typography.bodyMedium,
+                color = colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+
+            if (expanded) {
+                Column(modifier = Modifier.padding(top = 16.dp)) {
+                    HorizontalDivider(color = colorScheme.error.copy(alpha = 0.2f), modifier = Modifier.padding(bottom = 16.dp))
+                    
+                    Text(
+                        text = "THE CALM COMMAND",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = colorScheme.error,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = flag.theCommand,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Black,
+                        color = colorScheme.onSurface,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "WHILE YOU WAIT FOR THE CALLBACK",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = colorScheme.secondary,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+
+                    flag.whileYouWait.forEachIndexed { index, step ->
+                        ExecutionStepItem(
+                            stepNumber = index + 1,
+                            content = step,
+                            isLast = index == flag.whileYouWait.size - 1
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Surface(
+                        color = colorScheme.secondary.copy(alpha = 0.05f),
+                        shape = MaterialTheme.shapes.medium,
+                        border = BorderStroke(1.dp, colorScheme.secondary.copy(alpha = 0.2f))
+                    ) {
+                        Column(modifier = Modifier.padding(12.dp)) {
+                            Text(
+                                text = "WHAT TO TELL THE NURSE",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = colorScheme.secondary,
+                                fontWeight = FontWeight.Black
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "\"${flag.handoffScript}\"",
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

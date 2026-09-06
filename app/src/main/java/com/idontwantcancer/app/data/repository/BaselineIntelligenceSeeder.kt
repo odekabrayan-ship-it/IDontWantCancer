@@ -30,6 +30,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
         seedTreatmentManuals()
         seedSymptomDirectives()
         seedPatientTruthChecks()
+        seedRedFlagDirectives()
         
         // --- MASTER SIGNAL REGISTRY ---
         seedFoodSafetySignals()
@@ -489,6 +490,297 @@ class BaselineIntelligenceSeeder @Inject constructor(
         healingRepository.savePatientTruthChecks(defenses)
     }
 
+    private suspend fun seedRedFlagDirectives() {
+        val flags = listOf(
+            RedFlagDirective(
+                id = "rf-1",
+                title = "Feeling Hot, Shaky, or Flushed",
+                summary = "These are signs of a fever, which is an emergency after chemotherapy.",
+                theTruth = "Chemotherapy lowers your white blood cells, making it impossible for your body to fight even small infections. A fever is a signal that your body is being overwhelmed.",
+                theCommand = "Call your 24-hour Oncology Hotline immediately.",
+                theExecution = listOf(
+                    "If you have a thermometer, check your temperature. If it is 38°C (100.4°F) or higher, call now.",
+                    "If you don't have a thermometer but feel 'feverish' or have the shivers, call anyway.",
+                    "Ask a family member to stay with you while you make the call."
+                ),
+                whileYouWait = listOf(
+                    "Do NOT take Paracetamol, Tylenol, or Aspirin yet. The doctor needs to see the true fever signal.",
+                    "Drink a large glass of water to stay hydrated.",
+                    "Place your 'Red Treatment Folder' and all your pill bottles on the kitchen table."
+                ),
+                handoffScript = "I am a cancer patient on active treatment. I am calling because I have a Fever/Shivers. I need immediate oncology triage.",
+                theShield = "Prevents 'Neutropenic Sepsis,' a life-threatening infection that can be stopped if caught in the first hour."
+            ),
+            RedFlagDirective(
+                id = "rf-2",
+                title = "New or Worsening Back Pain",
+                summary = "Sharp pain in your back or spine that won't go away.",
+                theTruth = "Cancer can sometimes put pressure on your spinal cord. If not treated quickly, this can cause permanent damage to your nerves.",
+                theCommand = "Call your doctor today. If you have trouble walking, go to the ER.",
+                theExecution = listOf(
+                    "Check if the pain feels like a tight 'band' around your chest or waist.",
+                    "Check if your legs feel 'heavy,' 'tingly,' or weak when you stand up.",
+                    "Note if you are having any new trouble going to the bathroom."
+                ),
+                whileYouWait = listOf(
+                    "Lie flat on a firm surface like a bed or the floor to take pressure off your spine.",
+                    "Avoid any lifting, bending, or straining.",
+                    "Ask a relative to help you gather your most recent scan reports."
+                ),
+                handoffScript = "I am a cancer patient. I have developed new, sharp back pain and I am concerned about Spinal Cord Compression.",
+                theShield = "Protects your ability to walk and maintain control of your body."
+            ),
+            RedFlagDirective(
+                id = "rf-3",
+                title = "Swelling in Face, Neck, or Arms",
+                summary = "Sudden puffiness or bulging veins in your upper body.",
+                theTruth = "A tumor can sometimes press on the main vein (the SVC) that carries blood from your head to your heart.",
+                theCommand = "Call your oncology team immediately.",
+                theExecution = listOf(
+                    "Look in the mirror for new swelling around your eyes or neck.",
+                    "Check if your shirt collars or rings feel suddenly tight.",
+                    "Note if you feel 'fullness' in your head when you lean forward."
+                ),
+                whileYouWait = listOf(
+                    "Sit upright; do not lie flat as this increases the swelling.",
+                    "Loosen any tight clothing, ties, or jewelry.",
+                    "Try to remain calm and breathe slowly."
+                ),
+                handoffScript = "I am a cancer patient. I have new swelling in my face and neck and I am concerned about SVC Syndrome.",
+                theShield = "Ensures blood continues to flow properly from your brain and upper body."
+            ),
+            RedFlagDirective(
+                id = "rf-4",
+                title = "Sudden Shortness of Breath",
+                summary = "Feeling like you can't get enough air, even when resting.",
+                theTruth = "This can be caused by fluid around the lungs, a blood clot, or an infection. It needs immediate medical attention.",
+                theCommand = "Dial 911 or your local emergency number immediately.",
+                theExecution = listOf(
+                    "Stop all physical activity.",
+                    "If you have a pulse-oximeter at home, check your oxygen level.",
+                    "Ask someone to unlock your front door for the paramedics."
+                ),
+                whileYouWait = listOf(
+                    "Sit upright in a chair; do not lie down.",
+                    "Open a window for fresh air.",
+                    "Practice 'Pursed Lip' breathing (inhale through nose, exhale slowly through puckered lips)."
+                ),
+                handoffScript = "I am a cancer patient. I have sudden shortness of breath and chest tightness. I need emergency assistance.",
+                theShield = "Protects your lungs and heart from total failure."
+            ),
+            RedFlagDirective(
+                id = "rf-5",
+                title = "Pain or Swelling in One Leg",
+                summary = "One leg (usually the calf) becomes red, hot, and painful.",
+                theTruth = "Cancer patients are at high risk for blood clots (DVT). If the clot moves to your lungs, it is life-threatening.",
+                theCommand = "Call your oncology team or go to the ER today.",
+                theExecution = listOf(
+                    "Compare your legs; look for one that is larger or redder.",
+                    "Flex your foot upward; see if the pain in your calf gets sharper.",
+                    "Note any sudden coughing or chest pain."
+                ),
+                whileYouWait = listOf(
+                    "Do NOT massage or rub the painful area (this can dislodge the clot).",
+                    "Keep your leg elevated on a pillow.",
+                    "Limit walking until you have been seen by a doctor."
+                ),
+                handoffScript = "I am a cancer patient. I have a painful, swollen left/right leg and I am concerned about a blood clot (DVT).",
+                theShield = "Prevents a clot from traveling to your lungs (Pulmonary Embolism)."
+            ),
+            RedFlagDirective(
+                id = "rf-6",
+                title = "Uncontrolled Bleeding or Bruising",
+                summary = "Nosebleeds that won't stop or large purple spots on your skin.",
+                theTruth = "Treatment can lower your platelets, which are the 'plugs' that stop bleeding. Without them, you can bleed internally.",
+                theCommand = "Call your clinic now. If bleeding is heavy, go to the ER.",
+                theExecution = listOf(
+                    "Check your gums for bleeding after brushing.",
+                    "Look for tiny red dots (petechiae) or large bruises that appeared for no reason.",
+                    "If you have a nosebleed, pinch the bridge of your nose and lean forward for 10 minutes."
+                ),
+                whileYouWait = listOf(
+                    "Avoid any activity where you could fall or hit your head.",
+                    "Do not blow your nose or use a hard toothbrush.",
+                    "Stay seated and calm to keep your blood pressure low."
+                ),
+                handoffScript = "I am a cancer patient. I have uncontrolled bleeding/bruising and I am concerned about a Low Platelet count.",
+                theShield = "Protects you from dangerous internal bleeding."
+            ),
+            RedFlagDirective(
+                id = "rf-7",
+                title = "Intense Thirst and Confusion",
+                summary = "Feeling extremely thirsty, peeing often, and feeling 'spaced out'.",
+                theTruth = "Some cancers cause bones to release too much calcium into the blood. This 'Hypercalcemia' can damage your heart and kidneys.",
+                theCommand = "Call your oncology team today.",
+                theExecution = listOf(
+                    "Check if you are also suffering from severe constipation.",
+                    "Ask a family member if you seem unusually sleepy or confused.",
+                    "Note if you have new, deep bone pain."
+                ),
+                whileYouWait = listOf(
+                    "Drink as much plain water as you can to help flush the calcium.",
+                    "Do not take any calcium or Vitamin D supplements.",
+                    "Keep a list of how many times you are peeing."
+                ),
+                handoffScript = "I am a cancer patient. I have extreme thirst and confusion and I am concerned about High Calcium (Hypercalcemia).",
+                theShield = "Protects your kidneys and heart from mineral overload."
+            ),
+            RedFlagDirective(
+                id = "rf-8",
+                title = "Muscle Cramps and Palpitations",
+                summary = "Feeling your heart 'flutter' or having painful muscle twitches.",
+                theTruth = "When cancer cells die quickly after chemo, they release salts into your blood that can confuse your heart and kidneys (Tumor Lysis).",
+                theCommand = "Call your oncology hotline immediately.",
+                theExecution = listOf(
+                    "Check if your urine has turned very dark or if you aren't peeing much.",
+                    "Note any feeling of 'pins and needles' around your mouth or fingers.",
+                    "Check your pulse; is it irregular or very fast?"
+                ),
+                whileYouWait = listOf(
+                    "Sip water slowly and steadily.",
+                    "Find your most recent blood test results (look for Potassium or Uric Acid levels).",
+                    "Do not eat high-potassium foods (like bananas or oranges) until cleared."
+                ),
+                handoffScript = "I am a cancer patient. I just started treatment and have heart palpitations. I am concerned about Tumor Lysis Syndrome.",
+                theShield = "Prevents sudden kidney failure and heart rhythm problems."
+            ),
+            RedFlagDirective(
+                id = "rf-9",
+                title = "Severe Burning at the IV Site",
+                summary = "Pain, stinging, or redness where your chemo was injected.",
+                theTruth = "If chemo drugs leak out of the vein into your skin (Extravasation), they can cause permanent tissue damage.",
+                theCommand = "Call your infusion center or oncology hotline now.",
+                theExecution = listOf(
+                    "Look for any new swelling or blistering around the injection site.",
+                    "Note the name of the drug you were just given.",
+                    "Check if the area feels hot or if the skin is changing color."
+                ),
+                whileYouWait = listOf(
+                    "Do NOT rub or apply pressure to the site.",
+                    "Ask your nurse/hotline if you should use a cold or warm pack (different drugs need different care).",
+                    "Keep the arm or area elevated."
+                ),
+                handoffScript = "I am a cancer patient. I have severe pain/swelling at my injection site and I am concerned about an IV leak (Extravasation).",
+                theShield = "Prevents permanent damage to your skin, nerves, and muscles."
+            ),
+            RedFlagDirective(
+                id = "rf-10",
+                title = "Sharp Chest Pain",
+                summary = "Pain in your chest that feels sharp, especially when you breathe deep.",
+                theTruth = "This can be a signal of a blood clot in the lung or fluid around the heart. Both are serious.",
+                theCommand = "Dial 911 or your local emergency number immediately.",
+                theExecution = listOf(
+                    "Stop all movement and sit down.",
+                    "Check if you feel faint or lightheaded.",
+                    "Note if your fingernails or lips look blue or grey."
+                ),
+                whileYouWait = listOf(
+                    "Try to take small, shallow breaths if deep breathing hurts too much.",
+                    "Unlock your door for the paramedics.",
+                    "Do not eat or drink anything."
+                ),
+                handoffScript = "I am a cancer patient. I have sharp chest pain and feel faint. I need emergency assistance.",
+                theShield = "Saves your heart and lungs from a critical blockage."
+            ),
+            RedFlagDirective(
+                id = "rf-11",
+                title = "Sudden Confusion or Slurred Speech",
+                summary = "Difficulty thinking, knowing where you are, or speaking clearly.",
+                theTruth = "Metabolic changes or treatment side effects can affect your brain function rapidly.",
+                theCommand = "Call your doctor or emergency services now.",
+                theExecution = listOf(
+                    "Check if the person can tell you the current date and their location.",
+                    "Look for any new facial drooping or weakness on one side.",
+                    "Note if they have had a severe headache recently."
+                ),
+                whileYouWait = listOf(
+                    "Stay with the person at all times.",
+                    "Keep them in a safe, seated position so they don't fall.",
+                    "Note down when the confusion started."
+                ),
+                handoffScript = "I am a caregiver for a cancer patient. They have sudden confusion and slurred speech. We need immediate triage.",
+                theShield = "Protects the brain from metabolic or neurological damage."
+            ),
+            RedFlagDirective(
+                id = "rf-12",
+                title = "Severe Abdominal Pain and Vomiting",
+                summary = "Cramping pain in your stomach and inability to pass gas or stool.",
+                theTruth = "Treatment or the tumor itself can sometimes block the flow through your bowels.",
+                theCommand = "Call your oncology team or go to the ER.",
+                theExecution = listOf(
+                    "Check if your stomach looks bloated or feels hard.",
+                    "Note when you last had a bowel movement.",
+                    "Check if you can keep any water down."
+                ),
+                whileYouWait = listOf(
+                    "Do NOT take any laxatives or enemas.",
+                    "Stop eating and drinking until you speak to a doctor.",
+                    "Walk around gently if you can, but stop if pain increases."
+                ),
+                handoffScript = "I am a cancer patient. I have severe stomach pain and vomiting and I am concerned about a Bowel Obstruction.",
+                theShield = "Prevents a dangerous tear (perforation) in your digestive system."
+            ),
+            RedFlagDirective(
+                id = "rf-13",
+                title = "Severe Diarrhea (>4 times/day)",
+                summary = "Watery stools that happen much more often than usual.",
+                theTruth = "Some treatments can damage the gut lining too much, leading to rapid dehydration and loss of minerals.",
+                theCommand = "Call your oncology clinic today.",
+                theExecution = listOf(
+                    "Keep a count of how many times you go to the bathroom.",
+                    "Check for any blood or mucus in your stool.",
+                    "Note if you feel dizzy when you stand up (a sign of dehydration)."
+                ),
+                whileYouWait = listOf(
+                    "Sip an electrolyte drink (like Pedialyte or Gatorade) slowly.",
+                    "Eat 'B.R.A.T' foods: Bananas, Rice, Applesauce, Toast.",
+                    "Do NOT take over-the-counter anti-diarrhea meds unless your doctor says yes."
+                ),
+                handoffScript = "I am a cancer patient. I have severe treatment-related diarrhea and I'm concerned about dehydration.",
+                theShield = "Protects your gut and prevents a dangerous loss of body fluids."
+            ),
+            RedFlagDirective(
+                id = "rf-14",
+                title = "Sudden Vision Changes",
+                summary = "Blurred vision, seeing 'spots,' or sudden loss of sight.",
+                theTruth = "High blood pressure or treatment-related changes can affect the pressure in your brain or eyes.",
+                theCommand = "Call your doctor or go to the ER today.",
+                theExecution = listOf(
+                    "Check if you also have a severe, 'pounding' headache.",
+                    "Note if the vision change is in one eye or both.",
+                    "Check if you feel dizzy or lose your balance."
+                ),
+                whileYouWait = listOf(
+                    "Rest in a quiet, dark room.",
+                    "Avoid looking at phone or TV screens.",
+                    "Ask someone to drive you; do NOT attempt to drive."
+                ),
+                handoffScript = "I am a cancer patient. I have sudden vision changes and a severe headache. I need immediate evaluation.",
+                theShield = "Protects your sight and your brain from internal pressure damage."
+            ),
+            RedFlagDirective(
+                id = "rf-15",
+                title = "Uncontrollable Shaking (Rigors)",
+                summary = "Shaking so hard you can't hold a glass of water, even without a fever.",
+                theTruth = "Violent shivering is often the body's first signal of a serious bloodstream infection, even before a fever starts.",
+                theCommand = "Call your oncology hotline immediately.",
+                theExecution = listOf(
+                    "Note if you also feel suddenly very cold or very tired.",
+                    "Check your temperature every 15 minutes.",
+                    "Look for any redness around your PICC line or Port site."
+                ),
+                whileYouWait = listOf(
+                    "Bundle up in warm blankets.",
+                    "Do NOT take any medicine to stop the shaking until you speak to a nurse.",
+                    "Prepare to go to the hospital, as this often needs IV antibiotics."
+                ),
+                handoffScript = "I am a cancer patient. I have developed uncontrollable shaking/rigors. I need immediate sepsis triage.",
+                theShield = "Intercepts a bloodstream infection at the earliest possible second."
+            )
+        )
+        healingRepository.saveRedFlagDirectives(flags)
+    }
+
     private suspend fun seedThread(signal: Signal) {
         val thread = IntelligenceThread(
             id = UUID.randomUUID().toString(),
@@ -510,4 +802,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
     }
+
+    private suspend fun seedCosmeticShield() {}
+    private suspend fun seedHouseholdSentinel() {}
+    private suspend fun seedFoodAdditiveRegistry() {}
 }

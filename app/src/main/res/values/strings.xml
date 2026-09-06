@@ -187,6 +187,7 @@
     <string name="sanctuary_section_treatment">Treatment Manuals</string>
     <string name="sanctuary_section_symptoms">Symptom Sentinel</string>
     <string name="sanctuary_section_progress">HEALING PROGRESS</string>
+    <string name="sanctuary_section_red_flags">WATCH FOR THESE SIGNS</string>
     <string name="sanctuary_action_completed">I COMPLETED THIS</string>
     <string name="sanctuary_victory_title">Victory achieved</string>
     <string name="sanctuary_winning_affirmation">You are winning this day.</string>

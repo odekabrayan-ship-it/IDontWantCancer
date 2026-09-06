@@ -30,9 +30,10 @@ import com.idontwantcancer.app.data.local.entity.*
         TreatmentManualEntity::class,
         SymptomDirectiveEntity::class,
         PatientTruthCheckEntity::class,
-        HealingLogEntity::class
+        HealingLogEntity::class,
+        RedFlagDirectiveEntity::class
     ],
-    version = 31,
+    version = 32,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -55,6 +56,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun symptomDirectiveDao(): SymptomDirectiveDao
     abstract fun patientTruthCheckDao(): PatientTruthCheckDao
     abstract fun healingLogDao(): HealingLogDao
+    abstract fun redFlagDirectiveDao(): RedFlagDirectiveDao
 
     companion object {
         const val DATABASE_NAME = "intelligence_memory.db"

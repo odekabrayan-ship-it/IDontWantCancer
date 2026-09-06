@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.domain.model.HealingLogEntry
 import com.idontwantcancer.app.domain.model.HealingLogType
 import com.idontwantcancer.app.domain.model.PatientTruthCheck
+import com.idontwantcancer.app.domain.model.RedFlagDirective
 import com.idontwantcancer.app.domain.model.SymptomDirective
 import com.idontwantcancer.app.domain.model.TreatmentManual
 import com.idontwantcancer.app.domain.repository.HealingRepository
@@ -29,12 +30,14 @@ class HealingViewModel @Inject constructor(
         healingRepository.getTreatmentManuals(),
         healingRepository.getSymptomDirectives(),
         healingRepository.getPatientTruthChecks(),
+        healingRepository.getRedFlagDirectives(),
         getHealingLogUseCase()
-    ) { manuals, symptoms, truthChecks, logs ->
+    ) { manuals, symptoms, truthChecks, redFlags, logs ->
         HealingUiState.Success(
             treatmentManuals = manuals,
             symptomDirectives = symptoms,
             patientTruthChecks = truthChecks,
+            redFlagDirectives = redFlags,
             healingLogEntries = logs
         )
     }.stateIn(
@@ -56,6 +59,7 @@ sealed interface HealingUiState {
         val treatmentManuals: List<TreatmentManual>,
         val symptomDirectives: List<SymptomDirective>,
         val patientTruthChecks: List<PatientTruthCheck>,
+        val redFlagDirectives: List<RedFlagDirective>,
         val healingLogEntries: List<HealingLogEntry>
     ) : HealingUiState
 }

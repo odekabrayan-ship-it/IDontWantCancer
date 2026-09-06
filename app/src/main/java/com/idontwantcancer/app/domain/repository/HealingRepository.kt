@@ -1,9 +1,6 @@
 package com.idontwantcancer.app.domain.repository
 
-import com.idontwantcancer.app.domain.model.HealingLogEntry
-import com.idontwantcancer.app.domain.model.PatientTruthCheck
-import com.idontwantcancer.app.domain.model.SymptomDirective
-import com.idontwantcancer.app.domain.model.TreatmentManual
+import com.idontwantcancer.app.domain.model.*
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -39,6 +36,16 @@ interface HealingRepository {
      * Saves foundational patient truth checks.
      */
     suspend fun savePatientTruthChecks(items: List<PatientTruthCheck>)
+
+    /**
+     * Retrieves all emergency red-flag directives.
+     */
+    fun getRedFlagDirectives(): Flow<List<RedFlagDirective>>
+
+    /**
+     * Saves foundational red-flag directives.
+     */
+    suspend fun saveRedFlagDirectives(items: List<RedFlagDirective>)
 
     /**
      * Retrieves the permanent record of healing acts.

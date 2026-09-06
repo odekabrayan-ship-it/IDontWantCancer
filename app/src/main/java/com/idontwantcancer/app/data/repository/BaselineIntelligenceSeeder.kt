@@ -802,8 +802,4 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
     }
-
-    private suspend fun seedCosmeticShield() {}
-    private suspend fun seedHouseholdSentinel() {}
-    private suspend fun seedFoodAdditiveRegistry() {}
 }

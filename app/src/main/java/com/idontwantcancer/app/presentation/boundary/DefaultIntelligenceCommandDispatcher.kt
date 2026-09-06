@@ -63,6 +63,26 @@ class DefaultIntelligenceCommandDispatcher @Inject constructor(
                 lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
                 onNavigate(Screen.SignalDetail(interaction.signalId))
             }
+            is IntelligenceUiInteraction.EnterAlerts -> {
+                lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
+                onNavigate(Screen.Alerts)
+            }
+            is IntelligenceUiInteraction.EnterVerify -> {
+                lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
+                onNavigate(Screen.Search)
+            }
+            is IntelligenceUiInteraction.EnterPrevention -> {
+                lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
+                onNavigate(Screen.Prevention)
+            }
+            is IntelligenceUiInteraction.EnterHealingSanctuary -> {
+                lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
+                onNavigate(Screen.HealingSanctuary)
+            }
+            is IntelligenceUiInteraction.EnterSettings -> {
+                lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
+                onNavigate(Screen.Settings)
+            }
             is IntelligenceUiInteraction.NavigateBack -> {
                 lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
                 onNavigate(NavigateBackAction)

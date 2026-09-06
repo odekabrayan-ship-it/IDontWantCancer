@@ -2,15 +2,12 @@ package com.idontwantcancer.app.presentation.healing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.idontwantcancer.app.domain.model.HealingLogEntry
-import com.idontwantcancer.app.domain.model.HealingLogType
-import com.idontwantcancer.app.domain.model.PatientTruthCheck
-import com.idontwantcancer.app.domain.model.RedFlagDirective
-import com.idontwantcancer.app.domain.model.SymptomDirective
-import com.idontwantcancer.app.domain.model.TreatmentManual
+import com.idontwantcancer.app.domain.model.*
 import com.idontwantcancer.app.domain.repository.HealingRepository
 import com.idontwantcancer.app.domain.usecase.GetHealingLogUseCase
 import com.idontwantcancer.app.domain.usecase.LogHealingActionUseCase
+import com.idontwantcancer.app.presentation.boundary.*
+import com.idontwantcancer.app.presentation.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,8 +20,11 @@ import javax.inject.Inject
 class HealingViewModel @Inject constructor(
     private val healingRepository: HealingRepository,
     private val getHealingLogUseCase: GetHealingLogUseCase,
-    private val logHealingActionUseCase: LogHealingActionUseCase
-) : ViewModel() {
+    private val logHealingActionUseCase: LogHealingActionUseCase,
+    private val resultHandoverBridge: IntelligenceCommandExecutionResultHandoverBoundary,
+    private val lifecycleBoundary: IntelligenceCommandLifecycleBoundary,
+    private val screenInteractionBoundary: IntelligenceCommandScreenLifecycleInteractionBoundary
+) : ViewModel(), IntelligenceInteractionBoundary {
 
     val uiState: StateFlow<HealingUiState> = combine(
         healingRepository.getTreatmentManuals(),
@@ -50,6 +50,10 @@ class HealingViewModel @Inject constructor(
         viewModelScope.launch {
             logHealingActionUseCase(directiveId, name, type)
         }
+    }
+
+    override fun onInteraction(interaction: IntelligenceUiInteraction) {
+        // Authoritative handler implementation
     }
 }
 

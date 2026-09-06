@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
+import com.idontwantcancer.app.domain.model.SignalCategory
+import com.idontwantcancer.app.domain.model.SignalImportance
 import com.idontwantcancer.app.domain.model.UserMission
 import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.GetCurrentBriefingUseCase
@@ -22,11 +24,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-/**
- * ViewModel for the Home screen briefing.
- *
- * Manages the presentation state of the "What matters today?" briefing.
- */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCurrentBriefingUseCase: GetCurrentBriefingUseCase,
@@ -43,7 +40,6 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    // Step 114: Track jobs for cancellation
     private val activeJobs = mutableMapOf<IntelligenceUiInteraction, Job>()
 
     init {
@@ -86,27 +82,15 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Entry point for interactions originating from the screen (Step 199).
-     */
-    fun handleUserInteraction(
-        interaction: IntelligenceUiInteraction,
-        onNavigate: (Any) -> Unit = {}
-    ) {
-        // Step 199 Logic: Handover the screen-level gesture to the interaction authority.
-        screenInteractionBoundary.handleScreenInteraction(
-            interaction = interaction,
-            handler = this,
-            onNavigate = onNavigate
-        )
+    fun handleUserInteraction(interaction: IntelligenceUiInteraction, onNavigate: (Any) -> Unit = {}) {
+        screenInteractionBoundary.handleScreenInteraction(interaction, this, onNavigate)
     }
 
     override fun onInteraction(interaction: IntelligenceUiInteraction) {
-        // Authoritative handler implementation (Step 141 / 156 / 169)
         when (interaction) {
             is IntelligenceUiInteraction.RetryOperation -> retry(interaction)
             is IntelligenceUiInteraction.CancelOperation -> cancel(interaction.targetInteraction)
-            else -> {} // Navigation handled at composition level or through onNavigate callback
+            else -> {}
         }
     }
 
@@ -114,78 +98,86 @@ class HomeViewModel @Inject constructor(
         activeJobs[target]?.let { job ->
             job.cancel()
             activeJobs.remove(target)
-            
-            // Step 121 / 157 / 172 / 187: Report cancellation
-            resultHandoverBridge.routeToResult(
-                target, 
-                IntelligenceCommandExecutionOutcome.Cancelled(operationId = "cancel_home_${target.hashCode()}")
-            )
+            resultHandoverBridge.routeToResult(target, IntelligenceCommandExecutionOutcome.Cancelled("cancel_home_${target.hashCode()}"))
         }
     }
 
-    /**
-     * Triggers another attempt to load the current briefing.
-     */
     private fun retry(interaction: IntelligenceUiInteraction? = null) {
         loadBriefing(interaction)
     }
 
     private fun loadBriefing(interaction: IntelligenceUiInteraction? = null) {
-        // Only track lifecycle if an explicit interaction is provided
-        if (interaction != null) {
-            activeJobs[interaction]?.cancel()
-        }
-
+        if (interaction != null) activeJobs[interaction]?.cancel()
         val job = viewModelScope.launch {
-            // Step 113: PROCESSING
             interaction?.let { lifecycleBoundary.transitionTo(it, CommandLifecycleStage.PROCESSING) }
-
             _uiState.value = HomeUiState.Loading
             try {
                 var briefing = getCurrentBriefingUseCase()
-                
-                // Step 222: If briefing is empty, trigger an immediate autonomous cycle
                 if (briefing.items.isEmpty()) {
                     coordinator.runCycle()
                     briefing = getCurrentBriefingUseCase()
                 }
 
-                // Step 212: Move expensive association and mapping to Default dispatcher
                 val reconciliations = withContext(dispatcherProvider.default) {
                     briefing.items.associate { item ->
                         item.intelligenceId to item.reconciliationContract?.toUiState().toContract()
                     }
                 }
 
-                val adoptedActions = getPreventionActionsUseCase().first().filter { it.isAdopted }
+                val allSignals = briefing.signals.values.toList()
                 val mission = userContextRepository.getUserMission().first()
-                
-                // Step 112 / 157 / 172 / 187: Report success outcome
-                interaction?.let { 
-                    resultHandoverBridge.routeToResult(
-                        it, 
-                        IntelligenceCommandExecutionOutcome.Success(operationId = "load_briefing_${briefing.id}")
+                val adoptedActions = getPreventionActionsUseCase().first().filter { it.isAdopted }
+
+                // Calculate Pillar Statuses based on Mission
+                val pillars = if (mission == UserMission.HEALING) {
+                    listOf(
+                        PillarStatus("WATCH", "Sentinel Watch", "${allSignals.count { it.importance == SignalImportance.CRITICAL }} Urgent Alerts", allSignals.any { it.importance == SignalImportance.CRITICAL }),
+                        PillarStatus("TREATMENT", "Treatment", "Manuals Active"),
+                        PillarStatus("SYMPTOMS", "Symptom Help", "Directives Ready"),
+                        PillarStatus("DECEPTION", "Deception Shield", "Scam Defense Active"),
+                        PillarStatus("PROGRESS", "My Progress", "Victory Ledger Active"),
+                        PillarStatus("VERIFY", "Laboratory", "Verification Active")
+                    )
+                } else {
+                    listOf(
+                        PillarStatus("WATCH", "Sentinel Watch", "${allSignals.count { it.importance == SignalImportance.CRITICAL }} Urgent Alerts", allSignals.any { it.importance == SignalImportance.CRITICAL }),
+                        PillarStatus("SHOP", "Shopping Shield", "Chemicals Registry"),
+                        PillarStatus("EAT", "Safe Eating", "Biological Blueprint"),
+                        PillarStatus("TRUTH", "Health Claims", "Deception Shield"),
+                        PillarStatus("HOME", "Safe Home", "Surroundings Hub"),
+                        PillarStatus("ACADEMY", "Academy", "Intelligence Lessons"),
+                        PillarStatus("PLAN", "Action Plan", "${adoptedActions.size} Habits Tracked")
                     )
                 }
+
+                val dailyPeace = if (mission == UserMission.HEALING) {
+                    DailyPeace(
+                        title = "You are Winning",
+                        summary = "Every protective act you complete today strengthens your body's recovery shield.",
+                        shield = "Focus on one directive at a time. Resilience is a pattern."
+                    )
+                } else {
+                    DailyPeace(
+                        title = "Microwaves are Safe",
+                        summary = "The Agency has verified that non-ionizing waves are too weak to damage your DNA.",
+                        shield = "Prevents unnecessary anxiety about common home appliances."
+                    )
+                }
+
+                interaction?.let { resultHandoverBridge.routeToResult(it, IntelligenceCommandExecutionOutcome.Success("load_briefing_${briefing.id}")) }
 
                 _uiState.value = HomeUiState.Success(
                     briefing = briefing,
                     userCountry = userContextRepository.getUserCountryCode(),
                     userMission = mission,
-                    reconciliations = reconciliations,
-                    adoptedActions = adoptedActions
+                    adoptedActions = adoptedActions,
+                    dailyPeace = dailyPeace,
+                    pillarStatuses = pillars,
+                    reconciliations = reconciliations
                 )
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e
-
-                // Step 117 / 157 / 172 / 187: Report failure outcome
-                interaction?.let { 
-                    resultHandoverBridge.routeToResult(
-                        it, 
-                        IntelligenceCommandExecutionOutcome.Failure(e, "load_briefing_failed")
-                    )
-                }
-
+                interaction?.let { resultHandoverBridge.routeToResult(it, IntelligenceCommandExecutionOutcome.Failure(e, "load_briefing_failed")) }
                 _uiState.value = HomeUiState.Error("Unable to load today's briefing.")
             } finally {
                 interaction?.let { activeJobs.remove(it) }

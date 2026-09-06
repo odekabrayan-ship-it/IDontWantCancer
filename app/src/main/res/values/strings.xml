@@ -30,8 +30,8 @@
 
     <!-- Search / Intelligence Inquiry Screen -->
     <string name="search_title">Safety Verification Lab</string>
-    <string name="search_subtitle">Verify product safety against the Agency registry</string>
-    <string name="search_placeholder">Enter product or ingredient name&#8230;</string>
+    <string name="search_subtitle">Verify product ingredients and health claims</string>
+    <string name="search_placeholder">Enter product or claim to verify&#8230;</string>
     <string name="search_clear_content_desc">Clear verification</string>
     <string name="search_loading">Verifying safety status&#8230;</string>
     <string name="search_empty_title">Registry scan complete</string>

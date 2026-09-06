@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -169,7 +170,27 @@ fun SearchScreen(
                                         onInteraction(IntelligenceUiInteraction.PerformSearch(it))
                                     }
                                 )
-                                is SearchUiState.Searching -> AgencyLoadingState(message = stringResource(R.string.search_loading))
+                                is SearchUiState.Searching -> {
+                                    Column(
+                                        modifier = Modifier.fillMaxSize(),
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        LinearProgressIndicator(
+                                            modifier = Modifier.fillMaxWidth().height(2.dp),
+                                            color = MaterialTheme.colorScheme.primary,
+                                            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                                        )
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                        Text(
+                                            text = "SCANNING REGISTRY...",
+                                            style = MaterialTheme.typography.labelMedium,
+                                            fontWeight = FontWeight.Black,
+                                            color = MaterialTheme.colorScheme.primary,
+                                            letterSpacing = 1.sp
+                                        )
+                                    }
+                                }
                                 is SearchUiState.Success -> SearchResultsList(
                                 signals = state.signals,
                                 reconciliations = state.reconciliations,
@@ -334,16 +355,26 @@ private fun SearchResultsList(
         verticalArrangement = Arrangement.spacedBy(spacing.small)
     ) {
         item {
-            OperationalFinalityIndicator(finality)
+            Surface(
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                shape = MaterialTheme.shapes.extraSmall,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+            ) {
+                Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Verified, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "SECURITY AUDIT: ${signals.size} MATCHES FOUND",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         }
         item {
-            Text(
-                text = stringResource(R.string.search_found_header),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            OperationalFinalityIndicator(finality)
         }
         items(
             items = signals,

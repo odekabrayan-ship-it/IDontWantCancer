@@ -22,5 +22,8 @@ sealed interface Screen {
     data object HealingSanctuary : Screen
 
     @Serializable
+    data object MyJourney : Screen
+
+    @Serializable
     data class SignalDetail(val signalId: String) : Screen
 }

@@ -54,4 +54,24 @@ sealed interface IntelligenceUiInteraction {
      * User requested to enter the Healing Sanctuary.
      */
     data object EnterHealingSanctuary : IntelligenceUiInteraction
+
+    /**
+     * User requested to enter the Alerts Hub.
+     */
+    data object EnterAlerts : IntelligenceUiInteraction
+
+    /**
+     * User requested to enter the Verification Lab.
+     */
+    data object EnterVerify : IntelligenceUiInteraction
+
+    /**
+     * User requested to enter the Prevention Hub.
+     */
+    data object EnterPrevention : IntelligenceUiInteraction
+
+    /**
+     * User requested to enter the Settings screen.
+     */
+    data object EnterSettings : IntelligenceUiInteraction
 }

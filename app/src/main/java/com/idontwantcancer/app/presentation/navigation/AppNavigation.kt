@@ -35,6 +35,8 @@ import com.idontwantcancer.app.presentation.settings.SettingsScreen
 import com.idontwantcancer.app.presentation.signal.SignalDetailScreen
 import com.idontwantcancer.app.presentation.signal.SignalDetailViewModel
 import com.idontwantcancer.app.presentation.healing.HealingSanctuaryScreen
+import com.idontwantcancer.app.presentation.healing.HealingViewModel
+import com.idontwantcancer.app.presentation.healing.MyJourneyScreen
 import com.idontwantcancer.app.presentation.onboarding.MissionSelectionScreen
 import com.idontwantcancer.app.presentation.model.IntelligenceUiInteraction
 import com.idontwantcancer.app.domain.model.UserMission
@@ -65,13 +67,19 @@ fun AppNavigation(
     val currentDestination = navBackStackEntry?.destination
 
     val items = remember(userMission) {
-        listOfNotNull(
-            NavigationItem.Home,
-            NavigationItem.Verify,
-            if (userMission == UserMission.PREVENTION) NavigationItem.Prevention else null,
-            if (userMission == UserMission.HEALING) NavigationItem.HealingSanctuary else null,
-            NavigationItem.Settings
-        )
+        if (userMission == UserMission.HEALING) {
+            listOf(
+                NavigationItem.HealingSanctuary,
+                NavigationItem.MyJourney,
+                NavigationItem.Verify
+            )
+        } else {
+            listOf(
+                NavigationItem.Home,
+                NavigationItem.Verify,
+                NavigationItem.Settings
+            )
+        }
     }
     
     val layout = AdaptiveLayout.current
@@ -172,9 +180,25 @@ fun AppNavigation(
                 SettingsScreen()
             }
             composable<Screen.HealingSanctuary> {
+                val healingViewModel: HealingViewModel = hiltViewModel()
+                val onHealingInteraction: (IntelligenceUiInteraction) -> Unit = remember(healingViewModel) {
+                    { interaction ->
+                        viewModel.dispatch(interaction, healingViewModel) { action ->
+                            when (action) {
+                                is DefaultIntelligenceCommandDispatcher.NavigateBackAction -> navController.popBackStack()
+                                is Screen -> navController.navigate(action)
+                            }
+                        }
+                    }
+                }
                 HealingSanctuaryScreen(
-                    onBack = { navController.popBackStack() }
+                    onSettings = { onHealingInteraction(IntelligenceUiInteraction.EnterSettings) },
+                    viewModel = healingViewModel
                 )
+            }
+            composable<Screen.MyJourney> {
+                val healingViewModel: HealingViewModel = hiltViewModel()
+                MyJourneyScreen(viewModel = healingViewModel)
             }
             composable<Screen.SignalDetail> {
                 val detailViewModel: SignalDetailViewModel = hiltViewModel()

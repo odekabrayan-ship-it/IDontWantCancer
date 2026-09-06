@@ -7,37 +7,37 @@ import com.idontwantcancer.app.presentation.model.CommandConsumptionFinalityPres
 import com.idontwantcancer.app.presentation.model.IntelligenceReentryReconciliationPresentationContract
 
 /**
- * UI state for the Home screen briefing.
+ * UI state for the Home screen briefing dashboard.
  */
 sealed interface HomeUiState {
-    /**
-     * The briefing is being loaded.
-     */
     data object Loading : HomeUiState
 
-    /**
-     * The briefing was successfully retrieved.
-     */
     data class Success(
         val briefing: IntelligenceBriefing,
         val userCountry: String,
         val userMission: UserMission = UserMission.PREVENTION,
         val adoptedActions: List<PreventionAction> = emptyList(),
-        /**
-         * Map of signal ID to its verified re-entry reconciliation status.
-         */
+        val dailyPeace: DailyPeace? = null,
+        val pillarStatuses: List<PillarStatus> = emptyList(),
         val reconciliations: Map<String, IntelligenceReentryReconciliationPresentationContract> = emptyMap(),
-        /**
-         * Contract representing the finality/sync status of the current briefing.
-         */
         val finality: CommandConsumptionFinalityPresentationContract = CommandConsumptionFinalityPresentationContract.NonTerminal(
             operationId = "initial_load",
             detail = "Initializing agency briefing..."
         )
     ) : HomeUiState
 
-    /**
-     * An error occurred while retrieving the briefing.
-     */
     data class Error(val message: String) : HomeUiState
 }
+
+data class DailyPeace(
+    val title: String,
+    val summary: String,
+    val shield: String
+)
+
+data class PillarStatus(
+    val id: String,
+    val title: String,
+    val status: String,
+    val isAlert: Boolean = false
+)

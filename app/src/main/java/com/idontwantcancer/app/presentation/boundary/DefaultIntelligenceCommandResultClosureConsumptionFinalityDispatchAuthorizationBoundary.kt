@@ -28,6 +28,10 @@ class DefaultIntelligenceCommandResultClosureConsumptionFinalityDispatchAuthoriz
             is IntelligenceUiInteraction.AcknowledgeSignal,
             is IntelligenceUiInteraction.ToggleWatch,
             is IntelligenceUiInteraction.EnterHealingSanctuary,
+            is IntelligenceUiInteraction.EnterAlerts,
+            is IntelligenceUiInteraction.EnterVerify,
+            is IntelligenceUiInteraction.EnterPrevention,
+            is IntelligenceUiInteraction.EnterSettings,
             is IntelligenceUiInteraction.ClearSelection -> true
         }
 

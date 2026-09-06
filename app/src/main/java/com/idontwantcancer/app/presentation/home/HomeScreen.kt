@@ -8,36 +8,30 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.DirectionsRun
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayout
-import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayoutType
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
 import com.idontwantcancer.app.domain.model.*
-import com.idontwantcancer.app.presentation.boundary.IntelligenceInteractionBoundary
 import com.idontwantcancer.app.presentation.components.*
-import com.idontwantcancer.app.presentation.model.CommandConsumptionFinalityPresentationContract
-import com.idontwantcancer.app.presentation.model.IntelligenceReentryReconciliationPresentationContract
 import com.idontwantcancer.app.presentation.model.IntelligenceUiInteraction
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -51,10 +45,9 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Step 222: Request Notification Permission on launch
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { /* No action needed, preference stored by system */ }
+        onResult = { }
     )
 
     LaunchedEffect(Unit) {
@@ -65,7 +58,11 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeHeader(onRefresh = { onInteraction(IntelligenceUiInteraction.RetryOperation) })
+            HomeHeader(
+                mission = (uiState as? HomeUiState.Success)?.userMission ?: UserMission.UNDEFINED,
+                onRefresh = { onInteraction(IntelligenceUiInteraction.RetryOperation) },
+                onSettings = { onInteraction(IntelligenceUiInteraction.EnterSettings) }
+            )
         }
     ) { innerPadding ->
         Box(
@@ -80,15 +77,7 @@ fun HomeScreen(
                     onRetry = { onInteraction(IntelligenceUiInteraction.RetryOperation) }
                 )
                 is HomeUiState.Success -> {
-                    HomeContent(
-                        briefing = state.briefing,
-                        userCountry = state.userCountry,
-                        userMission = state.userMission,
-                        adoptedActions = state.adoptedActions,
-                        reconciliations = state.reconciliations,
-                        finality = state.finality,
-                        onInteraction = onInteraction
-                    )
+                    DashboardContent(state, onInteraction)
                 }
             }
         }
@@ -97,7 +86,9 @@ fun HomeScreen(
 
 @Composable
 private fun HomeHeader(
-    onRefresh: () -> Unit
+    mission: UserMission,
+    onRefresh: () -> Unit,
+    onSettings: () -> Unit
 ) {
     val spacing = LocalSpacing.current
     Row(
@@ -108,347 +99,222 @@ private fun HomeHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
+        Column {
             Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.semantics { heading() }
+                text = "THE AGENCY",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.primary,
+                letterSpacing = 2.sp
             )
             Text(
-                text = stringResource(R.string.app_subtitle),
+                text = if (mission == UserMission.HEALING) "Healing Support Dashboard" else "Prevention Dashboard",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Row {
+            IconButton(onClick = onRefresh) {
+                Icon(Icons.Default.Refresh, contentDescription = null)
+            }
+            IconButton(onClick = onSettings) {
+                Icon(Icons.Default.Settings, contentDescription = null)
+            }
+        }
+    }
+}
+
+@Composable
+private fun DashboardContent(
+    state: HomeUiState.Success,
+    onInteraction: (IntelligenceUiInteraction) -> Unit
+) {
+    val spacing = LocalSpacing.current
+    
+    // Extract signals for primary directives
+    val signals = remember(state.briefing) { 
+        state.briefing.items.mapNotNull { state.briefing.signals[it.intelligenceId] } 
+    }
+    val criticalDirective = remember(signals) {
+        signals.find { (it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH) && !it.isActionTaken }
+    }
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(spacing.screenPadding),
+        horizontalArrangement = Arrangement.spacedBy(spacing.medium),
+        verticalArrangement = Arrangement.spacedBy(spacing.medium)
+    ) {
+        // 1. Operational Status
+        item(span = { GridItemSpan(2) }) {
+            AgencyStatusAnchor()
+        }
+
+        // 2. Daily Peace
+        state.dailyPeace?.let { peace ->
+            item(span = { GridItemSpan(2) }) {
+                DailyPeaceCard(peace)
+            }
+        }
+
+        // 3. Primary Directive (High Urgency Intercept)
+        criticalDirective?.let { directive ->
+            item(span = { GridItemSpan(2) }) {
+                PrimaryDirectiveCard(
+                    signal = directive,
+                    onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(directive.id)) }
+                )
+            }
+        }
+
+        // 4. The 7-Pillar Grid
+        item(span = { GridItemSpan(2) }) {
+            Text(
+                text = "PROTECTIVE SECTORS",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(top = spacing.medium, bottom = spacing.small)
+            )
+        }
+
+        items(state.pillarStatuses) { pillar ->
+            PillarCard(
+                pillar = pillar,
+                onClick = { 
+                    when(pillar.id) {
+                        "WATCH" -> onInteraction(IntelligenceUiInteraction.EnterAlerts)
+                        "SHOP", "TRUTH", "VERIFY" -> onInteraction(IntelligenceUiInteraction.EnterVerify)
+                        "EAT", "HOME", "ACADEMY", "PLAN" -> onInteraction(IntelligenceUiInteraction.EnterPrevention)
+                        "TREATMENT", "SYMPTOMS", "DECEPTION", "PROGRESS" -> onInteraction(IntelligenceUiInteraction.EnterHealingSanctuary)
+                    }
+                }
+            )
+        }
+        
+        item(span = { GridItemSpan(2) }) {
+            Spacer(modifier = Modifier.height(32.dp))
+        }
+    }
+}
+
+@Composable
+private fun AgencyStatusAnchor() {
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Default.Shield,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                text = "STATUS: OPERATIONAL - YOUR WATCH IS CLEAR",
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.onPrimary,
+                letterSpacing = 1.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun DailyPeaceCard(peace: DailyPeace) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "DAILY PEACE",
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Black,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = peace.title,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = peace.summary,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        IconButton(onClick = onRefresh) {
-            Icon(
-                imageVector = Icons.Default.Refresh,
-                contentDescription = stringResource(R.string.action_refresh_content_desc)
-            )
-        }
     }
 }
 
 @Composable
-private fun HomeContent(
-    briefing: IntelligenceBriefing,
-    userCountry: String,
-    userMission: UserMission,
-    adoptedActions: List<PreventionAction>,
-    reconciliations: Map<String, IntelligenceReentryReconciliationPresentationContract>,
-    finality: CommandConsumptionFinalityPresentationContract,
-    onInteraction: (IntelligenceUiInteraction) -> Unit
-) {
-    val layout = AdaptiveLayout.current
-    
-    // Step 213: Remember expensive transformations
-    val signals = remember(briefing) { 
-        briefing.items.mapNotNull { briefing.signals[it.intelligenceId] } 
-    }
-    
-    // Stage 4 Overhaul: User Agency filtering
-    val primaryDirectives = remember(signals) {
-        signals.filter { (it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH) && !it.isActionTaken }
-    }
-    val otherSignals = remember(signals, primaryDirectives) {
-        signals.filter { it !in primaryDirectives && !it.isActionTaken && !it.isWatched }
-    }
-    val watchedSignals = remember(signals) {
-        signals.filter { it.isWatched && !it.isActionTaken }
-    }
-    val securedSignals = remember(signals) {
-        signals.filter { it.isActionTaken }
-    }
-    
-    val isClear = remember(briefing, signals) { 
-        briefing.status == BriefingStatus.NO_MAJOR_CHANGES && signals.isEmpty() 
-    }
-
-    if (isClear) {
-        HomeClearState(lastUpdated = briefing.generatedAt, userCountry = userCountry)
-    } else {
-        val spacing = LocalSpacing.current
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().animateContentSize(animationSpec = tween(500)),
-            contentPadding = PaddingValues(bottom = spacing.extraLarge)
+private fun PillarCard(pillar: PillarStatus, onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth().aspectRatio(1.2f),
+        colors = CardDefaults.cardColors(
+            containerColor = if (pillar.isAlert) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        border = BorderStroke(1.dp, if (pillar.isAlert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            if (userMission == UserMission.PREVENTION) {
-                item {
-                    PatientPortalCard(
-                        onClick = { onInteraction(IntelligenceUiInteraction.EnterHealingSanctuary) }
-                    )
-                }
-            }
-
-            item {
-                BriefingStatusSection(status = briefing.status)
+            val icon = when(pillar.id) {
+                "WATCH" -> Icons.Default.NotificationsActive
+                "SHOP" -> Icons.Default.ShoppingBag
+                "EAT" -> Icons.Default.Restaurant
+                "TRUTH" -> Icons.Default.VerifiedUser
+                "HOME" -> Icons.Default.HomeWork
+                "ACADEMY" -> Icons.Default.School
+                "PLAN" -> Icons.Default.TrackChanges
+                else -> Icons.Default.GridView
             }
             
-            item {
-                OperationalFinalityIndicator(finality)
-            }
-
-            if (primaryDirectives.isNotEmpty()) {
-                item {
-                    SectionHeader(title = stringResource(R.string.section_directives))
-                }
-                items(primaryDirectives, key = { "directive-${it.id}" }) { signal ->
-                    PrimaryDirectiveCard(
-                        signal = signal,
-                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
-                    )
-                }
-            }
-
-            if (watchedSignals.isNotEmpty()) {
-                item {
-                    SectionHeader(title = stringResource(R.string.section_active_store_watch))
-                }
-                items(watchedSignals, key = { "watched-${it.id}" }) { signal ->
-                    SignalCard(
-                        signal = signal,
-                        isSelected = false,
-                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
-                    )
-                }
-            }
-
-            if (adoptedActions.isNotEmpty()) {
-                item {
-                    SectionHeader(title = stringResource(R.string.section_prevention_focus))
-                }
-                items(adoptedActions, key = { "adopted-${it.id}" }) { action ->
-                    AdoptedActionCard(action)
-                }
-            }
-
-            if (otherSignals.isNotEmpty()) {
-                item {
-                    SectionHeader(title = stringResource(R.string.section_additional_intelligence))
-                }
-                
-                items(
-                    items = otherSignals,
-                    key = { it.id }
-                ) { signal ->
-                    SignalCard(
-                        signal = signal,
-                        isSelected = false,
-                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) },
-                        reconciliationIndicator = {
-                            if (reconciliations[signal.id] is IntelligenceReentryReconciliationPresentationContract.InconsistentMismatch) {
-                                Spacer(modifier = Modifier.height(spacing.small))
-                                CompactReconciliationIndicator()
-                            }
-                        }
-                    )
-                }
-            }
-
-            if (securedSignals.isNotEmpty()) {
-                item {
-                    SectionHeader(title = stringResource(R.string.section_safety_secured))
-                }
-                items(securedSignals, key = { "secured-${it.id}" }) { signal ->
-                    SignalCard(
-                        signal = signal,
-                        isSelected = false,
-                        onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PatientPortalCard(
-    onClick: () -> Unit
-) {
-    val spacing = LocalSpacing.current
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spacing.screenPadding, vertical = spacing.medium),
-        onClick = onClick,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-        ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f))
-    ) {
-        Column(modifier = Modifier.padding(spacing.cardPadding)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.Healing,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (pillar.isAlert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(28.dp)
+            )
+            
+            Column {
                 Text(
-                    text = stringResource(R.string.portal_fighting_diagnosis),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(
-                onClick = onClick,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-            ) {
-                Text(
-                    text = stringResource(R.string.portal_enter_sanctuary),
+                    text = pillar.title,
                     style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Black
+                    fontWeight = FontWeight.Black,
+                    maxLines = 1
+                )
+                Text(
+                    text = pillar.status,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (pillar.isAlert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    lineHeight = 14.sp
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun AdoptedActionCard(action: PreventionAction) {
-    val spacing = LocalSpacing.current
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spacing.screenPadding, vertical = spacing.extraSmall),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
-        ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
-    ) {
-        Row(
-            modifier = Modifier.padding(spacing.cardPadding),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val icon = when (action.iconName) {
-                "smoke_free" -> Icons.Default.SmokeFree
-                "sunny" -> Icons.Default.WbSunny
-                "no_drinks" -> Icons.Default.NoDrinks
-                "directions_run" -> Icons.AutoMirrored.Filled.DirectionsRun
-                "grass" -> Icons.Default.Grass
-                "restaurant" -> Icons.Default.Restaurant
-                else -> Icons.Default.Verified
-            }
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = action.title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
-    }
-}
-
-@Composable
-private fun BriefingStatusSection(status: BriefingStatus) {
-    val (text, icon, color) = when (status) {
-        BriefingStatus.NO_MAJOR_CHANGES -> Triple(
-            stringResource(R.string.status_no_changes),
-            Icons.Default.CheckCircle,
-            MaterialTheme.colorScheme.primary
-        )
-        BriefingStatus.READY -> Triple(
-            stringResource(R.string.status_ready),
-            Icons.Default.Info,
-            MaterialTheme.colorScheme.secondary
-        )
-        BriefingStatus.ATTENTION_REQUIRED -> Triple(
-            stringResource(R.string.status_attention),
-            Icons.Default.Warning,
-            MaterialTheme.colorScheme.error
-        )
-    }
-
-    Surface(
-        color = color.copy(alpha = 0.1f),
-        shape = MaterialTheme.shapes.medium,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(LocalSpacing.current.screenPadding)
-    ) {
-        val spacing = LocalSpacing.current
-        Row(
-            modifier = Modifier.padding(spacing.cardPadding),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = color,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = text,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = color
-            )
-        }
-    }
-}
-
-@Composable
-private fun SectionHeader(title: String) {
-    val spacing = LocalSpacing.current
-    Text(
-        text = title,
-        style = MaterialTheme.typography.labelLarge,
-        color = MaterialTheme.colorScheme.secondary,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier
-            .padding(start = spacing.screenPadding, end = spacing.screenPadding, top = spacing.large, bottom = spacing.small)
-            .semantics { heading() }
-    )
-}
-
-@Composable
-private fun HomeClearState(lastUpdated: java.time.Instant, userCountry: String) {
-    val formatter = remember {
-        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
-            .withLocale(Locale.getDefault())
-            .withZone(ZoneId.systemDefault())
-    }
-    
-    val timeString = remember(lastUpdated) { formatter.format(lastUpdated) }
-    val countryName = remember(userCountry) { Locale("", userCountry).displayCountry }
-
-    AgencyEmptyState(
-        title = stringResource(R.string.briefing_clear_title),
-        description = stringResource(R.string.briefing_clear_desc),
-        icon = Icons.Default.CheckCircle
-    )
-    
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(bottom = 32.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.briefing_monitoring_reassurance, countryName),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 32.dp)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = stringResource(R.string.briefing_last_update, timeString),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-            )
         }
     }
 }

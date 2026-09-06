@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
+import com.idontwantcancer.app.domain.model.UserMission
 import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.GetCurrentBriefingUseCase
 import com.idontwantcancer.app.domain.usecase.GetPreventionActionsUseCase
@@ -49,6 +50,18 @@ class HomeViewModel @Inject constructor(
         loadBriefing()
         observeFinality()
         observeAdoptedActions()
+        observeMission()
+    }
+
+    private fun observeMission() {
+        viewModelScope.launch {
+            userContextRepository.getUserMission().collect { mission ->
+                val currentState = _uiState.value
+                if (currentState is HomeUiState.Success) {
+                    _uiState.value = currentState.copy(userMission = mission)
+                }
+            }
+        }
     }
 
     private fun observeFinality() {
@@ -145,6 +158,7 @@ class HomeViewModel @Inject constructor(
                 }
 
                 val adoptedActions = getPreventionActionsUseCase().first().filter { it.isAdopted }
+                val mission = userContextRepository.getUserMission().first()
                 
                 // Step 112 / 157 / 172 / 187: Report success outcome
                 interaction?.let { 
@@ -157,6 +171,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.value = HomeUiState.Success(
                     briefing = briefing,
                     userCountry = userContextRepository.getUserCountryCode(),
+                    userMission = mission,
                     reconciliations = reconciliations,
                     adoptedActions = adoptedActions
                 )

@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -34,7 +35,9 @@ import com.idontwantcancer.app.presentation.settings.SettingsScreen
 import com.idontwantcancer.app.presentation.signal.SignalDetailScreen
 import com.idontwantcancer.app.presentation.signal.SignalDetailViewModel
 import com.idontwantcancer.app.presentation.healing.HealingSanctuaryScreen
+import com.idontwantcancer.app.presentation.onboarding.MissionSelectionScreen
 import com.idontwantcancer.app.presentation.model.IntelligenceUiInteraction
+import com.idontwantcancer.app.domain.model.UserMission
 import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayout
 import com.idontwantcancer.app.core.ui.adaptive.AdaptiveLayoutType
 
@@ -43,8 +46,14 @@ fun AppNavigation(
     initialSignalId: String? = null,
     viewModel: NavigationViewModel = hiltViewModel()
 ) {
+    val userMission by viewModel.userMission.collectAsStateWithLifecycle()
     val navController = rememberNavController()
     
+    if (userMission == UserMission.UNDEFINED) {
+        MissionSelectionScreen()
+        return
+    }
+
     // Stage 5 Overhaul: Handle initial deep link from notification
     LaunchedEffect(initialSignalId) {
         if (initialSignalId != null) {
@@ -55,13 +64,15 @@ fun AppNavigation(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val items = listOf(
-        NavigationItem.Home,
-        NavigationItem.Alerts,
-        NavigationItem.Search,
-        NavigationItem.Prevention,
-        NavigationItem.Settings
-    )
+    val items = remember(userMission) {
+        listOfNotNull(
+            NavigationItem.Home,
+            NavigationItem.Search,
+            if (userMission == UserMission.PREVENTION) NavigationItem.Prevention else null,
+            if (userMission == UserMission.HEALING) NavigationItem.HealingSanctuary else null,
+            NavigationItem.Settings
+        )
+    }
     
     val layout = AdaptiveLayout.current
 

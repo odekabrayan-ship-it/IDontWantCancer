@@ -83,6 +83,7 @@ fun HomeScreen(
                     HomeContent(
                         briefing = state.briefing,
                         userCountry = state.userCountry,
+                        userMission = state.userMission,
                         adoptedActions = state.adoptedActions,
                         reconciliations = state.reconciliations,
                         finality = state.finality,
@@ -133,6 +134,7 @@ private fun HomeHeader(
 private fun HomeContent(
     briefing: IntelligenceBriefing,
     userCountry: String,
+    userMission: UserMission,
     adoptedActions: List<PreventionAction>,
     reconciliations: Map<String, IntelligenceReentryReconciliationPresentationContract>,
     finality: CommandConsumptionFinalityPresentationContract,
@@ -171,10 +173,12 @@ private fun HomeContent(
             modifier = Modifier.fillMaxSize().animateContentSize(animationSpec = tween(500)),
             contentPadding = PaddingValues(bottom = spacing.extraLarge)
         ) {
-            item {
-                PatientPortalCard(
-                    onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails("HEALING_PORTAL")) }
-                )
+            if (userMission == UserMission.PREVENTION) {
+                item {
+                    PatientPortalCard(
+                        onClick = { onInteraction(IntelligenceUiInteraction.EnterHealingSanctuary) }
+                    )
+                }
             }
 
             item {
@@ -259,48 +263,6 @@ private fun HomeContent(
 }
 
 @Composable
-private fun AdoptedActionCard(action: PreventionAction) {
-    val spacing = LocalSpacing.current
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = spacing.screenPadding, vertical = spacing.extraSmall),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
-        ),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
-    ) {
-        Row(
-            modifier = Modifier.padding(spacing.cardPadding),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val icon = when (action.iconName) {
-                "smoke_free" -> Icons.Default.SmokeFree
-                "sunny" -> Icons.Default.WbSunny
-                "no_drinks" -> Icons.Default.NoDrinks
-                "directions_run" -> Icons.AutoMirrored.Filled.DirectionsRun
-                "grass" -> Icons.Default.Grass
-                "restaurant" -> Icons.Default.Restaurant
-                else -> Icons.Default.Verified
-            }
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = action.title,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
-            )
-        }
-    }
-}
-
-@Composable
 private fun PatientPortalCard(
     onClick: () -> Unit
 ) {
@@ -343,6 +305,48 @@ private fun PatientPortalCard(
                     fontWeight = FontWeight.Black
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun AdoptedActionCard(action: PreventionAction) {
+    val spacing = LocalSpacing.current
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = spacing.screenPadding, vertical = spacing.extraSmall),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
+    ) {
+        Row(
+            modifier = Modifier.padding(spacing.cardPadding),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val icon = when (action.iconName) {
+                "smoke_free" -> Icons.Default.SmokeFree
+                "sunny" -> Icons.Default.WbSunny
+                "no_drinks" -> Icons.Default.NoDrinks
+                "directions_run" -> Icons.AutoMirrored.Filled.DirectionsRun
+                "grass" -> Icons.Default.Grass
+                "restaurant" -> Icons.Default.Restaurant
+                else -> Icons.Default.Verified
+            }
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                text = action.title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         }
     }
 }

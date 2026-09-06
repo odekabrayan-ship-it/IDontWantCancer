@@ -14,14 +14,17 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.idontwantcancer.app.R
 import com.idontwantcancer.app.core.ui.theme.LocalSpacing
+import com.idontwantcancer.app.domain.model.UserMission
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    val userMission by viewModel.userMission.collectAsStateWithLifecycle()
     var showClearDialog by remember { mutableStateOf(false) }
     val spacing = LocalSpacing.current
 
@@ -44,6 +47,32 @@ fun SettingsScreen(
                 .padding(innerPadding),
             contentPadding = PaddingValues(vertical = spacing.medium)
         ) {
+            item {
+                SettingsSectionHeader(title = "MISSION")
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Current Mission") },
+                    supportingContent = { Text("Switch between Prevention and Healing support") },
+                    trailingContent = {
+                        Text(
+                            text = if (userMission == UserMission.PREVENTION) "Protecting Health" else "Fighting Diagnosis",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    },
+                    leadingContent = { Icon(Icons.Default.Shield, contentDescription = null) },
+                    modifier = Modifier.clickable {
+                        viewModel.setMission(
+                            if (userMission == UserMission.PREVENTION) UserMission.HEALING else UserMission.PREVENTION
+                        )
+                    }
+                )
+            }
+
+            item { HorizontalDivider(modifier = Modifier.padding(vertical = spacing.small)) }
+
             item {
                 SettingsSectionHeader(title = stringResource(R.string.settings_section_notifications))
             }

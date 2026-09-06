@@ -67,7 +67,7 @@ fun AppNavigation(
     val items = remember(userMission) {
         listOfNotNull(
             NavigationItem.Home,
-            NavigationItem.Search,
+            NavigationItem.Verify,
             if (userMission == UserMission.PREVENTION) NavigationItem.Prevention else null,
             if (userMission == UserMission.HEALING) NavigationItem.HealingSanctuary else null,
             NavigationItem.Settings

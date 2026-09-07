@@ -155,12 +155,22 @@ class HomeViewModel @Inject constructor(
 
                     val scamCount = truthChecks.count { it.verdict == PatientVerdict.SCAM }
 
+                    // Logic: Count available manuals + symptoms vs what was done today
+                    val totalDirectivesToday = 1 + managedSymptoms.size // Base 1 treatment manual + active symptoms
+                    val completedDirectivesToday = (if (treatmentDoneToday) 1 else 0) + managedSymptoms.size
+                    val defenseScore = (completedDirectivesToday.toFloat() / totalDirectivesToday.toFloat()).coerceIn(0f, 1f)
+
                     listOf(
                         PillarStatus(id = "WATCH", title = "Sentinel Watch", status = if (medicalAlerts.isNotEmpty()) "${medicalAlerts.size} URGENT TREATMENT ALERTS" else "Treatment Integrity Clear", isAlert = medicalAlerts.isNotEmpty()),
                         PillarStatus(id = "TREATMENT", title = "Treatment", status = if (treatmentDoneToday) "Protocol Steps Completed" else "Next: Check Daily Manual"),
                         PillarStatus(id = "SYMPTOMS", title = "Symptom Help", status = if (managedSymptoms.isNotEmpty()) "Managing: ${managedSymptoms.size} Symptoms" else "Immediate Directives Ready"),
                         PillarStatus(id = "DECEPTION", title = "Deception Shield", status = "$scamCount Known Scams Blocked"),
-                        PillarStatus(id = "PROGRESS", title = "My Progress", status = "${healingLogs.size} Victories Logged"),
+                        PillarStatus(
+                            id = "PROGRESS", 
+                            title = "My Progress", 
+                            status = "${(defenseScore * 100).toInt()}% DEFENSE REACHED",
+                            progress = defenseScore
+                        ),
                         PillarStatus(id = "VERIFY", title = "Laboratory", status = "Drug & Supplement Check")
                     )
                 } else {

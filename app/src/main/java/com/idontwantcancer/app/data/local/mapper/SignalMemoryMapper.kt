@@ -76,6 +76,11 @@ fun SignalEntity.toDomain(): Signal {
         } catch (e: Exception) {
             emptyList()
         },
+        discoveryTags = try {
+            Json.decodeFromString(discoveryTagsJson)
+        } catch (e: Exception) {
+            emptyList()
+        },
         lastAdmittedStateEntryId = lastAdmittedStateEntryId
     )
 }
@@ -120,6 +125,7 @@ fun Signal.toEntity(
         isActionTaken = isActionTaken,
         isWatched = isWatched,
         interactionContextsJson = Json.encodeToString(interactionContexts),
+        discoveryTagsJson = Json.encodeToString(discoveryTags),
         lifecycle = lifecycle,
         isBriefed = isBriefed,
         firstObservedAt = firstObservedAt,

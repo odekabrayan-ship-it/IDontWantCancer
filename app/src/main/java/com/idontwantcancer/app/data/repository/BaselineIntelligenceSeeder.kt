@@ -12,7 +12,7 @@ import javax.inject.Singleton
 /**
  * Responsible for seeding the agency with verified baseline intelligence.
  * Optimized for ORDINARY LANGUAGE and direct problem-solving.
- * This is the Elite Integrity Registry: 100+ High-Standard Directives.
+ * This is the Elite Integrity Registry: 200+ High-Standard Directives.
  */
 @Singleton
 class BaselineIntelligenceSeeder @Inject constructor(
@@ -49,29 +49,89 @@ class BaselineIntelligenceSeeder @Inject constructor(
 
     private suspend fun seedCosmeticRegistry() {
         val data = listOf(
-            Triple("Parabens", listOf("Methylparaben", "Propylparaben", "Butylparaben", "Ethylparaben", "Isobutylparaben", "E216", "E218"), "Endocrine Disruptors common in lotions and makeup. They mimic estrogen and can promote breast cancer cell growth."),
-            Triple("Formaldehyde Releasers", listOf("DMDM Hydantoin", "Quaternium-15", "Imidazolidinyl Urea", "Diazolidinyl Urea", "2-bromo-2-nitropropane-1,3-diol", "Bronopol"), "Preservatives that slowly release known human carcinogens into your skin and air."),
-            Triple("Phthalates", listOf("DEP", "DBP", "DEHP", "Phthalate", "Fragrance", "Parfum", "Synthetic Musk"), "Hormone disruptors that make scents last longer. Linked to reproductive issues and hormone-sensitive cancers."),
-            Triple("Ethanolamines", listOf("DEA", "TEA", "MEA", "Diethanolamine", "Triethanolamine", "Cocamide DEA", "Lauramide DEA"), "Chemicals used as sudsing agents. Can react with other ingredients to form Nitrosamines, which are powerful carcinogens."),
-            Triple("Coal Tar", listOf("Coal Tar", "CI 77266", "Carbon Black", "P-phenylenediamine", "PPD", "Aminophenol"), "Used in dandruff shampoos and hair dyes. A known human carcinogen (Group 1)."),
-            Triple("Synthetic Musks", listOf("Galaxolide", "Tonalide", "HHCB", "AHTN", "Musk Xylene"), "Highly persistent chemicals used in perfumes. They build up in human fat tissue and disrupt hormones."),
-            Triple("Chemical UV Filters", listOf("Oxybenzone", "Octinoxate", "Benzophenone-3", "Avobenzone", "Homosalate", "Octocrylene"), "Sunscreen chemicals that absorb into the body at high rates and disrupt hormonal balance."),
-            Triple("PFAS (Forever Chemicals)", listOf("PTFE", "Perfluoro", "Polyperfluoromethylisopropyl Ether", "Teflon", "Fluorine"), "Used in waterproof mascara and long-wear foundations. Linked to kidney cancer and immune suppression."),
-            Triple("Lead Acetate", listOf("Lead Acetate"), "Found in some progressive hair dyes. Lead is a neurotoxin and suspected carcinogen."),
-            Triple("Talcum Powder", listOf("Talc", "Hydrous Magnesium Silicate", "Magnesium Silicate"), "Can be naturally contaminated with asbestos. Linked to ovarian and lung cancer."),
-            Triple("Resorcinol", listOf("Resorcinol", "1,3-benzenediol"), "Found in hair dyes and acne treatments. Linked to thyroid disruption and immune system issues."),
-            Triple("Carbon Black", listOf("Carbon Black", "D&C Black No. 2", "Acetylene Black"), "Used in eyeliners and mascaras. Linked to cancer and organ system toxicity.")
+            RegistrySeed(
+                "Parabens", 
+                listOf("Methylparaben", "Propylparaben", "Butylparaben", "Ethylparaben", "Isobutylparaben", "E216", "E218"), 
+                "Endocrine Disruptors common in lotions and makeup. They mimic estrogen and can promote breast cancer cell growth.", 
+                listOf("Lotion", "Moisturizer", "Makeup", "Preservative", "Bathroom")
+            ),
+            RegistrySeed(
+                "Formaldehyde Releasers", 
+                listOf("DMDM Hydantoin", "Quaternium-15", "Imidazolidinyl Urea", "Diazolidinyl Urea", "Bronopol"), 
+                "Preservatives that slowly release known human carcinogens into your skin and air.", 
+                listOf("Shampoo", "Body Wash", "Conditioner", "Bathroom")
+            ),
+            RegistrySeed(
+                "Phthalates", 
+                listOf("DEP", "DBP", "DEHP", "Phthalate", "Fragrance", "Parfum", "Synthetic Musk"), 
+                "Hormone disruptors that make scents last longer. Linked to reproductive issues and hormone-sensitive cancers.", 
+                listOf("Perfume", "Cologne", "Fragrance", "Scent")
+            ),
+            RegistrySeed(
+                "Ethanolamines", 
+                listOf("DEA", "TEA", "MEA", "Diethanolamine", "Triethanolamine", "Cocamide DEA", "Lauramide DEA"), 
+                "Chemicals used as sudsing agents. Can react with other ingredients to form Nitrosamines, which are powerful carcinogens.", 
+                listOf("Soap", "Sudsing", "Foam", "Detergent")
+            ),
+            RegistrySeed(
+                "Coal Tar", 
+                listOf("Coal Tar", "CI 77266", "Carbon Black", "P-phenylenediamine", "PPD", "Aminophenol"), 
+                "Used in dandruff shampoos and hair dyes. A known human carcinogen (Group 1).", 
+                listOf("Hair Dye", "Dandruff", "Scalp", "Black Dye")
+            ),
+            RegistrySeed(
+                "Synthetic Musks", 
+                listOf("Galaxolide", "Tonalide", "HHCB", "AHTN", "Musk Xylene"), 
+                "Highly persistent chemicals used in perfumes. They build up in human fat tissue and disrupt hormones.", 
+                listOf("Perfume", "Laundry", "Dryer Sheet")
+            ),
+            RegistrySeed(
+                "Chemical UV Filters", 
+                listOf("Oxybenzone", "Octinoxate", "Benzophenone-3", "Avobenzone", "Homosalate", "Octocrylene"), 
+                "Sunscreen chemicals that absorb into the body at high rates and disrupt hormonal balance.", 
+                listOf("Sunscreen", "SPF", "Sunblock", "Beach")
+            ),
+            RegistrySeed(
+                "PFAS (Forever Chemicals)", 
+                listOf("PTFE", "Perfluoro", "Polyperfluoromethylisopropyl Ether", "Teflon", "Fluorine"), 
+                "Used in waterproof mascara and long-wear foundations. Linked to kidney cancer and immune suppression.", 
+                listOf("Waterproof", "Makeup", "Mascara", "Eyeliner")
+            ),
+            RegistrySeed(
+                "Lead Acetate", 
+                listOf("Lead Acetate"), 
+                "Found in some progressive hair dyes. Lead is a neurotoxin and suspected carcinogen.", 
+                listOf("Hair Dye", "Metal", "Neurotoxin")
+            ),
+            RegistrySeed(
+                "Talcum Powder", 
+                listOf("Talc", "Hydrous Magnesium Silicate", "Magnesium Silicate"), 
+                "Can be naturally contaminated with asbestos. Linked to ovarian and lung cancer.", 
+                listOf("Body Powder", "Baby Powder", "Asbestos", "Dust")
+            ),
+            RegistrySeed(
+                "Resorcinol", 
+                listOf("Resorcinol", "1,3-benzenediol"), 
+                "Found in hair dyes and acne treatments. Linked to thyroid disruption and immune system issues.", 
+                listOf("Hair Dye", "Acne", "Skin Treatment")
+            ),
+            RegistrySeed(
+                "Carbon Black", 
+                listOf("Carbon Black", "D&C Black No. 2", "Acetylene Black"), 
+                "Used in eyeliners and mascaras. Linked to cancer and organ system toxicity.", 
+                listOf("Mascara", "Eyeliner", "Black Pigment")
+            )
         )
 
-        data.forEach { (name, ingredients, truth) ->
+        data.forEach { seed ->
             saveSignal(
-                id = "cos-${name.lowercase().replace(" ", "-")}",
-                title = "$name: Label Check",
+                id = "cos-${seed.name.lowercase().replace(" ", "-")}",
+                title = "${seed.name}: Label Check",
                 summary = "Dangerous chemicals found in cosmetics and personal care products.",
-                theTruth = truth,
-                theCommand = "Switch to products explicitly labeled '${name}-Free'.",
+                theTruth = seed.truth,
+                theCommand = "Switch to products explicitly labeled '${seed.name}-Free'.",
                 theExecution = listOf(
-                    "Scan the ingredient list for: ${ingredients.joinToString(", ")}.",
+                    "Scan the ingredient list for: ${seed.ingredients.joinToString(", ")}.",
                     "If any match, do not purchase the product.",
                     "Choose 'Clean Beauty' brands that provide a 'Red List' of banned chemicals."
                 ),
@@ -79,31 +139,57 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 category = SignalCategory.COSMETICS,
                 importance = SignalImportance.HIGH,
                 confidence = SignalConfidence.VERY_HIGH,
-                affectedIngredients = ingredients,
+                affectedIngredients = seed.ingredients,
                 safeAlternatives = listOf("Natural Extracts", "Mineral UV Filters", "Beeswax", "Tocopherol"),
-                interactionContexts = listOf("Store", "Home")
+                interactionContexts = listOf("Store", "Home"),
+                discoveryTags = seed.tags
             )
         }
     }
 
     private suspend fun seedHouseholdRegistry() {
         val data = listOf(
-            Triple("Triclosan", listOf("Triclosan", "Triclocarban"), "Antibacterial agent that disrupts thyroid hormones and contributes to antibiotic resistance."),
-            Triple("1,4-Dioxane", listOf("PEG", "Polyethylene Glycol", "Sodium Laureth Sulfate", "SLES", "Ceteareth", "Polysorbate"), "A probable carcinogen that is a manufacturing byproduct. Found in sudsing products like dish soap and laundry detergent."),
-            Triple("Quats", listOf("Benzalkonium Chloride", "Distearyldimonium Chloride", "Quaternium-18"), "Quaternary Ammonium Compounds used as disinfectants and fabric softeners. Potent lung irritants and endocrine disruptors."),
-            Triple("Ammonia", listOf("Ammonia", "Ammonium Hydroxide"), "Found in window cleaners. Can react with bleach to create deadly Mustard Gas. Chronic exposure is hard on the lungs."),
-            Triple("2-Butoxyethanol", listOf("2-Butoxyethanol", "Ethylene Glycol Monobutyl Ether"), "Found in multipurpose and glass cleaners. A known organ toxin linked to blood disorders and potential cancer.")
+            RegistrySeed(
+                "Triclosan", 
+                listOf("Triclosan", "Triclocarban"), 
+                "Antibacterial agent that disrupts thyroid hormones and contributes to antibiotic resistance.", 
+                listOf("Antibacterial", "Soap", "Toothpaste", "Kitchen")
+            ),
+            RegistrySeed(
+                "1,4-Dioxane", 
+                listOf("PEG", "Polyethylene Glycol", "Sodium Laureth Sulfate", "SLES", "Ceteareth", "Polysorbate"), 
+                "A probable carcinogen that is a manufacturing byproduct. Found in sudsing products like dish soap and laundry detergent.", 
+                listOf("Laundry", "Dish Soap", "Sudsing", "Foam")
+            ),
+            RegistrySeed(
+                "Quats", 
+                listOf("Benzalkonium Chloride", "Distearyldimonium Chloride", "Quaternium-18"), 
+                "Quaternary Ammonium Compounds used as disinfectants and fabric softeners. Potent lung irritants and endocrine disruptors.", 
+                listOf("Fabric Softener", "Disinfectant", "Wipes", "Laundry")
+            ),
+            RegistrySeed(
+                "Ammonia", 
+                listOf("Ammonia", "Ammonium Hydroxide"), 
+                "Found in window cleaners. Can react with bleach to create deadly Mustard Gas. Chronic exposure is hard on the lungs.", 
+                listOf("Window Cleaner", "Glass", "Ammonia", "Janitorial")
+            ),
+            RegistrySeed(
+                "2-Butoxyethanol", 
+                listOf("2-Butoxyethanol", "Ethylene Glycol Monobutyl Ether"), 
+                "Found in multipurpose and glass cleaners. A known organ toxin linked to blood disorders and potential cancer.", 
+                listOf("Multipurpose", "Spray", "Cleaner", "Solvent")
+            )
         )
 
-        data.forEach { (name, ingredients, truth) ->
+        data.forEach { seed ->
             saveSignal(
-                id = "clean-${name.lowercase().replace(" ", "-")}",
-                title = "$name: Household Registry",
+                id = "clean-${seed.name.lowercase().replace(" ", "-")}",
+                title = "${seed.name}: Household Registry",
                 summary = "Cleaning chemicals that linger in your home's air and surfaces.",
-                theTruth = truth,
+                theTruth = seed.truth,
                 theCommand = "Switch to fragrance-free, plant-based cleaning agents.",
                 theExecution = listOf(
-                    "Identify '$name' or synonyms: ${ingredients.joinToString(", ")}.",
+                    "Identify '${seed.name}' or synonyms: ${seed.ingredients.joinToString(", ")}.",
                     "Ask for digital receipts or hold paper ones by the edges (Receipts contain BPA).",
                     "Use white vinegar and water as a safe, all-purpose alternative."
                 ),
@@ -111,34 +197,90 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 category = SignalCategory.CLEANING,
                 importance = SignalImportance.MODERATE,
                 confidence = SignalConfidence.HIGH,
-                affectedIngredients = ingredients,
+                affectedIngredients = seed.ingredients,
                 safeAlternatives = listOf("White Vinegar", "Castile Soap", "Baking Soda", "Essential Oils"),
-                interactionContexts = listOf("Home", "Store")
+                interactionContexts = listOf("Home", "Store"),
+                discoveryTags = seed.tags
             )
         }
     }
 
     private suspend fun seedFoodAdditiveRegistry() {
         val data = listOf(
-            Triple("Sodium Nitrite", listOf("E250", "Sodium Nitrite", "Curing Salt", "Pink Salt", "Prague Powder", "Nitrate"), "Used in bacon and ham. Forms DNA-damaging Nitrosamines in your stomach."),
-            Triple("Titanium Dioxide", listOf("E171", "Titanium Dioxide", "CI 77891", "Pigment White 6"), "Whitening pigment in candies and pills. Contains nanoparticles that can damage the gut barrier."),
-            Triple("Potassium Bromate", listOf("E924", "Potassium Bromate", "Bromated Flour", "Enriched Bromated Flour"), "Flour improver that is a known carcinogen. Banned in most countries except the USA."),
-            Triple("BHA & BHT", listOf("E320", "E321", "Butylated Hydroxyanisole", "Butylated Hydroxytoluene", "Antioxidant 320"), "Preservatives used in oils and cereals. Linked to hormonal disruption and cancer."),
-            Triple("Azo Dyes", listOf("Red 40", "Yellow 5", "Yellow 6", "E129", "E102", "E110", "Red 3", "E127", "Tartrazine", "Allura Red"), "Synthetic food colors derived from petroleum. Suspected carcinogens."),
-            Triple("Propyl Gallate", listOf("E310", "Propyl Gallate"), "Antioxidant used to prevent oils from going rancid. Suspected endocrine disruptor."),
-            Triple("Carrageenan", listOf("E407", "Carrageenan", "Irish Moss Extract"), "Thickener found in dairy and plant milks. Can cause intense gut inflammation, a precursor to cancer."),
-            Triple("TBHQ", listOf("Tertiary Butylhydroquinone", "E319", "Antioxidant 319"), "Preservative in crackers and frozen foods. Linked to immune system damage."),
-            Triple("Potassium Iodate", listOf("E917", "Potassium Iodate"), "Flour treatment agent. Linked to thyroid dysfunction and potential carcinogenic effects."),
-            Triple("Aspartame", listOf("E951", "Aspartame", "Equal", "NutraSweet"), "Artificial sweetener classified as 'possibly carcinogenic' by IARC (2B)."),
-            Triple("Acesulfame K", listOf("E950", "Acesulfame Potassium", "Ace-K"), "Artificial sweetener. Some studies suggest potential for thyroid disruption and cancer.")
+            RegistrySeed(
+                "Sodium Nitrite", 
+                listOf("E250", "Sodium Nitrite", "Curing Salt", "Pink Salt", "Prague Powder", "Nitrate"), 
+                "Used in bacon and ham. Forms DNA-damaging Nitrosamines in your stomach.", 
+                listOf("Bacon", "Ham", "Deli Meat", "Pink Meat")
+            ),
+            RegistrySeed(
+                "Titanium Dioxide", 
+                listOf("E171", "Titanium Dioxide", "CI 77891", "Pigment White 6"), 
+                "Whitening pigment in candies and pills. Contains nanoparticles that can damage the gut barrier.", 
+                listOf("Candy", "Chewing Gum", "Pill Coating", "White Food")
+            ),
+            RegistrySeed(
+                "Potassium Bromate", 
+                listOf("E924", "Potassium Bromate", "Bromated Flour", "Enriched Bromated Flour"), 
+                "Flour improver that is a known carcinogen. Banned in most countries except the USA.", 
+                listOf("Bread", "Flour", "Bakery", "White Bread")
+            ),
+            RegistrySeed(
+                "BHA & BHT", 
+                listOf("E320", "E321", "Butylated Hydroxyanisole", "Butylated Hydroxytoluene", "Antioxidant 320"), 
+                "Preservatives used in oils and cereals. Linked to hormonal disruption and cancer.", 
+                listOf("Cereal", "Oils", "Chips", "Preservative")
+            ),
+            RegistrySeed(
+                "Azo Dyes", 
+                listOf("Red 40", "Yellow 5", "Yellow 6", "E129", "E102", "E110", "Red 3", "E127", "Tartrazine", "Allura Red"), 
+                "Synthetic food colors derived from petroleum. Suspected carcinogens.", 
+                listOf("Coloring", "Cereal", "Candy", "Soda")
+            ),
+            RegistrySeed(
+                "Propyl Gallate", 
+                listOf("E310", "Propyl Gallate"), 
+                "Antioxidant used to prevent oils from going rancid. Suspected endocrine disruptor.", 
+                listOf("Oils", "Mayonnaise", "Lard", "Preservative")
+            ),
+            RegistrySeed(
+                "Carrageenan", 
+                listOf("E407", "Carrageenan", "Irish Moss Extract"), 
+                "Thickener found in dairy and plant milks. Can cause intense gut inflammation, a precursor to cancer.", 
+                listOf("Milk", "Yogurt", "Dairy Free", "Thickener")
+            ),
+            RegistrySeed(
+                "TBHQ", 
+                listOf("Tertiary Butylhydroquinone", "E319", "Antioxidant 319"), 
+                "Preservative in crackers and frozen foods. Linked to immune system damage.", 
+                listOf("Crackers", "Frozen Food", "Chicken Nuggets", "Preservative")
+            ),
+            RegistrySeed(
+                "Potassium Iodate", 
+                listOf("E917", "Potassium Iodate"), 
+                "Flour treatment agent. Linked to thyroid dysfunction and potential carcinogenic effects.", 
+                listOf("Bread", "Bakery", "Flour")
+            ),
+            RegistrySeed(
+                "Aspartame", 
+                listOf("E951", "Aspartame", "Equal", "NutraSweet"), 
+                "Artificial sweetener classified as 'possibly carcinogenic' by IARC (2B).", 
+                listOf("Diet Soda", "Sugar Free", "Sweetener")
+            ),
+            RegistrySeed(
+                "Acesulfame K", 
+                listOf("E950", "Acesulfame Potassium", "Ace-K"), 
+                "Artificial sweetener. Some studies suggest potential for thyroid disruption and cancer.", 
+                listOf("Diet Soda", "Sugar Free", "Sweetener")
+            )
         )
 
-        data.forEach { (name, ingredients, truth) ->
+        data.forEach { seed ->
             saveSignal(
-                id = "food-add-${name.lowercase().replace(" ", "-")}",
-                title = "$name: Food Registry",
+                id = "food-add-${seed.name.lowercase().replace(" ", "-")}",
+                title = "${seed.name}: Food Registry",
                 summary = "Industrial chemicals used to improve shelf-life and appearance of food.",
-                theTruth = truth,
+                theTruth = seed.truth,
                 theCommand = "Avoid 'Highly Processed' foods with long chemical ingredient lists.",
                 theExecution = listOf(
                     "Check the 'E-Number' or chemical name on the back label.",
@@ -149,9 +291,10 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 category = SignalCategory.FOOD,
                 importance = SignalImportance.HIGH,
                 confidence = SignalConfidence.VERY_HIGH,
-                affectedIngredients = ingredients,
+                affectedIngredients = seed.ingredients,
                 safeAlternatives = listOf("Fresh Meat", "Natural Colors (Turmeric, Beet)", "Honey", "Sea Salt"),
-                interactionContexts = listOf("Store", "Home")
+                interactionContexts = listOf("Store", "Home"),
+                discoveryTags = seed.tags
             )
         }
     }
@@ -173,7 +316,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Health Watch", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Mold", "Humidity", "Basement", "Bathroom")
             ),
             Signal(
                 id = "env-pesticide",
@@ -189,7 +333,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Agency Safety Lab", ""),
-                interactionContexts = listOf("Home", "Public")
+                interactionContexts = listOf("Home", "Public"),
+                discoveryTags = listOf("Pesticide", "Garden", "Lawn", "Glyphosate")
             ),
             Signal(
                 id = "env-house-dust",
@@ -209,7 +354,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Environmental Health Perspectives", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Dust", "Furniture", "Electronics", "Cleaning")
             ),
             Signal(
                 id = "env-radon",
@@ -229,7 +375,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("EPA / Agency Intelligence", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Radon", "Basement", "Air Quality", "Radioactive")
             ),
             Signal(
                 id = "env-cooking-smoke",
@@ -249,7 +396,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("WHO / Indoor Air Quality", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Kitchen", "Smoke", "Gas Stove", "Frying")
             ),
             Signal(
                 id = "env-new-furnishings",
@@ -269,7 +417,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Agency Indoor Watch", ""),
-                interactionContexts = listOf("Home", "Work")
+                interactionContexts = listOf("Home", "Work"),
+                discoveryTags = listOf("Furniture", "Carpet", "VOC", "Formaldehyde")
             ),
             Signal(
                 id = "env-plastic-leach",
@@ -289,7 +438,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Consumer Safety Lab", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Plastic", "Microwave", "Kitchen", "BPA", "Phthalate")
             ),
             Signal(
                 id = "env-dry-cleaning",
@@ -309,7 +459,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Agency Wardrobe Sentinel", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Dry Cleaning", "Wardrobe", "Closet", "PERC")
             ),
             Signal(
                 id = "env-non-stick",
@@ -329,7 +480,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Agency Kitchen Protocol", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Kitchen", "Teflon", "PTFE", "Cookware", "Pan")
             ),
             Signal(
                 id = "env-pesticide-shoes",
@@ -349,7 +501,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 detectedAt = now,
                 publishedAt = now,
                 source = SignalSource("Environmental Health Lab", ""),
-                interactionContexts = listOf("Home")
+                interactionContexts = listOf("Home"),
+                discoveryTags = listOf("Shoes", "Threshold", "Pesticide", "Lead", "Floor")
             )
         )
         signals.forEach { memory.saveSignal(it); seedThread(it) }
@@ -374,7 +527,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 source = SignalSource("U.S. FDA", ""),
                 isActionable = true,
                 actionType = ActionType.AVOID,
-                interactionContexts = listOf("Home", "Store")
+                interactionContexts = listOf("Home", "Store"),
+                discoveryTags = listOf("Aerosol", "Sunscreen", "Dry Shampoo", "Benzene", "Recall")
             )
         )
         signals.forEach { memory.saveSignal(it); seedThread(it) }
@@ -393,7 +547,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
         confidence: SignalConfidence,
         affectedIngredients: List<String>,
         safeAlternatives: List<String>,
-        interactionContexts: List<String>
+        interactionContexts: List<String>,
+        discoveryTags: List<String> = emptyList()
     ) {
         val signal = Signal(
             id = id,
@@ -412,7 +567,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
             isActionable = true,
             affectedIngredients = affectedIngredients,
             safeAlternatives = safeAlternatives,
-            interactionContexts = interactionContexts
+            interactionContexts = interactionContexts,
+            discoveryTags = discoveryTags
         )
         memory.saveSignal(signal)
         seedThread(signal)
@@ -670,20 +826,28 @@ class BaselineIntelligenceSeeder @Inject constructor(
     }
 
     private suspend fun seedPreventionActions() {
-        val actions = listOf(
-            PreventionAction(
-                id = "action-1",
-                title = "Avoid Tobacco",
-                description = "The single most powerful act to protect your lungs and life.",
-                iconName = "smoke_free"
-            ),
-            PreventionAction(
-                id = "action-4",
-                title = "Move Your Body",
-                description = "30 minutes of daily activity reduces risk for 13 types of cancer.",
-                iconName = "directions_run"
-            )
+        val data = listOf(
+            Triple("Avoid Tobacco", "The most significant avoidable risk factor for cancer.", "smoke_free"),
+            Triple("Protect Skin from UV", "Use SPF 30+ daily and seek shade between 10 AM - 4 PM.", "sunny"),
+            Triple("Limit Alcohol", "Reducing intake lowers risk for 7 types of cancer.", "no_drinks"),
+            Triple("Move Your Body", "Aim for 30 minutes of moderate activity (like brisk walking) daily.", "directions_run"),
+            Triple("Whole Grains First", "Choose brown rice and oats over refined white starches.", "grass"),
+            Triple("Limit Red Meat", "Keep weekly intake below 500g (cooked weight).", "restaurant"),
+            Triple("Healthy Weight", "Maintain a stable BMI through diet and movement.", "monitor_weight"),
+            Triple("Zero Sugary Drinks", "Eliminate liquid sugar to normalize insulin signals.", "water_drop"),
+            Triple("Screening Checklist", "Complete age-appropriate cancer checkups on time.", "event_available"),
+            Triple("Radon Safety", "Verify your home's air quality every 2 years.", "air")
         )
+
+        val actions = data.map { (title, desc, icon) ->
+            PreventionAction(
+                id = "action-${title.lowercase().replace(" ", "-")}",
+                title = title,
+                description = desc,
+                iconName = icon,
+                isAdopted = false
+            )
+        }
         preventionRepository.savePreventionActions(actions)
     }
 
@@ -698,6 +862,36 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 theCommand = "Drink 3 liters of water the day before your treatment.",
                 theExecution = listOf("Start drinking as soon as you wake up.", "Keep a water bottle with you all day.", "Don't wait until you are thirsty; sip steadily.", "Stick to plain water or light tea."),
                 theShield = "Ensures drugs clear your kidneys quickly and reduces overall sickness."
+            ),
+            TreatmentManual(
+                id = "treat-mouth-sores",
+                title = "Mouth Health: Salt & Soda Protocol",
+                summary = "Prevent painful mouth sores during chemo or radiation.",
+                category = TreatmentCategory.DAILY_HYGIENE,
+                theTruth = "Treatment can cause the lining of your mouth to break down. Salt and Soda neutralizes acid and keeps the area clean.",
+                theCommand = "Rinse your mouth every 2 hours while awake.",
+                theExecution = listOf(
+                    "Mix 1/4 tsp salt and 1/4 tsp baking soda in 1 cup warm water.",
+                    "Swish and spit gently; do not swallow.",
+                    "Avoid store-bought mouthwash containing alcohol.",
+                    "Use an extra-soft toothbrush only."
+                ),
+                theShield = "Prevents secondary infections and allows you to keep eating comfortably."
+            ),
+            TreatmentManual(
+                id = "treat-fatigue",
+                title = "Energy Watch: The 30-Min Rule",
+                summary = "Manage treatment-related exhaustion effectively.",
+                category = TreatmentCategory.RECOVERY,
+                theTruth = "Cancer fatigue is different from normal tiredness. It doesn't always go away with sleep.",
+                theCommand = "Rest when needed, but keep naps under 30 minutes.",
+                theExecution = listOf(
+                    "Do your most important task when you have the most energy.",
+                    "Ask for help with chores like laundry or cooking.",
+                    "Try a slow 10-minute walk to actually boost your energy levels.",
+                    "Keep a daily log of when you feel strongest."
+                ),
+                theShield = "Protects your physical stamina and keeps your body from 'shutting down'."
             )
         )
         healingRepository.saveTreatmentManuals(manuals)
@@ -707,12 +901,73 @@ class BaselineIntelligenceSeeder @Inject constructor(
         val symptoms = listOf(
             SymptomDirective(
                 id = "symp-1",
-                name = "Nausea (Sick to Stomach)",
+                name = "🤢 SICK TO STOMACH (NAUSEA)",
                 iconName = "sick",
                 theTruth = "Treatment can upset your stomach lining and signal your brain to feel sick.",
                 theCommand = "Use the 'Ginger & Dry Food' protocol immediately.",
-                theExecution = listOf("Sip cool ginger tea slowly.", "Eat 2-3 plain crackers.", "Sit upright; don't lie flat right after eating.", "Firmly press the spot 3 fingers above your inner wrist."),
+                theExecution = listOf(
+                    "Sip cool ginger tea or ginger ale slowly.",
+                    "Eat 2-3 plain crackers every hour.",
+                    "Sit upright; do not lie flat for 30 minutes after eating.",
+                    "Avoid strong smells like cooking or heavy perfume."
+                ),
                 theShield = "Calms your stomach naturally and breaks the 'feeling sick' loop."
+            ),
+            SymptomDirective(
+                id = "symp-2",
+                name = "🧱 CAN'T GO (CONSTIPATION)",
+                iconName = "emergency",
+                theTruth = "Pain meds and some chemo drugs slow down your digestive system.",
+                theCommand = "Implement the 'Fiber & Fluid' flush immediately.",
+                theExecution = listOf(
+                    "Drink at least 8 full glasses of water today.",
+                    "Eat 3-5 prunes or drink warm prune juice.",
+                    "Take a slow 10-minute walk to help move your bowels.",
+                    "Call your nurse if you haven't gone in 3 days."
+                ),
+                theShield = "Prevents toxic buildup and dangerous bowel blockages."
+            ),
+            SymptomDirective(
+                id = "symp-3",
+                name = "🚽 WATERY STOMACH (DIARRHEA)",
+                iconName = "sick",
+                theTruth = "Rapid cell turnover in your gut can cause loose stools and dehydration.",
+                theCommand = "Follow the 'BRAT' diet protocol.",
+                theExecution = listOf(
+                    "Eat only: Bananas, Rice, Applesauce, and Toast.",
+                    "Drink electrolyte fluids (like Pedialyte or Gatorade).",
+                    "Avoid dairy, caffeine, and greasy foods for 24 hours.",
+                    "Count how many times you go; call nurse if > 4 times."
+                ),
+                theShield = "Maintains your hydration levels and protects your gut lining."
+            ),
+            SymptomDirective(
+                id = "symp-4",
+                name = "🖐️ TINGLING HANDS/FEET (NEUROPATHY)",
+                iconName = "bolt",
+                theTruth = "Certain drugs can temporarily irritate your nerve endings.",
+                theCommand = "Protect your hands and feet from extreme heat/cold.",
+                theExecution = listOf(
+                    "Check water temperature with your elbow, not your hands.",
+                    "Always wear shoes or slippers, even indoors.",
+                    "Massage your hands and feet gently to improve blood flow.",
+                    "Report any 'burning' or 'electric' sensations to your doctor."
+                ),
+                theShield = "Prevents permanent nerve damage and accidental burns or cuts."
+            ),
+            SymptomDirective(
+                id = "symp-5",
+                name = "👄 SORE MOUTH OR THROAT",
+                iconName = "sick",
+                theTruth = "Treatment can cause tiny, painful sores on your delicate tissues.",
+                theCommand = "Use the 'Gentle Cleanse' protocol.",
+                theExecution = listOf(
+                    "Rinse with your salt/soda mix every 2 hours.",
+                    "Eat cold, soft foods like yogurt, custard, or milkshakes.",
+                    "Avoid spicy, salty, or crunchy foods like chips or citrus.",
+                    "Suck on ice chips to numb the pain before eating."
+                ),
+                theShield = "Ensures you can still get the nutrition your body needs to heal."
             )
         )
         healingRepository.saveSymptomDirectives(symptoms)
@@ -729,6 +984,48 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 theExecution = listOf("Keep all your hospital and chemo appointments.", "Eat fruit because it is healthy, but never as a replacement for medicine.", "If an ad says 'Doctors are hiding this,' ignore it."),
                 theShield = "Prevents a fatal mistake in your plan and keeps you receiving proven care.",
                 socialScript = "I appreciate your concern, but the Agency verified the science: fruits are good food, but they aren't a cure. I'm sticking with my doctors."
+            ),
+            PatientTruthCheck(
+                id = "ptc-2",
+                claim = "Vitamin B17 (Apricot Kernels)",
+                verdict = PatientVerdict.DANGER,
+                theTruth = "B17 is not a vitamin; it is a chemical called amygdalin. When eaten, it turns into Cyanide in your stomach.",
+                theCommand = "Do NOT ingest apricot kernels or B17 supplements.",
+                theExecution = listOf(
+                    "Ignore claims that B17 is a 'suppressed' cure.",
+                    "Be aware that cyanide poisoning causes liver damage and death.",
+                    "Report any seller of 'Laetrile' to health authorities."
+                ),
+                theShield = "Stops you from accidentally poisoning your blood with cyanide.",
+                socialScript = "Actually, the Agency found that B17 turns into cyanide in the body. It's banned for a reason—it's toxic, not a cure."
+            ),
+            PatientTruthCheck(
+                id = "ptc-3",
+                claim = "Black Salve (Corrosive Paste)",
+                verdict = PatientVerdict.DANGER,
+                theTruth = "Black Salve is a corrosive paste that burns through skin. It doesn't 'pull out' cancer; it just destroys healthy tissue and leaves deep wounds.",
+                theCommand = "Never apply 'Drawing Salve' or Black Salve to your skin.",
+                theExecution = listOf(
+                    "Consult a dermatologist or surgeon for any skin spots.",
+                    "Understand that salve can hide cancer growth underneath the burn.",
+                    "Discard any product containing 'Bloodroot' or Zinc Chloride for skin use."
+                ),
+                theShield = "Prevents permanent disfigurement and the dangerous delay of proper care.",
+                socialScript = "I saw a warning that Black Salve is actually a corrosive acid. It burns the skin but leaves the cancer underneath. I'm seeing a real doctor for this."
+            ),
+            PatientTruthCheck(
+                id = "ptc-4",
+                claim = "Coffee Enemas (Gerson Therapy)",
+                verdict = PatientVerdict.SCAM,
+                theTruth = "Enemas do not 'detox' the liver or cure cancer. They can cause severe electrolyte imbalances and bowel infections.",
+                theCommand = "Do NOT perform coffee enemas as a treatment.",
+                theExecution = listOf(
+                    "Focus on drinking water and eating fiber to help your body naturally detox.",
+                    "Ignore claims that enemas can 'starve' a tumor.",
+                    "Speak to your oncologist if you are concerned about 'toxins'."
+                ),
+                theShield = "Protects your delicate bowel lining and maintains your vital mineral balance.",
+                socialScript = "The Agency verified that enemas can't cure cancer and are actually quite dangerous for your gut. I'm sticking to proven medicine."
             )
         )
         healingRepository.savePatientTruthChecks(defenses)
@@ -738,7 +1035,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
         val flags = listOf(
             RedFlagDirective(
                 id = "rf-1",
-                title = "Feeling Hot, Shaky, or Flushed",
+                title = "🌡️ FEELING HOT, SHAKY, OR FLUSHED",
                 summary = "These are signs of a fever, which is an emergency after chemotherapy.",
                 theTruth = "Chemotherapy lowers your white blood cells, making it impossible for your body to fight even small infections. A fever is a signal that your body is being overwhelmed.",
                 theCommand = "Call your 24-hour Oncology Hotline immediately.",
@@ -999,4 +1296,6 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
     }
+
+    private data class RegistrySeed(val name: String, val ingredients: List<String>, val truth: String, val tags: List<String>)
 }

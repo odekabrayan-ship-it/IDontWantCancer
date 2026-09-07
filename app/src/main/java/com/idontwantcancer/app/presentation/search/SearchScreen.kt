@@ -61,7 +61,6 @@ fun SearchScreen(
     val navigator = rememberListDetailPaneScaffoldNavigator<String>()
     val scope = rememberCoroutineScope()
     
-    // Context filter state initialized with parameter
     var storeFilterActive by rememberSaveable { mutableStateOf(initialStoreMode) }
 
     BackHandler(navigator.canNavigateBack()) {
@@ -107,7 +106,7 @@ fun SearchScreen(
                             )
                         }
                         Text(
-                            text = "Verify label ingredients and health claims instantly",
+                            text = "Verify labels, ingredients, and health claims instantly",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
@@ -164,7 +163,7 @@ fun SearchScreen(
 
                         Box(modifier = Modifier.fillMaxSize().imePadding()) {
                             when (val state = uiState) {
-                                is SearchUiState.Idle -> LabelScanDirectory(onChipClick = {
+                                is SearchUiState.Idle -> HighPriorityInvestigationsMatrix(onChipClick = {
                                     query = it
                                     onInteraction(IntelligenceUiInteraction.PerformSearch(it))
                                 })
@@ -190,7 +189,7 @@ fun SearchScreen(
                                 }
                                 is SearchUiState.Empty -> AgencyEmptyState(
                                     title = "NO REGISTRY MATCH",
-                                    description = "This ingredient is not flagged in the Agency's high-priority carcinogen database."
+                                    description = "This item is not flagged in the Agency's high-priority carcinogen database."
                                 )
                                 is SearchUiState.Error -> AgencyErrorState(
                                     message = state.message,
@@ -235,7 +234,7 @@ fun SearchScreen(
 }
 
 @Composable
-private fun LabelScanDirectory(onChipClick: (String) -> Unit) {
+private fun HighPriorityInvestigationsMatrix(onChipClick: (String) -> Unit) {
     val spacing = LocalSpacing.current
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -243,7 +242,7 @@ private fun LabelScanDirectory(onChipClick: (String) -> Unit) {
     ) {
         item {
             Text(
-                text = "LABEL SCAN GUIDE: THE DIRTY 50",
+                text = "HIGH-PRIORITY INVESTIGATIONS",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Black,
                 color = MaterialTheme.colorScheme.primary,
@@ -252,33 +251,33 @@ private fun LabelScanDirectory(onChipClick: (String) -> Unit) {
         }
 
         item {
-            AisleSection(
+            InvestigationAisle(
                 title = "💄 COSMETICS & CARE",
-                items = listOf("Parabens", "Phthalates", "DMDM Hydantoin", "PFAS", "Talc", "Aluminum"),
+                items = listOf("Parabens", "Phthalates", "DMDM Hydantoin", "PFAS", "Talc", "Aluminum", "Lead Acetate", "Hair Dye", "Sunscreen"),
                 onChipClick = onChipClick
             )
         }
 
         item {
-            AisleSection(
+            InvestigationAisle(
                 title = "🧼 CLEANING & LAUNDRY",
-                items = listOf("Triclosan", "PEG", "SLES", "1,4-Dioxane", "Quats"),
+                items = listOf("Triclosan", "1,4-Dioxane", "Quats", "Ammonia", "PEG", "SLES", "Fabric Softener", "Aerosols"),
                 onChipClick = onChipClick
             )
         }
 
         item {
-            AisleSection(
-                title = "🍎 FOOD ADDITIVES",
-                items = listOf("E250", "E171", "Potassium Bromate", "BHA", "Red 40", "Yellow 5"),
+            InvestigationAisle(
+                title = "🍎 FOOD & PANTRY",
+                items = listOf("E250 (Nitrite)", "E171 (Titanium)", "E924 (Bromate)", "BHA & BHT", "Azo Dyes", "Aspartame", "TBHQ", "Processed Meat"),
                 onChipClick = onChipClick
             )
         }
 
         item {
-            AisleSection(
-                title = "🛡️ VERIFY A CLAIM: COMMON MYTHS",
-                items = listOf("Sugar feeds cancer", "Alkaline diet", "Cell phones & 5G", "Biopsies spread", "Big Pharma Cures", "Deodorant risk"),
+            InvestigationAisle(
+                title = "🛡️ VERIFY A CLAIM (MYTHS)",
+                items = listOf("Sugar feeds cancer", "Alkaline diet", "5G & Cell phones", "Biopsies spread", "Alternative cures", "Big Pharma"),
                 onChipClick = onChipClick
             )
         }
@@ -286,9 +285,9 @@ private fun LabelScanDirectory(onChipClick: (String) -> Unit) {
 }
 
 @Composable
-private fun AisleSection(title: String, items: List<String>, onChipClick: (String) -> Unit) {
+private fun InvestigationAisle(title: String, items: List<String>, onChipClick: (String) -> Unit) {
     Column {
-        Text(text = title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Text(text = title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.secondary)
         Spacer(modifier = Modifier.height(12.dp))
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -297,7 +296,7 @@ private fun AisleSection(title: String, items: List<String>, onChipClick: (Strin
             items.forEach { label ->
                 SuggestionChip(
                     onClick = { onChipClick(label) },
-                    label = { Text(label, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium) },
+                    label = { Text(label, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold) },
                     shape = MaterialTheme.shapes.extraSmall
                 )
             }
@@ -338,7 +337,6 @@ private fun SearchResultsList(
     onInteraction: (IntelligenceUiInteraction) -> Unit,
     onScroll: () -> Unit
 ) {
-    val spacing = LocalSpacing.current
     val listState = rememberLazyListState()
     
     LaunchedEffect(listState.isScrollInProgress) { if (listState.isScrollInProgress) onScroll() }
@@ -346,7 +344,7 @@ private fun SearchResultsList(
     LazyColumn(
         state = listState,
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(spacing.small)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item { SummaryVerdictHeader(verdict) }
         item { OperationalFinalityIndicator(finality) }
@@ -358,7 +356,7 @@ private fun SearchResultsList(
                 onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) },
                 reconciliationIndicator = {
                     if (reconciliations[signal.id] is IntelligenceReentryReconciliationPresentationContract.InconsistentMismatch) {
-                        Spacer(modifier = Modifier.height(spacing.small))
+                        Spacer(modifier = Modifier.height(8.dp))
                         CompactReconciliationIndicator()
                     }
                 }

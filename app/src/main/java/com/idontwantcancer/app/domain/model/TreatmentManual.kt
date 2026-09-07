@@ -3,12 +3,14 @@ package com.idontwantcancer.app.domain.model
 import kotlinx.serialization.Serializable
 
 /**
- * Categorizes treatment manuals by medical modality.
+ * Categorizes treatment manuals by medical modality or recovery phase.
  */
 enum class TreatmentCategory {
     CHEMO,
     RADIATION,
-    SURGERY
+    SURGERY,
+    DAILY_HYGIENE,
+    RECOVERY
 }
 
 /**

@@ -295,12 +295,22 @@ private fun PillarCard(pillar: PillarStatus, onClick: () -> Unit) {
                 else -> Icons.Default.GridView
             }
             
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = if (pillar.isAlert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(28.dp)
-            )
+            if (pillar.progress != null) {
+                CircularProgressIndicator(
+                    progress = { pillar.progress },
+                    modifier = Modifier.size(32.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
+                )
+            } else {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = if (pillar.isAlert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
             
             Column {
                 Text(

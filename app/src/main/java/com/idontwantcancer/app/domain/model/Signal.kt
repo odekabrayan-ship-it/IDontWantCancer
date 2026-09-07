@@ -53,6 +53,7 @@ data class Signal(
     val isActionTaken: Boolean = false,
     val isWatched: Boolean = false,
     val interactionContexts: List<String> = emptyList(), // e.g., "Home", "Work", "Public"
+    val discoveryTags: List<String> = emptyList(), // e.g., "Aerosol", "Kitchen", "Bathroom"
     
     // Admission Context
     val lastAdmittedStateEntryId: String? = null

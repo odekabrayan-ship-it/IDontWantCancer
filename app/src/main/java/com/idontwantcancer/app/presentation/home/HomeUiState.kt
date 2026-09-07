@@ -39,5 +39,6 @@ data class PillarStatus(
     val id: String,
     val title: String,
     val status: String,
-    val isAlert: Boolean = false
+    val isAlert: Boolean = false,
+    val progress: Float? = null
 )

@@ -8,7 +8,8 @@ import kotlinx.serialization.Serializable
 enum class PatientVerdict {
     SCAM,
     UNCERTAIN,
-    COMPLEMENTARY
+    COMPLEMENTARY,
+    DANGER
 }
 
 /**

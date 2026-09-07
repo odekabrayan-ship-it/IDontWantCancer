@@ -33,7 +33,7 @@ import com.idontwantcancer.app.data.local.entity.*
         HealingLogEntity::class,
         RedFlagDirectiveEntity::class
     ],
-    version = 33,
+    version = 34,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

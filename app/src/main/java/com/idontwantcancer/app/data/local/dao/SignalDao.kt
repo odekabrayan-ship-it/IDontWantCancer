@@ -29,7 +29,7 @@ interface SignalDao {
     @Query("SELECT * FROM signals ORDER BY publishedAt DESC")
     fun getAllFlow(): Flow<List<SignalEntity>>
 
-    @Query("SELECT * FROM signals WHERE title LIKE '%' || :query || '%' OR summary LIKE '%' || :query || '%' OR affectedIngredientsJson LIKE '%' || :query || '%' OR category LIKE '%' || :query || '%' OR investigatedClaim LIKE '%' || :query || '%' ORDER BY publishedAt DESC")
+    @Query("SELECT * FROM signals WHERE title LIKE '%' || :query || '%' OR summary LIKE '%' || :query || '%' OR affectedIngredientsJson LIKE '%' || :query || '%' OR category LIKE '%' || :query || '%' OR investigatedClaim LIKE '%' || :query || '%' OR discoveryTagsJson LIKE '%' || :query || '%' ORDER BY publishedAt DESC")
     suspend fun search(query: String): List<SignalEntity>
 
     @Query("SELECT * FROM signals WHERE category IN (:categories) ORDER BY publishedAt DESC")

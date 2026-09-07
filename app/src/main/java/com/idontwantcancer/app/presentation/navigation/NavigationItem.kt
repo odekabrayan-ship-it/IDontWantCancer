@@ -18,7 +18,7 @@ sealed class NavigationItem(
 ) {
     // Prevention Mission Tabs
     data object Home : NavigationItem(Screen.Home, R.string.nav_home, Icons.Default.Home)
-    data object Verify : NavigationItem(Screen.Search, R.string.nav_inquiry, Icons.Default.HealthAndSafety)
+    data object Verify : NavigationItem(Screen.Search(), R.string.nav_inquiry, Icons.Default.HealthAndSafety)
     data object Settings : NavigationItem(Screen.Settings, R.string.nav_settings, Icons.Default.Settings)
     
     // Healing Mission Tabs

@@ -49,6 +49,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun SearchScreen(
+    initialStoreMode: Boolean = false,
     onInteraction: (IntelligenceUiInteraction) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
@@ -60,8 +61,8 @@ fun SearchScreen(
     val navigator = rememberListDetailPaneScaffoldNavigator<String>()
     val scope = rememberCoroutineScope()
     
-    // Context filter state
-    var storeFilterActive by rememberSaveable { mutableStateOf(false) }
+    // Context filter state initialized with parameter
+    var storeFilterActive by rememberSaveable { mutableStateOf(initialStoreMode) }
 
     BackHandler(navigator.canNavigateBack()) {
         scope.launch {

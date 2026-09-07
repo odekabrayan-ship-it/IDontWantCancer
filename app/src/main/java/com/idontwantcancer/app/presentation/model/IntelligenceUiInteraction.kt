@@ -63,7 +63,7 @@ sealed interface IntelligenceUiInteraction {
     /**
      * User requested to enter the Verification Lab.
      */
-    data object EnterVerify : IntelligenceUiInteraction
+    data class EnterVerify(val storeMode: Boolean = false) : IntelligenceUiInteraction
 
     /**
      * User requested to enter the Prevention Hub.

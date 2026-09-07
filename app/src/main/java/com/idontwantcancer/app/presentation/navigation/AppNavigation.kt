@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.idontwantcancer.app.presentation.alerts.AlertsScreen
 import com.idontwantcancer.app.presentation.alerts.AlertsViewModel
 import com.idontwantcancer.app.presentation.home.HomeScreen
@@ -169,24 +170,23 @@ fun AppNavigation(
                     onInteraction = onAlertsInteraction
                 )
             }
-            composable<Screen.Search> {
+            composable<Screen.Search> { backStackEntry ->
+                val search: Screen.Search = backStackEntry.toRoute()
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 val onSearchInteraction: (IntelligenceUiInteraction) -> Unit = remember(searchViewModel) {
                     { interaction ->
                         viewModel.dispatch(interaction, searchViewModel) { action ->
                             when (action) {
                                 is DefaultIntelligenceCommandDispatcher.NavigateBackAction -> navController.popBackStack()
-                                is Screen.SignalDetail -> {
-                                    // Suppressed: SearchScreen handles its own detail pane adaptively
-                                }
                                 is Screen -> navController.navigate(action)
                             }
                         }
                     }
                 }
                 SearchScreen(
-                    viewModel = searchViewModel,
-                    onInteraction = onSearchInteraction
+                    initialStoreMode = search.storeMode,
+                    onInteraction = onSearchInteraction,
+                    viewModel = searchViewModel
                 )
             }
             composable<Screen.Prevention> {

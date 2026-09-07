@@ -131,10 +131,14 @@ class HomeViewModel @Inject constructor(
                 val healingLogs = getHealingLogUseCase().first()
                 val truthChecks = healingRepository.getPatientTruthChecks().first()
                 
+                val watchedSignalsCount = allSignals.count { it.isWatched && !it.isActionTaken }
+                
                 val today = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate()
 
                 // Calculate Pillar Statuses based on Mission
                 val pillars = if (mission == UserMission.HEALING) {
+                    // ... (Healing pillars stay same)
+                    // (I will keep the healing pillars code here for brevity)
                     val medicalAlerts = allSignals.filter { 
                         (it.category == SignalCategory.MEDICINE || it.category == SignalCategory.REGULATION) && 
                         (it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH) 
@@ -151,42 +155,17 @@ class HomeViewModel @Inject constructor(
                     val scamCount = truthChecks.count { it.verdict == PatientVerdict.SCAM }
 
                     listOf(
-                        PillarStatus(
-                            id = "WATCH", 
-                            title = "Sentinel Watch", 
-                            status = if (medicalAlerts.isNotEmpty()) "${medicalAlerts.size} URGENT TREATMENT ALERTS" else "Treatment Integrity Clear", 
-                            isAlert = medicalAlerts.isNotEmpty()
-                        ),
-                        PillarStatus(
-                            id = "TREATMENT", 
-                            title = "Treatment", 
-                            status = if (treatmentDoneToday) "Protocol Steps Completed" else "Next: Check Daily Manual"
-                        ),
-                        PillarStatus(
-                            id = "SYMPTOMS", 
-                            title = "Symptom Help", 
-                            status = if (managedSymptoms.isNotEmpty()) "Managing: ${managedSymptoms.size} Symptoms" else "Immediate Directives Ready"
-                        ),
-                        PillarStatus(
-                            id = "DECEPTION", 
-                            title = "Deception Shield", 
-                            status = "$scamCount Known Scams Blocked"
-                        ),
-                        PillarStatus(
-                            id = "PROGRESS", 
-                            title = "My Progress", 
-                            status = "${healingLogs.size} Victories Logged"
-                        ),
-                        PillarStatus(
-                            id = "VERIFY", 
-                            title = "Laboratory", 
-                            status = "Safety Check Active"
-                        )
+                        PillarStatus(id = "WATCH", title = "Sentinel Watch", status = if (medicalAlerts.isNotEmpty()) "${medicalAlerts.size} URGENT TREATMENT ALERTS" else "Treatment Integrity Clear", isAlert = medicalAlerts.isNotEmpty()),
+                        PillarStatus(id = "TREATMENT", title = "Treatment", status = if (treatmentDoneToday) "Protocol Steps Completed" else "Next: Check Daily Manual"),
+                        PillarStatus(id = "SYMPTOMS", title = "Symptom Help", status = if (managedSymptoms.isNotEmpty()) "Managing: ${managedSymptoms.size} Symptoms" else "Immediate Directives Ready"),
+                        PillarStatus(id = "DECEPTION", title = "Deception Shield", status = "$scamCount Known Scams Blocked"),
+                        PillarStatus(id = "PROGRESS", title = "My Progress", status = "${healingLogs.size} Victories Logged"),
+                        PillarStatus(id = "VERIFY", title = "Laboratory", status = "Safety Check Active")
                     )
                 } else {
                     listOf(
                         PillarStatus("WATCH", "Sentinel Watch", "${allSignals.count { it.importance == SignalImportance.CRITICAL }} Urgent Alerts", allSignals.any { it.importance == SignalImportance.CRITICAL }),
-                        PillarStatus("SHOP", "Shopping Shield", "Chemicals Registry"),
+                        PillarStatus("SHOP", "Shopping Shield", if (watchedSignalsCount > 0) "Watching $watchedSignalsCount items" else "200+ Chemicals Verified"),
                         PillarStatus("EAT", "Safe Eating", "Biological Blueprint"),
                         PillarStatus("TRUTH", "Health Claims", "Deception Shield"),
                         PillarStatus("HOME", "Safe Home", "Surroundings Hub"),

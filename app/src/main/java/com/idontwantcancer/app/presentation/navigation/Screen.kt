@@ -10,7 +10,7 @@ sealed interface Screen {
     data object Alerts : Screen
 
     @Serializable
-    data object Search : Screen
+    data class Search(val storeMode: Boolean = false) : Screen
 
     @Serializable
     data object Prevention : Screen

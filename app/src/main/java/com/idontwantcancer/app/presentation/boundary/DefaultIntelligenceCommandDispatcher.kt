@@ -69,7 +69,7 @@ class DefaultIntelligenceCommandDispatcher @Inject constructor(
             }
             is IntelligenceUiInteraction.EnterVerify -> {
                 lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
-                onNavigate(Screen.Search)
+                onNavigate(Screen.Search(interaction.storeMode))
             }
             is IntelligenceUiInteraction.EnterPrevention -> {
                 lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)

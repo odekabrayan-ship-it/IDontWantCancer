@@ -185,7 +185,8 @@ private fun DashboardContent(
                 onClick = { 
                     when(pillar.id) {
                         "WATCH" -> onInteraction(IntelligenceUiInteraction.EnterAlerts)
-                        "SHOP", "TRUTH", "VERIFY" -> onInteraction(IntelligenceUiInteraction.EnterVerify)
+                        "SHOP" -> onInteraction(IntelligenceUiInteraction.EnterVerify(storeMode = true))
+                        "TRUTH", "VERIFY" -> onInteraction(IntelligenceUiInteraction.EnterVerify(storeMode = false))
                         "EAT", "HOME", "ACADEMY", "PLAN" -> onInteraction(IntelligenceUiInteraction.EnterPrevention)
                         "TREATMENT", "SYMPTOMS", "DECEPTION" -> onInteraction(IntelligenceUiInteraction.EnterHealingSanctuary)
                         "PROGRESS" -> onInteraction(IntelligenceUiInteraction.EnterMyJourney)

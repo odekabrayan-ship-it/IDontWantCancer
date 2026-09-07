@@ -16,6 +16,7 @@ data class NutritionIntelligenceEntity(
     val theCommand: String,
     val theExecutionJson: String, // Serialized list of String
     val theShield: String,
+    val switchThisForThat: String?,
     val source: String,
     val sourceUrl: String?
 )

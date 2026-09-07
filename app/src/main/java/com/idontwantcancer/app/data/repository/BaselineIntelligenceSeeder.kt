@@ -256,32 +256,239 @@ class BaselineIntelligenceSeeder @Inject constructor(
     }
 
     private suspend fun seedNutritionTruths() {
-        val nutritionTruths = listOf(
+        val nutritionTruths = mutableListOf<NutritionIntelligence>()
+
+        // --- THE DEFENSE (What to Avoid) ---
+        nutritionTruths.addAll(listOf(
             NutritionIntelligence(
-                id = "truth-nutrition-1",
-                title = "Meat Safety: Avoiding Nitrates",
-                summary = "Curing salts in pink meats are high-priority risks.",
+                id = "truth-def-1",
+                title = "Processed Meat: Group 1 Carcinogen",
+                summary = "Sausages, bacon, and ham are direct causes of colorectal cancer.",
                 evidenceLevel = EvidenceStrength.VERY_HIGH,
-                category = NutritionCategory.PATTERN,
-                theTruth = "When Nitrates (E250) are heated with meat, they form DNA-damaging compounds in your gut.",
-                theCommand = "Reduce intake of pink, preserved meats (ham, bacon, sausages).",
-                theExecution = listOf("Identify 'Sodium Nitrite' on local food labels.", "Pick fresh, unpreserved proteins: {PROTEIN_STAPLE}.", "Save cured meats for very rare special occasions."),
-                theShield = "Prevents direct chemical damage to the lining of your colon.",
-                source = "World Health Organization"
+                category = NutritionCategory.DEFENSE,
+                theTruth = "Strong evidence from 800+ studies confirms that chemicals used in meat processing (like nitrates) form carcinogenic nitrosamines in your body.",
+                theCommand = "Eliminate or minimize processed meats to almost zero.",
+                theExecution = listOf("Remove bacon, hot dogs, salami, and deli meats from your weekly shopping list.", "Ask for 'Uncured' versions if you must consume them.", "Replace morning bacon with eggs, beans, or avocado."),
+                theShield = "Blocks the direct delivery of industrial mutagens to your colon lining.",
+                switchThisForThat = "Switch morning bacon or ham for avocado, eggs, or beans.",
+                source = "IARC / World Health Organization"
             ),
             NutritionIntelligence(
-                id = "truth-nutrition-6",
-                title = "Cooking Tip: Don't Burn Your Meat",
-                summary = "Black char on food creates chemicals that can damage DNA.",
+                id = "truth-def-2",
+                title = "Red Meat: Limit Weekly Intake",
+                summary = "Beef, pork, and lamb increase cancer risk in high amounts.",
                 evidenceLevel = EvidenceStrength.HIGH,
-                category = NutritionCategory.PREPARATION,
-                theTruth = "Direct flames on meat create 'HCAs' which are known cellular mutagens.",
-                theCommand = "Avoid dark-charred sections on grilled or fried foods.",
-                theExecution = listOf("Trim fat before cooking to stop big flames and smoke.", "Use a marinade with lemon or vinegar to protect the meat.", "If food gets burned, cut off the black parts before eating."),
-                theShield = "Reduces the amount of high-energy mutagens entering your bloodstream.",
-                source = "National Cancer Institute"
+                category = NutritionCategory.DEFENSE,
+                theTruth = "Heme iron and high-heat cooking of red meat can damage DNA and promote tumor growth.",
+                theCommand = "Limit red meat to no more than 3 portions (12-18 oz) per week.",
+                theExecution = listOf("Measure your portions: one portion is about the size of a deck of cards.", "Substitute red meat with poultry, fish, or plant-based proteins 4 days a week.", "Never use red meat as a 'daily staple'."),
+                theShield = "Reduces the systemic oxidative stress caused by excess heme iron processing.",
+                source = "WCRF / AICR"
+            ),
+            NutritionIntelligence(
+                id = "truth-def-3",
+                title = "Sugary Drinks: The body fat link",
+                summary = "Sodas and sweetened juices cause cancer through body fat pathways.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.DEFENSE,
+                theTruth = "Sugar itself doesn't cause cancer directly, but sugary drinks cause weight gain. Body fat is a cause of 13 different types of cancer.",
+                theCommand = "Switch to water, unsweetened tea, or coffee.",
+                theExecution = listOf("Stop buying sodas, energy drinks, and 'fruit' drinks with added sugar.", "Dilute juice with 50% sparkling water if you are transitioning.", "Always carry a reusable water bottle to avoid 'impulse' soda purchases."),
+                theShield = "Maintains a healthy weight and normalizes insulin signaling, removing 'fuel' for tumors.",
+                switchThisForThat = "Switch sugary sodas for sparkling water with a squeeze of fresh lemon or lime.",
+                source = "WCRF / AICR"
+            ),
+            NutritionIntelligence(
+                id = "truth-def-4",
+                title = "Alcohol: Multi-System Carcinogen",
+                summary = "Alcohol breaks DNA strands in seven different organ systems.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.DEFENSE,
+                theTruth = "When your body breaks down alcohol, it creates acetaldehyde—a toxin that breaks DNA and prevents your cells from repairing the damage.",
+                theCommand = "Minimize or eliminate alcohol for maximum protection.",
+                theExecution = listOf("Understand there is no 'safe amount' for breast cancer prevention.", "Switch to 'Mocktails' or non-alcoholic beers during social events.", "If you drink, limit to 1 (women) or 2 (men) standard drinks per day maximum."),
+                theShield = "Prevents the systematic flooding of your internal organs with DNA-breaking toxins.",
+                source = "IARC / WCRF"
+            ),
+            NutritionIntelligence(
+                id = "truth-def-5",
+                title = "Ultra-Processed 'Fast' Foods",
+                summary = "Energy-dense snacks and commercial baked goods drive cancer risk.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.DEFENSE,
+                theTruth = "These foods are engineered to be 'over-consumed.' They are high in fats, starches, and sugars that promote obesity and inflammation.",
+                theCommand = "Limit intake of 'convenience' foods; prioritize home-cooked meals.",
+                theExecution = listOf("Avoid the 'middle aisles' of the store where packaged snacks live.", "Check labels for more than 5 ingredients; if it's long, it's processed.", "Batch-cook meals on weekends to avoid the 'fast-food' trap during the work week."),
+                theShield = "Stops chronic systemic inflammation caused by industrial food additives and excess calories.",
+                source = "Agency Intelligence"
+            ),
+            NutritionIntelligence(
+                id = "truth-def-6",
+                title = "Salt-Preserved Foods: Stomach Watch",
+                summary = "Excess salt and pickled/salted foods increase stomach cancer risk.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.DEFENSE,
+                theTruth = "High salt intake can damage the stomach lining and encourage the growth of H. pylori bacteria, a major cancer trigger.",
+                theCommand = "Limit salt intake to less than 5g (one teaspoon) per day.",
+                theExecution = listOf("Avoid traditional salted fish or heavily pickled vegetables.", "Taste food before adding salt; use herbs and spices for flavor instead.", "Check 'Sodium' content on bread and cereal labels—hidden salt is high there."),
+                theShield = "Protects your stomach lining from abrasive and inflammatory damage.",
+                source = "WCRF / WHO"
+            ),
+            NutritionIntelligence(
+                id = "truth-def-7",
+                title = "High-Dose Supplements: Risk of Overload",
+                summary = "Unverified supplements can have unexpected harmful effects.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.DEFENSE,
+                theTruth = "Research shows that high-dose supplements (like Beta-Carotene) can actually increase risk in some groups. Nutrients are safest from whole foods.",
+                theCommand = "Meet your nutritional needs through food alone; do not rely on supplements.",
+                theExecution = listOf("Consult your doctor before starting any high-dose vitamins.", "Focus on a varied diet to get a natural spectrum of vitamins.", "Be wary of 'miracle pill' marketing for cancer prevention."),
+                theShield = "Ensures your biological systems aren't overloaded by concentrated synthetic nutrients.",
+                source = "AICR / Agency Truth Check"
             )
-        )
+        ))
+
+        // --- THE REPAIR (What to Prioritize) ---
+        nutritionTruths.addAll(listOf(
+            NutritionIntelligence(
+                id = "truth-rep-1",
+                title = "Whole Grains: Your Fiber Shield",
+                summary = "Oats, brown rice, and quinoa reduce colorectal cancer risk.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.REPAIR,
+                theTruth = "Dietary fiber dilutes carcinogens in the gut and speeds up their exit from the body.",
+                theCommand = "Make at least 90% of your grain intake 'Whole Grain'.",
+                theExecution = listOf("Switch white bread for 100% Whole Wheat.", "Use brown rice instead of white rice for all meals.", "Add oats or barley to your breakfast routine."),
+                theShield = "Physically sweeps potential cancer-causers out of your system.",
+                switchThisForThat = "Switch white rice or white bread for brown rice, quinoa, or whole-grain bread.",
+                source = "WCRF / AICR"
+            ),
+            NutritionIntelligence(
+                id = "truth-rep-2",
+                title = "Pulses & Legumes: Plant Protein",
+                summary = "Beans, lentils, and chickpeas are high-standard protective fuels.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.REPAIR,
+                theTruth = "Legumes provide high fiber and phytochemicals that assist in cellular repair.",
+                theCommand = "Include pulses (beans) in at least one meal every day.",
+                theExecution = listOf("Add a cup of lentils to your soups or stews.", "Use chickpeas (garbanzo beans) as a base for salads.", "Replace half the meat in your recipes with beans."),
+                theShield = "Provides the biological building blocks for DNA repair and maintenance.",
+                source = "Agency Blueprint"
+            ),
+            NutritionIntelligence(
+                id = "truth-rep-3",
+                title = "Non-Starchy Veggies: Leafy Greens",
+                summary = "Spinach, Kale, and Broccoli provide a total body shield.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.REPAIR,
+                theTruth = "These vegetables are rich in carotenoids and vitamins that neutralize free radicals.",
+                theCommand = "Eat at least 400g (5 portions) of varied vegetables and fruits daily.",
+                theExecution = listOf("Fill half your plate with leafy greens at lunch and dinner.", "Snack on raw carrots or peppers instead of chips.", "Try to eat the 'rainbow'—use different colors every day."),
+                theShield = "Neutralizes the oxidative stress that leads to cell mutations.",
+                source = "WHO / AICR"
+            ),
+            NutritionIntelligence(
+                id = "truth-rep-4",
+                title = "Garlic & Alliums: Stomach Defense",
+                summary = "Onions, garlic, and leeks contain protective sulfur compounds.",
+                evidenceLevel = EvidenceStrength.MODERATE,
+                category = NutritionCategory.REPAIR,
+                theTruth = "Sulfur compounds in garlic can inhibit the activation of carcinogens in the stomach.",
+                theCommand = "Incorporate fresh garlic into your cooking 3+ times per week.",
+                theExecution = listOf("Crush or chop garlic and let it sit for 10 minutes before cooking to activate the Allicin.", "Use leeks and onions as the flavor base for all home-cooked meals.", "Prioritize fresh garlic over processed garlic powders."),
+                theShield = "Creates a chemical barrier in the stomach against food-borne carcinogens.",
+                source = "AICR / Agency Intelligence"
+            ),
+            NutritionIntelligence(
+                id = "truth-rep-5",
+                title = "Coffee: Liver & Endometrial Protection",
+                summary = "Daily coffee intake is linked to lower risk in specific organs.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.REPAIR,
+                theTruth = "Coffee contains phytochemicals that help the liver detoxify harmful substances.",
+                theCommand = "Enjoy 1-3 cups of unsweetened coffee daily if you tolerate it.",
+                theExecution = listOf("Drink it black or with minimal dairy; avoid sugary syrups.", "Filter your coffee to remove oils (cafestol) that can raise cholesterol.", "Stop drinking coffee by 2 PM to protect your sleep/repair cycle."),
+                theShield = "Assists the liver's natural metabolic defense system.",
+                source = "IARC / WCRF"
+            ),
+            NutritionIntelligence(
+                id = "truth-rep-6",
+                title = "Cruciferous Veggies: Sulforaphane Shield",
+                summary = "Broccoli and Brussels sprouts boost detoxification enzymes.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.REPAIR,
+                theTruth = "Sulforaphane in these veggies triggers the body's natural defense against DNA damage.",
+                theCommand = "Consume cruciferous vegetables 3+ times per week.",
+                theExecution = listOf("Steam broccoli lightly (2-4 mins) to retain the maximum sulforaphane.", "Add cauliflower to your rice or mash.", "Roast Brussels sprouts with a small amount of olive oil."),
+                theShield = "Upregulates your internal 'Detox Phase II' enzymes.",
+                source = "Agency Biological Blueprint"
+            ),
+            NutritionIntelligence(
+                id = "truth-rep-7",
+                title = "Flaxseeds: The Lignan Layer",
+                summary = "Tiny seeds that provide high fiber and protective lignans.",
+                evidenceLevel = EvidenceStrength.MODERATE,
+                category = NutritionCategory.REPAIR,
+                theTruth = "Flaxseeds are the richest source of lignans, which can interfere with estrogen-driven tumor growth.",
+                theCommand = "Add 1-2 tablespoons of ground flaxseeds to your daily intake.",
+                theExecution = listOf("Mix ground flaxseeds into your oatmeal or yogurt.", "Add them to smoothies or home-baked whole-grain muffins.", "Always use ground flax; whole seeds often pass through the body undigested."),
+                theShield = "Provides a dual layer of fiber and hormonal modulation.",
+                source = "Agency Intelligence"
+            )
+        ))
+
+        // --- THE PROTOCOL (Preparation) ---
+        nutritionTruths.addAll(listOf(
+            NutritionIntelligence(
+                id = "truth-pro-1",
+                title = "Charring Control: Grill Safety",
+                summary = "Direct flame on protein creates mutagenic HCAs and PAHs.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.PROTOCOL,
+                theTruth = "Black char on meat is not 'flavor'—it is a concentrated high-energy carcinogen.",
+                theCommand = "Avoid direct flame contact and black charring on all meats.",
+                theExecution = listOf("Trim visible fat before grilling to reduce smoke and flare-ups.", "Use acidic marinades (lemon/vinegar) to reduce HCA formation by up to 90%.", "If food gets burned, cut off the black parts before eating.", "Pre-cook meat in a microwave for 2 minutes to reduce time on the high-heat grill."),
+                theShield = "Reduces the ingestion of high-energy chemical mutagens.",
+                source = "NCI / Agency Protocol"
+            ),
+            NutritionIntelligence(
+                id = "truth-pro-2",
+                title = "Acrylamide: Stop at Golden Yellow",
+                summary = "Overheating starches (potatoes/bread) creates a probable carcinogen.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.PROTOCOL,
+                theTruth = "Acrylamide forms when starchy foods are cooked at high temps (frying/roasting) for too long.",
+                theCommand = "Cook starches to a light golden yellow, never dark brown or black.",
+                theExecution = listOf("Toast your bread to the lightest possible setting.", "Soak potato slices in water for 20 minutes before roasting to lower starch levels.", "Store potatoes in a cool, dark cupboard—NOT the fridge (cold increases sugar/acrylamide risk)."),
+                theShield = "Reduces your systemic load of a known neurotoxin and DNA-damaging compound.",
+                source = "EFSA / FDA"
+            ),
+            NutritionIntelligence(
+                id = "truth-pro-3",
+                title = "Plastic Leaching Protocol",
+                summary = "Heat causes plastic to shed hormone disruptors into your food.",
+                evidenceLevel = EvidenceStrength.HIGH,
+                category = NutritionCategory.PROTOCOL,
+                theTruth = "Even 'microwave-safe' plastic can release phthalates when heated. These interfere with hormone balance.",
+                theCommand = "Never heat food or drinks in plastic containers.",
+                theExecution = listOf("Transfer all leftovers to glass or ceramic before microwaving.", "Use a paper towel or glass lid to cover food instead of plastic wrap.", "Hand-wash plastic items; the high heat of a dishwasher speeds up leaching."),
+                theShield = "Eliminates a primary route for endocrine-disrupting chemicals into your warm meals.",
+                source = "Agency Consumer Safety"
+            ),
+            NutritionIntelligence(
+                id = "truth-pro-4",
+                title = "Aflatoxin Defense: Grain Storage",
+                summary = "Mould on stored nuts and grains creates a potent liver toxin.",
+                evidenceLevel = EvidenceStrength.VERY_HIGH,
+                category = NutritionCategory.PROTOCOL,
+                theTruth = "Aflatoxins are produced by fungi in warm, humid storage. It is one of the most potent naturally occurring carcinogens.",
+                theCommand = "Ensure grains and nuts are stored in bone-dry, airtight conditions.",
+                theExecution = listOf("Store flour, grains, and nuts in airtight glass or high-quality plastic jars.", "Visually inspect nuts for shriveling or discoloration before eating.", "Buy from reputable sources that follow standard drying protocols."),
+                theShield = "Prevents chronic systemic poisoning of your liver tissue.",
+                source = "WHO / IARC"
+            )
+        ))
+
         preventionRepository.saveNutritionIntelligence(nutritionTruths)
     }
 
@@ -373,7 +580,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 theTruth = "Chemotherapy lowers your white blood cells, making it impossible for your body to fight even small infections. A fever is a signal that your body is being overwhelmed.",
                 theCommand = "Call your 24-hour Oncology Hotline immediately.",
                 theExecution = listOf("If you have a thermometer, check your temperature. If it is 38°C (100.4°F) or higher, call now.", "If you don't have a thermometer but feel 'feverish' or have the shivers, call anyway.", "Ask a family member to stay with you while you make the call."),
-                whileYouWait = listOf("Do NOT take Paracetamol, Tylenol, or Aspirin yet. The doctor needs to see the true fever signal.", "Drink a large glass of water to stay hydrated.", "Place your 'Red Treatment Folder' and all your pill bottles on the kitchen table."),
+                whileYouWait = listOf("Do NOT take Paracetamol, Tylenol, or Aspirer yet. The doctor needs to see the true fever signal.", "Drink a large glass of water to stay hydrated.", "Place your 'Red Treatment Folder' and all your pill bottles on the kitchen table."),
                 handoffScript = "I am a cancer patient on active treatment. I am calling because I have a Fever/Shivers. I need immediate oncology triage.",
                 theShield = "Prevents 'Neutropenic Sepsis,' a life-threatening infection that can be stopped if caught in the first hour."
             )

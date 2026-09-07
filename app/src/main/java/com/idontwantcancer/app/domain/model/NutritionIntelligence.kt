@@ -12,11 +12,12 @@ data class NutritionIntelligence(
     val title: String,
     val summary: String,
     val evidenceLevel: EvidenceStrength,
-    val category: NutritionCategory = NutritionCategory.PATTERN,
+    val category: NutritionCategory,
     val theTruth: String,
     val theCommand: String,
     val theExecution: List<String>,
     val theShield: String,
+    val switchThisForThat: String? = null,
     val source: String,
     val sourceUrl: String? = null
 )

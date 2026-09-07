@@ -20,6 +20,7 @@ fun NutritionIntelligenceEntity.toDomain(): NutritionIntelligence {
             emptyList()
         },
         theShield = theShield,
+        switchThisForThat = switchThisForThat,
         source = source,
         sourceUrl = sourceUrl
     )
@@ -36,6 +37,7 @@ fun NutritionIntelligence.toEntity(): NutritionIntelligenceEntity {
         theCommand = theCommand,
         theExecutionJson = Json.encodeToString(theExecution),
         theShield = theShield,
+        switchThisForThat = switchThisForThat,
         source = source,
         sourceUrl = sourceUrl
     )

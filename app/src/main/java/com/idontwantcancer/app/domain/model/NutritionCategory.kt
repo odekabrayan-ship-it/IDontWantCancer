@@ -1,16 +1,21 @@
 package com.idontwantcancer.app.domain.model
 
 /**
- * Categorizes nutritional intelligence into general patterns or specific preparation methods.
+ * Defines the three pillars of the Biological Blueprint for safe eating.
  */
 enum class NutritionCategory {
     /**
-     * Long-term dietary patterns and habit-based intelligence.
+     * THE DEFENSE: Critical directives on what to avoid or minimize.
      */
-    PATTERN,
+    DEFENSE,
 
     /**
-     * Specific cooking, storage, or processing protocols.
+     * THE REPAIR: High-density protective foods that assist DNA repair and immune strength.
      */
-    PREPARATION
+    REPAIR,
+
+    /**
+     * THE PROTOCOL: Scientific methods for preparing and storing food safely.
+     */
+    PROTOCOL
 }

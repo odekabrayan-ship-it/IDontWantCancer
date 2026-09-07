@@ -3,6 +3,7 @@ package com.idontwantcancer.app.presentation.prevention
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -120,28 +122,40 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
             )
         }
 
+        // BIOLOGICAL BLUEPRINT PILLARS
         item {
             Spacer(modifier = Modifier.height(spacing.large))
             PreventionSectionHeader(
-                title = "FOOD & NUTRITION SAFETY",
-                subtitle = "Scientific patterns for your daily meals"
+                title = "THE DEFENSE: WHAT TO AVOID",
+                subtitle = "Blocking direct carcinogens and tumor fuel",
+                icon = Icons.Default.GppBad
             )
         }
-
-        items(state.dietaryPatterns, key = { it.id }) { truth ->
+        items(state.defenseDirectives, key = { it.id }) { truth ->
             NutritionTruthItem(truth)
         }
 
         item {
             Spacer(modifier = Modifier.height(spacing.large))
             PreventionSectionHeader(
-                title = "COOKING & STORAGE SAFETY",
+                title = "THE REPAIR: WHAT TO PRIORITIZE",
+                subtitle = "Fuels that assist DNA repair and immune strength",
+                icon = Icons.Default.AutoAwesome
+            )
+        }
+        items(state.repairDirectives, key = { it.id }) { truth ->
+            NutritionTruthItem(truth)
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(spacing.large))
+            PreventionSectionHeader(
+                title = "THE PROTOCOL: SCIENTIFIC PREPARATION",
                 subtitle = "How to prepare food without creating risks",
                 icon = Icons.Default.Fireplace
             )
         }
-
-        items(state.preparationDirectives, key = { it.id }) { truth ->
+        items(state.protocolDirectives, key = { it.id }) { truth ->
             NutritionTruthItem(truth)
         }
 
@@ -228,7 +242,7 @@ private fun ContextSubHeader(title: String) {
 private fun PreventionSectionHeader(
     title: String, 
     subtitle: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector = Icons.Default.Restaurant
+    icon: ImageVector = Icons.Default.Restaurant
 ) {
     val spacing = LocalSpacing.current
     Column(modifier = Modifier.padding(horizontal = spacing.screenPadding, vertical = spacing.medium)) {
@@ -364,6 +378,24 @@ private fun NutritionTruthItem(truth: NutritionIntelligence) {
                         content = truth.evidenceLevel.name.replace("_", " "),
                         color = MaterialTheme.colorScheme.primary
                     )
+
+                    if (truth.switchThisForThat != null) {
+                        Surface(
+                            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.1f),
+                            shape = MaterialTheme.shapes.small,
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f)),
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        ) {
+                            Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.SwapHoriz, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text("SUBSTITUTION BLUEPRINT", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Black, color = MaterialTheme.colorScheme.secondary)
+                                    Text(truth.switchThisForThat, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
+                                }
+                            }
+                        }
+                    }
                     
                     TruthDetailSection(
                         label = "THE TRUTH",

@@ -34,13 +34,18 @@ class PreventionViewModel @Inject constructor(
         val countryCode = userContextRepository.getUserCountryCode()
         
         PreventionUiState.Success(
-            dietaryPatterns = nutrition
-                .filter { it.category == NutritionCategory.PATTERN }
+            defenseDirectives = nutrition
+                .filter { it.category == NutritionCategory.DEFENSE }
                 .map { item ->
                     item.copy(theExecution = transformer.transform(item.theExecution, countryCode))
                 },
-            preparationDirectives = nutrition
-                .filter { it.category == NutritionCategory.PREPARATION }
+            repairDirectives = nutrition
+                .filter { it.category == NutritionCategory.REPAIR }
+                .map { item ->
+                    item.copy(theExecution = transformer.transform(item.theExecution, countryCode))
+                },
+            protocolDirectives = nutrition
+                .filter { it.category == NutritionCategory.PROTOCOL }
                 .map { item ->
                     item.copy(theExecution = transformer.transform(item.theExecution, countryCode))
                 },
@@ -65,8 +70,9 @@ class PreventionViewModel @Inject constructor(
 sealed interface PreventionUiState {
     data object Loading : PreventionUiState
     data class Success(
-        val dietaryPatterns: List<NutritionIntelligence>,
-        val preparationDirectives: List<NutritionIntelligence>,
+        val defenseDirectives: List<NutritionIntelligence>,
+        val repairDirectives: List<NutritionIntelligence>,
+        val protocolDirectives: List<NutritionIntelligence>,
         val environmentalSignals: List<Signal>,
         val educationLessons: List<EducationLesson>,
         val preventionActions: List<PreventionAction>,

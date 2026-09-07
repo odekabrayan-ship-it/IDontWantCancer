@@ -187,7 +187,8 @@ private fun DashboardContent(
                         "WATCH" -> onInteraction(IntelligenceUiInteraction.EnterAlerts)
                         "SHOP", "TRUTH", "VERIFY" -> onInteraction(IntelligenceUiInteraction.EnterVerify)
                         "EAT", "HOME", "ACADEMY", "PLAN" -> onInteraction(IntelligenceUiInteraction.EnterPrevention)
-                        "TREATMENT", "SYMPTOMS", "DECEPTION", "PROGRESS" -> onInteraction(IntelligenceUiInteraction.EnterHealingSanctuary)
+                        "TREATMENT", "SYMPTOMS", "DECEPTION" -> onInteraction(IntelligenceUiInteraction.EnterHealingSanctuary)
+                        "PROGRESS" -> onInteraction(IntelligenceUiInteraction.EnterMyJourney)
                     }
                 }
             )

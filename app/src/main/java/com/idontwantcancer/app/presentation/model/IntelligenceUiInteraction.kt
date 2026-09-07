@@ -74,4 +74,9 @@ sealed interface IntelligenceUiInteraction {
      * User requested to enter the Settings screen.
      */
     data object EnterSettings : IntelligenceUiInteraction
+
+    /**
+     * User requested to enter the My Journey screen.
+     */
+    data object EnterMyJourney : IntelligenceUiInteraction
 }

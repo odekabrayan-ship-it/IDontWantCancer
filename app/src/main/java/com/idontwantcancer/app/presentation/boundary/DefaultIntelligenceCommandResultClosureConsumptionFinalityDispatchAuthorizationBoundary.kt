@@ -32,6 +32,7 @@ class DefaultIntelligenceCommandResultClosureConsumptionFinalityDispatchAuthoriz
             is IntelligenceUiInteraction.EnterVerify,
             is IntelligenceUiInteraction.EnterPrevention,
             is IntelligenceUiInteraction.EnterSettings,
+            is IntelligenceUiInteraction.EnterMyJourney,
             is IntelligenceUiInteraction.ClearSelection -> true
         }
 

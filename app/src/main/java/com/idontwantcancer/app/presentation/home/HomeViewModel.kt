@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
-import com.idontwantcancer.app.domain.model.SignalCategory
-import com.idontwantcancer.app.domain.model.SignalImportance
-import com.idontwantcancer.app.domain.model.UserMission
+import com.idontwantcancer.app.domain.model.*
+import com.idontwantcancer.app.domain.repository.HealingRepository
 import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.GetCurrentBriefingUseCase
+import com.idontwantcancer.app.domain.usecase.GetHealingLogUseCase
 import com.idontwantcancer.app.domain.usecase.GetPreventionActionsUseCase
 import com.idontwantcancer.app.presentation.boundary.*
 import com.idontwantcancer.app.presentation.mapper.toContract
@@ -16,12 +16,11 @@ import com.idontwantcancer.app.presentation.mapper.toUiState
 import com.idontwantcancer.app.presentation.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,7 +28,9 @@ class HomeViewModel @Inject constructor(
     private val getCurrentBriefingUseCase: GetCurrentBriefingUseCase,
     private val coordinator: IntelligenceCycleCoordinator,
     private val userContextRepository: UserContextRepository,
+    private val healingRepository: HealingRepository,
     private val getPreventionActionsUseCase: GetPreventionActionsUseCase,
+    private val getHealingLogUseCase: GetHealingLogUseCase,
     private val resultHandoverBridge: IntelligenceCommandExecutionResultHandoverBoundary,
     private val lifecycleBoundary: IntelligenceCommandLifecycleBoundary,
     private val renderingLifecycleBoundary: IntelligenceCommandRenderingLifecycleBoundary,
@@ -127,16 +128,60 @@ class HomeViewModel @Inject constructor(
                 val allSignals = briefing.signals.values.toList()
                 val mission = userContextRepository.getUserMission().first()
                 val adoptedActions = getPreventionActionsUseCase().first().filter { it.isAdopted }
+                val healingLogs = getHealingLogUseCase().first()
+                val truthChecks = healingRepository.getPatientTruthChecks().first()
+                
+                val today = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate()
 
                 // Calculate Pillar Statuses based on Mission
                 val pillars = if (mission == UserMission.HEALING) {
+                    val medicalAlerts = allSignals.filter { 
+                        (it.category == SignalCategory.MEDICINE || it.category == SignalCategory.REGULATION) && 
+                        (it.importance == SignalImportance.CRITICAL || it.importance == SignalImportance.HIGH) 
+                    }
+                    val treatmentDoneToday = healingLogs.any { 
+                        it.type == HealingLogType.MANUAL && 
+                        it.timestamp.atZone(ZoneId.systemDefault()).toLocalDate() == today 
+                    }
+                    val managedSymptoms = healingLogs.filter { 
+                        it.type == HealingLogType.SYMPTOM && 
+                        it.timestamp.atZone(ZoneId.systemDefault()).toLocalDate() == today 
+                    }.map { it.directiveName }.distinct()
+
+                    val scamCount = truthChecks.count { it.verdict == PatientVerdict.SCAM }
+
                     listOf(
-                        PillarStatus("WATCH", "Sentinel Watch", "${allSignals.count { it.importance == SignalImportance.CRITICAL }} Urgent Alerts", allSignals.any { it.importance == SignalImportance.CRITICAL }),
-                        PillarStatus("TREATMENT", "Treatment", "Manuals Active"),
-                        PillarStatus("SYMPTOMS", "Symptom Help", "Directives Ready"),
-                        PillarStatus("DECEPTION", "Deception Shield", "Scam Defense Active"),
-                        PillarStatus("PROGRESS", "My Progress", "Victory Ledger Active"),
-                        PillarStatus("VERIFY", "Laboratory", "Verification Active")
+                        PillarStatus(
+                            id = "WATCH", 
+                            title = "Sentinel Watch", 
+                            status = if (medicalAlerts.isNotEmpty()) "${medicalAlerts.size} URGENT TREATMENT ALERTS" else "Treatment Integrity Clear", 
+                            isAlert = medicalAlerts.isNotEmpty()
+                        ),
+                        PillarStatus(
+                            id = "TREATMENT", 
+                            title = "Treatment", 
+                            status = if (treatmentDoneToday) "Protocol Steps Completed" else "Next: Check Daily Manual"
+                        ),
+                        PillarStatus(
+                            id = "SYMPTOMS", 
+                            title = "Symptom Help", 
+                            status = if (managedSymptoms.isNotEmpty()) "Managing: ${managedSymptoms.size} Symptoms" else "Immediate Directives Ready"
+                        ),
+                        PillarStatus(
+                            id = "DECEPTION", 
+                            title = "Deception Shield", 
+                            status = "$scamCount Known Scams Blocked"
+                        ),
+                        PillarStatus(
+                            id = "PROGRESS", 
+                            title = "My Progress", 
+                            status = "${healingLogs.size} Victories Logged"
+                        ),
+                        PillarStatus(
+                            id = "VERIFY", 
+                            title = "Laboratory", 
+                            status = "Safety Check Active"
+                        )
                     )
                 } else {
                     listOf(

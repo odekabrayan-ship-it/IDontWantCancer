@@ -79,6 +79,10 @@ class DefaultIntelligenceCommandDispatcher @Inject constructor(
                 lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
                 onNavigate(Screen.HealingSanctuary)
             }
+            is IntelligenceUiInteraction.EnterMyJourney -> {
+                lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
+                onNavigate(Screen.MyJourney)
+            }
             is IntelligenceUiInteraction.EnterSettings -> {
                 lifecycleBoundary.transitionTo(interaction, CommandLifecycleStage.DISPATCHED)
                 onNavigate(Screen.Settings)

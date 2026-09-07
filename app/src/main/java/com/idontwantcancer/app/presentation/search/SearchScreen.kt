@@ -9,11 +9,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.HealthAndSafety
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Verified
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -64,30 +60,21 @@ fun SearchScreen(
     val navigator = rememberListDetailPaneScaffoldNavigator<String>()
     val scope = rememberCoroutineScope()
     
-    // NEW: Context filter state
+    // Context filter state
     var storeFilterActive by rememberSaveable { mutableStateOf(false) }
 
     BackHandler(navigator.canNavigateBack()) {
         scope.launch {
             if (navigator.navigateBack()) {
-                // Step 209: Synchronize navigator back with ViewModel selection
                 viewModel.onInteraction(IntelligenceUiInteraction.ClearSelection)
             }
         }
     }
 
-    // Sync ViewModel selection with Navigator
     val selectedId = (uiState as? SearchUiState.Success)?.selectedSignalId
     LaunchedEffect(selectedId) {
         if (selectedId != null && navigator.currentDestination?.contentKey != selectedId) {
             navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, selectedId)
-        }
-    }
-
-    // Request focus on entry if no query exists
-    LaunchedEffect(Unit) {
-        if (query.isEmpty()) {
-            focusRequester.requestFocus()
         }
     }
 
@@ -112,20 +99,19 @@ fun SearchScreen(
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = stringResource(R.string.search_title),
+                                text = "VERIFICATION LAB",
                                 style = MaterialTheme.typography.headlineMedium,
                                 fontWeight = FontWeight.Black,
                                 modifier = Modifier.semantics { heading() }
                             )
                         }
                         Text(
-                            text = stringResource(R.string.search_subtitle),
+                            text = "Verify label ingredients and health claims instantly",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
                         )
                         
-                        // NEW: Aisle-Side Filter
                         FilterChip(
                             selected = storeFilterActive,
                             onClick = { storeFilterActive = !storeFilterActive },
@@ -148,7 +134,7 @@ fun SearchScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .focusRequester(focusRequester),
-                            placeholder = { Text(stringResource(R.string.search_placeholder)) },
+                            placeholder = { Text("Enter ingredient name or E-Number...") },
                             leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                             trailingIcon = {
                                 if (query.isNotEmpty()) {
@@ -157,7 +143,7 @@ fun SearchScreen(
                                         onInteraction(IntelligenceUiInteraction.ClearSearch)
                                         focusRequester.requestFocus()
                                     }) {
-                                        Icon(Icons.Default.Clear, contentDescription = stringResource(R.string.search_clear_content_desc))
+                                        Icon(Icons.Default.Clear, contentDescription = null)
                                     }
                                 }
                             },
@@ -170,43 +156,18 @@ fun SearchScreen(
                                     keyboardController?.hide()
                                 }
                             ),
-                            shape = MaterialTheme.shapes.medium
+                            shape = MaterialTheme.shapes.extraSmall
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .imePadding()
-                        ) {
+                        Box(modifier = Modifier.fillMaxSize().imePadding()) {
                             when (val state = uiState) {
-                                is SearchUiState.Idle -> SearchIdleState(
-                                    onChipClick = {
-                                        query = it
-                                        onInteraction(IntelligenceUiInteraction.PerformSearch(it))
-                                    }
-                                )
-                                is SearchUiState.Searching -> {
-                                    Column(
-                                        modifier = Modifier.fillMaxSize(),
-                                        verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        LinearProgressIndicator(
-                                            modifier = Modifier.fillMaxWidth().height(2.dp),
-                                            color = MaterialTheme.colorScheme.primary,
-                                            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                                        )
-                                        Spacer(modifier = Modifier.height(16.dp))
-                                        Text(
-                                            text = "SCANNING REGISTRY...",
-                                            style = MaterialTheme.typography.labelMedium,
-                                            fontWeight = FontWeight.Black,
-                                            color = MaterialTheme.colorScheme.primary,
-                                            letterSpacing = 1.sp
-                                        )
-                                    }
-                                }
+                                is SearchUiState.Idle -> LabelScanDirectory(onChipClick = {
+                                    query = it
+                                    onInteraction(IntelligenceUiInteraction.PerformSearch(it))
+                                })
+                                is SearchUiState.Searching -> SearchingState()
                                 is SearchUiState.Success -> {
                                     val filteredSignals = if (storeFilterActive) {
                                         state.signals.filter { "Store" in it.interactionContexts }
@@ -215,6 +176,7 @@ fun SearchScreen(
                                     }
                                     SearchResultsList(
                                         signals = filteredSignals,
+                                        verdict = state.verdict,
                                         reconciliations = state.reconciliations,
                                         finality = state.finality,
                                         selectedSignalId = state.selectedSignalId,
@@ -226,8 +188,8 @@ fun SearchScreen(
                                     )
                                 }
                                 is SearchUiState.Empty -> AgencyEmptyState(
-                                    title = stringResource(R.string.search_empty_title),
-                                    description = stringResource(R.string.search_empty_desc)
+                                    title = "NO REGISTRY MATCH",
+                                    description = "This ingredient is not flagged in the Agency's high-priority carcinogen database."
                                 )
                                 is SearchUiState.Error -> AgencyErrorState(
                                     message = state.message,
@@ -243,22 +205,14 @@ fun SearchScreen(
             AnimatedPane {
                 val selectedId = navigator.currentDestination?.contentKey
                 if (selectedId != null) {
-                    val detailViewModel: SignalDetailViewModel = hiltViewModel(
-                        key = selectedId
-                    )
-                    
-                    LaunchedEffect(selectedId) {
-                        detailViewModel.loadSignal(selectedId)
-                    }
-
+                    val detailViewModel: SignalDetailViewModel = hiltViewModel(key = selectedId)
+                    LaunchedEffect(selectedId) { detailViewModel.loadSignal(selectedId) }
                     val detailUiState by detailViewModel.uiState.collectAsStateWithLifecycle()
 
                     Scaffold { innerPadding ->
                         Box(modifier = Modifier.padding(innerPadding)) {
                             when (val state = detailUiState) {
-                                is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.Loading -> {
-                                    AgencyLoadingState()
-                                }
+                                is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.Loading -> AgencyLoadingState()
                                 is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.Success -> {
                                     SignalDetailView(
                                         signal = state.signal,
@@ -266,26 +220,13 @@ fun SearchScreen(
                                         finality = state.finality
                                     )
                                 }
-                                is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.Error -> {
-                                    AgencyErrorState(
-                                        message = state.message,
-                                        onRetry = { detailViewModel.loadSignal(selectedId) }
-                                    )
-                                }
-                                is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.NotFound -> {
-                                    AgencyEmptyState(
-                                        title = stringResource(R.string.not_found_title),
-                                        description = stringResource(R.string.not_found_desc)
-                                    )
-                                }
+                                is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.Error -> AgencyErrorState(message = state.message, onRetry = { detailViewModel.loadSignal(selectedId) })
+                                is com.idontwantcancer.app.presentation.signal.SignalDetailUiState.NotFound -> AgencyEmptyState(title = "NOT FOUND", description = "The requested intelligence could not be located.")
                             }
                         }
                     }
                 } else {
-                    AgencyEmptyState(
-                        title = stringResource(R.string.search_select_prompt),
-                        description = stringResource(R.string.search_select_desc)
-                    )
+                    AgencyEmptyState(title = "SELECT A RESULT", description = "Choose an item from the list to view its complete security dossier.")
                 }
             }
         }
@@ -293,68 +234,95 @@ fun SearchScreen(
 }
 
 @Composable
-private fun SearchIdleState(onChipClick: (String) -> Unit) {
+private fun LabelScanDirectory(onChipClick: (String) -> Unit) {
     val spacing = LocalSpacing.current
-    Column(
+    LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Surface(
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-            shape = MaterialTheme.shapes.medium,
-            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
+        item {
+            Text(
+                text = "LABEL SCAN GUIDE: THE DIRTY 50",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.primary,
+                letterSpacing = 1.sp
+            )
+        }
+
+        item {
+            AisleSection(
+                title = "💄 COSMETICS & CARE",
+                items = listOf("Parabens", "Phthalates", "DMDM Hydantoin", "PFAS", "Talc", "Aluminum"),
+                onChipClick = onChipClick
+            )
+        }
+
+        item {
+            AisleSection(
+                title = "🧼 CLEANING & LAUNDRY",
+                items = listOf("Triclosan", "PEG", "SLES", "1,4-Dioxane", "Quats"),
+                onChipClick = onChipClick
+            )
+        }
+
+        item {
+            AisleSection(
+                title = "🍎 FOOD ADDITIVES",
+                items = listOf("E250", "E171", "Potassium Bromate", "BHA", "Red 40", "Yellow 5"),
+                onChipClick = onChipClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun AisleSection(title: String, items: List<String>, onChipClick: (String) -> Unit) {
+    Column {
+        Text(text = title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(12.dp))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.search_idle_prompt),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = 1.sp
+            items.forEach { label ->
+                SuggestionChip(
+                    onClick = { onChipClick(label) },
+                    label = { Text(label, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Medium) },
+                    shape = MaterialTheme.shapes.extraSmall
                 )
-                Spacer(modifier = Modifier.height(spacing.medium))
-                
-                FlowRow(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    val chips = listOf(
-                        "💄 " + stringResource(R.string.cat_cosmetics),
-                        "🧪 " + stringResource(R.string.cat_cleaning),
-                        "🍎 " + stringResource(R.string.cat_food),
-                        "🧬 " + stringResource(R.string.cat_nutrition),
-                        "🩺 " + stringResource(R.string.cat_screening),
-                        "🏭 " + stringResource(R.string.cat_occupational)
-                    )
-                    
-                    chips.forEach { label ->
-                        val queryText = label.substring(2)
-                        SuggestionChip(
-                            onClick = { onChipClick(queryText) },
-                            label = { 
-                                Text(
-                                    text = label,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    fontWeight = FontWeight.Bold
-                                ) 
-                            },
-                            modifier = Modifier.padding(horizontal = 4.dp),
-                            shape = MaterialTheme.shapes.large
-                        )
-                    }
-                }
             }
         }
     }
 }
 
 @Composable
+private fun SearchingState() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        LinearProgressIndicator(
+            modifier = Modifier.fillMaxWidth().height(2.dp),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "SCANNING REGISTRY...",
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Black,
+            color = MaterialTheme.colorScheme.primary,
+            letterSpacing = 1.sp
+        )
+    }
+}
+
+@Composable
 private fun SearchResultsList(
     signals: List<Signal>,
+    verdict: SummaryVerdict,
     reconciliations: Map<String, IntelligenceReentryReconciliationPresentationContract>,
     finality: CommandConsumptionFinalityPresentationContract,
     selectedSignalId: String?,
@@ -364,53 +332,21 @@ private fun SearchResultsList(
     val spacing = LocalSpacing.current
     val listState = rememberLazyListState()
     
-    // Dismiss keyboard on scroll
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (listState.isScrollInProgress) {
-            onScroll()
-        }
-    }
+    LaunchedEffect(listState.isScrollInProgress) { if (listState.isScrollInProgress) onScroll() }
 
     LazyColumn(
         state = listState,
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = spacing.small),
         verticalArrangement = Arrangement.spacedBy(spacing.small)
     ) {
-        item {
-            Surface(
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                shape = MaterialTheme.shapes.extraSmall,
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
-                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-            ) {
-                Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Verified, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "SECURITY AUDIT: ${signals.size} MATCHES FOUND",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Black,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            }
-        }
-        item {
-            OperationalFinalityIndicator(finality)
-        }
-        items(
-            items = signals,
-            key = { it.id }
-        ) { signal ->
-            val onClick = remember(signal.id, onInteraction) {
-                { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) }
-            }
-            
+        item { SummaryVerdictHeader(verdict) }
+        item { OperationalFinalityIndicator(finality) }
+        
+        items(items = signals, key = { it.id }) { signal ->
             SignalCard(
                 signal = signal,
                 isSelected = signal.id == selectedSignalId,
-                onClick = onClick,
+                onClick = { onInteraction(IntelligenceUiInteraction.ViewSignalDetails(signal.id)) },
                 reconciliationIndicator = {
                     if (reconciliations[signal.id] is IntelligenceReentryReconciliationPresentationContract.InconsistentMismatch) {
                         Spacer(modifier = Modifier.height(spacing.small))
@@ -421,3 +357,42 @@ private fun SearchResultsList(
         }
     }
 }
+
+@Composable
+private fun SummaryVerdictHeader(verdict: SummaryVerdict) {
+    val colorScheme = MaterialTheme.colorScheme
+    val (title, icon, bgColor, textColor) = when (verdict) {
+        is SummaryVerdict.HazardDetected -> Quad(
+            "🔴 HAZARD DETECTED: PUT THIS ITEM BACK",
+            Icons.Default.Report,
+            colorScheme.error,
+            colorScheme.onError
+        )
+        is SummaryVerdict.ScamDetected -> Quad(
+            "🔴 FRAUD ALERT: DO NOT TRUST THIS CLAIM",
+            Icons.Default.GppBad,
+            colorScheme.error,
+            colorScheme.onError
+        )
+        SummaryVerdict.NoHazardMatch -> Quad(
+            "🟢 NO REGISTRY MATCH: SAFE FOR USE",
+            Icons.Default.Verified,
+            colorScheme.primary,
+            colorScheme.onPrimary
+        )
+    }
+
+    Surface(
+        color = bgColor,
+        shape = MaterialTheme.shapes.extraSmall,
+        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+    ) {
+        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(imageVector = icon, contentDescription = null, tint = textColor, modifier = Modifier.size(20.dp))
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(text = title, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Black, color = textColor, letterSpacing = 1.sp)
+        }
+    }
+}
+
+private data class Quad<A, B, C, D>(val a: A, val b: B, val c: C, val d: D)

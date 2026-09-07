@@ -398,7 +398,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 publishedAt = now,
                 source = SignalSource("IARC / Agency Intelligence", ""),
                 isActionable = true,
-                affectedIngredients = listOf("Sodium Nitrite", "E250", "Curing Salt", "Nitrate"),
+                affectedIngredients = listOf("Sodium Nitrite", "E250", "Curing Salt", "Nitrate", "Pink Salt", "Bacon Preservative"),
                 safeAlternatives = listOf("Fresh Meat", "Nitrite-Free products"),
                 interactionContexts = listOf("Store")
             ),
@@ -421,8 +421,31 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 publishedAt = now,
                 source = SignalSource("EFSA / Agency Intelligence", ""),
                 isActionable = true,
-                affectedIngredients = listOf("Titanium Dioxide", "E171", "CI 77891"),
+                affectedIngredients = listOf("Titanium Dioxide", "E171", "CI 77891", "White coloring"),
                 safeAlternatives = listOf("Calcium Carbonate", "Natural Coloring"),
+                interactionContexts = listOf("Store")
+            ),
+            Signal(
+                id = "food-add-3",
+                title = "Bread Safety: Potassium Bromate (E924)",
+                summary = "A flour improver linked to kidney and thyroid risks.",
+                theTruth = "Potassium Bromate makes bread dough rise and stay white, but it is a known carcinogen. It is banned in many countries but still used in others.",
+                theCommand = "Check bread and flour labels for 'Bromated' or 'E924'.",
+                theExecution = listOf(
+                    "Look for 'Bromated Flour' in the ingredients.",
+                    "Switch to brands that explicitly say 'Unbromated'.",
+                    "Choose organic breads as they never use this chemical."
+                ),
+                theShield = "Ensures your daily bread does not contribute to your toxic load.",
+                category = SignalCategory.FOOD,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Laboratory", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Potassium Bromate", "E924", "Bromated Flour", "Flour Improver", "White bread additive"),
+                safeAlternatives = listOf("Unbromated Flour", "Organic Wheat"),
                 interactionContexts = listOf("Store")
             )
         )

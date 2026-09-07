@@ -28,6 +28,7 @@ sealed interface SearchUiState {
      */
     data class Success(
         val signals: List<Signal>,
+        val verdict: SummaryVerdict,
         /**
          * Map of signal ID to its verified re-entry reconciliation status.
          */

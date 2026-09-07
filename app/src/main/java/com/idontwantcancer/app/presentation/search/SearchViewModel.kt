@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceReentryReconciliationConsumptionBoundary
+import com.idontwantcancer.app.domain.model.EvidenceVerdict
+import com.idontwantcancer.app.domain.model.SafetyLevel
 import com.idontwantcancer.app.domain.usecase.SearchSignalsUseCase
 import com.idontwantcancer.app.presentation.boundary.*
 import com.idontwantcancer.app.presentation.mapper.toContract
@@ -163,7 +165,17 @@ class SearchViewModel @Inject constructor(
                                 ?.toUiState().toContract()
                         }
                     }
-                    _uiState.value = SearchUiState.Success(results, reconciliations)
+                    val verdict = when {
+                        results.any { it.safetyLevel == SafetyLevel.DANGER } -> 
+                            SummaryVerdict.HazardDetected("HIGH-PRIORITY DANGER", results.count { it.safetyLevel == SafetyLevel.DANGER })
+                        results.any { it.safetyLevel == SafetyLevel.CAUTION } ->
+                            SummaryVerdict.HazardDetected("CAUTION REQUIRED", results.count { it.safetyLevel == SafetyLevel.CAUTION })
+                        results.any { it.verdict == EvidenceVerdict.NOT_SUPPORTED || it.verdict == EvidenceVerdict.MISLEADING } ->
+                            SummaryVerdict.ScamDetected(results.first().investigatedClaim ?: "this claim")
+                        else -> SummaryVerdict.NoHazardMatch
+                    }
+
+                    _uiState.value = SearchUiState.Success(results, verdict, reconciliations)
                 }
             } catch (e: Exception) {
                 if (e is kotlinx.coroutines.CancellationException) throw e

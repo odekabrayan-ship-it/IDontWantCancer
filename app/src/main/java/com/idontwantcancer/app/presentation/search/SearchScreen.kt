@@ -274,6 +274,14 @@ private fun LabelScanDirectory(onChipClick: (String) -> Unit) {
                 onChipClick = onChipClick
             )
         }
+
+        item {
+            AisleSection(
+                title = "🛡️ VERIFY A CLAIM: COMMON MYTHS",
+                items = listOf("Sugar feeds cancer", "Alkaline diet", "Cell phones & 5G", "Biopsies spread", "Big Pharma Cures", "Deodorant risk"),
+                onChipClick = onChipClick
+            )
+        }
     }
 }
 

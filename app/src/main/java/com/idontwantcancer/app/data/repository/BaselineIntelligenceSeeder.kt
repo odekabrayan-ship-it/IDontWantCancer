@@ -42,6 +42,9 @@ class BaselineIntelligenceSeeder @Inject constructor(
         
         // --- THE SENTINEL WATCH (Action 1) ---
         seedSafetyAlerts()
+        
+        // --- THE TRUTH SENTINEL (Action 4) ---
+        seedTruthCheckSignals()
     }
 
     private suspend fun seedCosmeticRegistry() {
@@ -586,6 +589,233 @@ class BaselineIntelligenceSeeder @Inject constructor(
             )
         )
         healingRepository.saveRedFlagDirectives(flags)
+    }
+
+    private suspend fun seedTruthCheckSignals() {
+        val now = Instant.now()
+        val signals = listOf(
+            Signal(
+                id = "truth-sugar-feeds",
+                title = "Myth Check: Sugar Feeds Cancer",
+                summary = "All cells use sugar, but eating sugar doesn't make cancer grow faster.",
+                theTruth = "Every cell in your body uses glucose (sugar) for energy. While cancer cells use it faster, there is no evidence that eating sugar directly feeds tumors. However, too much sugar leads to obesity, which IS a cancer risk.",
+                theCommand = "Manage sugar for weight control, not to 'starve' cancer.",
+                theExecution = listOf(
+                    "Limit sugary sodas and sweets to maintain a healthy weight.",
+                    "Don't panic about natural sugars in fruit.",
+                    "Focus on a balanced diet rather than extreme sugar-cutting."
+                ),
+                theShield = "Protects you from the stress of an impossible diet while keeping your weight in a safe range.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Mayo Clinic / Agency Truth Check", ""),
+                verdict = EvidenceVerdict.MISLEADING,
+                investigatedClaim = "Sugar feeds cancer and should be zeroed.",
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "truth-alkaline-diet",
+                title = "Myth Check: Alkaline Diet Cures Cancer",
+                summary = "Your body's pH is tightly controlled and cannot be changed by what you eat.",
+                theTruth = "Cancer cannot survive in an alkaline lab dish, but your blood pH is strictly kept at 7.4 by your lungs and kidneys. Eating alkaline foods (like lemons or greens) won't change your body's internal chemistry.",
+                theCommand = "Eat greens for their nutrients, not to change your pH.",
+                theExecution = listOf(
+                    "Ignore claims that 'cancer cannot live in an alkaline body'.",
+                    "Maintain a balanced diet rich in varied vegetables.",
+                    "Don't waste money on expensive alkaline water machines."
+                ),
+                theShield = "Protects you from predatory 'cure' scams and biologically useless devices.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("American Cancer Society / Agency Truth Check", ""),
+                verdict = EvidenceVerdict.NOT_SUPPORTED,
+                investigatedClaim = "An alkaline diet can cure or treat cancer.",
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "truth-cell-phones",
+                title = "Myth Check: Cell Phones and 5G",
+                summary = "Phone waves are non-ionizing and too weak to damage your DNA.",
+                theTruth = "Cell phones and 5G networks use radiofrequency (RF) waves. Unlike X-rays, these are 'non-ionizing'—they don't have enough energy to break DNA strands or cause cancer.",
+                theCommand = "You are safe to use your devices as normal.",
+                theExecution = listOf(
+                    "Ignore viral posts about '5G radiation' causing brain tumors.",
+                    "If you want extra comfort, use a speakerphone or wired headset.",
+                    "Don't waste money on 'EMF protection' stickers."
+                ),
+                theShield = "Protects you from unnecessary radiation anxiety and financial scams.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("WHO / Agency Truth Check", ""),
+                verdict = EvidenceVerdict.NOT_SUPPORTED,
+                investigatedClaim = "Cell phones and 5G networks cause brain tumors.",
+                interactionContexts = listOf("Public", "Work")
+            ),
+            Signal(
+                id = "truth-biopsy-spread",
+                title = "Myth Check: Biopsies Spread Cancer",
+                summary = "Medical procedures follow strict rules to prevent cancer from moving.",
+                theTruth = "It is extremely rare for a biopsy or surgery to cause cancer to spread. Doctors use special techniques and tools to ensure any cancer cells stay contained during the test.",
+                theCommand = "Do not skip your biopsy; it is the only way to get the right treatment.",
+                theExecution = listOf(
+                    "Trust that your surgical team is trained to prevent 'seeding'.",
+                    "Understand that finding cancer during surgery usually means it was already there.",
+                    "Get the diagnostic test your doctor recommends immediately."
+                ),
+                theShield = "Ensures you get an accurate diagnosis in time to save your life.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("NCI / Agency Truth Check", ""),
+                verdict = EvidenceVerdict.NOT_SUPPORTED,
+                investigatedClaim = "Biopsies or surgery cause cancer to spread.",
+                interactionContexts = listOf("Public")
+            ),
+            Signal(
+                id = "truth-big-pharma",
+                title = "Myth Check: Hidden Cancer Cures",
+                summary = "There is no single 'secret cure' being withheld by companies.",
+                theTruth = "Cancer is not one disease; it is hundreds of different types. Developing treatments is incredibly complex, and there is more profit in a cure than in temporary treatments.",
+                theCommand = "Be wary of anyone claiming to have a 'secret cure' doctors won't tell you about.",
+                theExecution = listOf(
+                    "Look for clinical trial evidence for any treatment claim.",
+                    "Ask: 'If there was a cure, why would researchers' own families still die of cancer?'",
+                    "Stick to treatments verified by global medical communities."
+                ),
+                theShield = "Protects you from delaying life-saving care while chasing fraudulent promises.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Intelligence Foundation", ""),
+                verdict = EvidenceVerdict.NOT_SUPPORTED,
+                investigatedClaim = "A simple cancer cure exists but is being hidden for profit. Big Pharma Cures.",
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "truth-antiperspirant",
+                title = "Myth Check: Deodorant and Breast Cancer",
+                summary = "No scientific evidence links aluminum in deodorant to tumors.",
+                theTruth = "Many people fear that aluminum or parabens in antiperspirants are absorbed and cause cancer. However, large studies have found no consistent link between these products and breast cancer.",
+                theCommand = "Use your preferred deodorant with confidence.",
+                theExecution = listOf(
+                    "Switch to aluminum-free versions only if you have a skin sensitivity.",
+                    "Ignore viral emails about 'sweating out toxins'.",
+                    "Focus on known breast cancer risks like exercise and alcohol reduction."
+                ),
+                theShield = "Reduces unnecessary daily worry about a common personal care item.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("National Cancer Institute", ""),
+                verdict = EvidenceVerdict.NOT_SUPPORTED,
+                investigatedClaim = "Aluminum in antiperspirants causes breast cancer. Deodorant risk.",
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "truth-microwaves",
+                title = "Myth Check: Microwave Radiation",
+                summary = "Microwaves do not make food radioactive or cause cancer.",
+                theTruth = "Microwaves use non-ionizing radiation to vibrate water molecules in food, creating heat. This is not the same as the ionizing radiation from X-rays that damages DNA. Your food does not become 'radioactive'.",
+                theCommand = "Use your microwave for heating; use glass containers for safety.",
+                theExecution = listOf(
+                    "Ignore claims that microwaving kills 'life energy' in food.",
+                    "Always use microwave-safe glass or ceramic, not plastic.",
+                    "Ensure the door seal on your microwave is clean and tight."
+                ),
+                theShield = "Protects you from appliance-fear while ensuring you avoid plastic chemical leaching.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("FDA / Agency Truth Check", ""),
+                verdict = EvidenceVerdict.NOT_SUPPORTED,
+                investigatedClaim = "Microwaves cause cancer and make food toxic.",
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "truth-contagious",
+                title = "Myth Check: Is Cancer Contagious?",
+                summary = "You cannot catch cancer like a cold or flu.",
+                theTruth = "Cancer is not a contagious disease. You cannot 'catch' it from someone else. However, some viruses (like HPV or Hepatitis) are contagious and can increase cancer risk years later.",
+                theCommand = "Support loved ones with cancer without fear of catching it.",
+                theExecution = listOf(
+                    "Feel safe to hug and spend time with cancer patients.",
+                    "Focus on vaccinations (like HPV) to prevent the viruses that can lead to cancer.",
+                    "Practice standard hygiene for overall health, not because cancer is catching."
+                ),
+                theShield = "Protects your relationships and mental health from unnecessary isolation.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Mayo Clinic", ""),
+                verdict = EvidenceVerdict.NOT_SUPPORTED,
+                investigatedClaim = "Cancer is contagious and can be caught from others.",
+                interactionContexts = listOf("Public")
+            ),
+            Signal(
+                id = "truth-positive-thinking",
+                title = "Myth Check: Positive Thinking Cures",
+                summary = "Attitude is great for quality of life, but it doesn't shrink tumors.",
+                theTruth = "While a positive outlook helps you cope with treatment stress, there is no scientific evidence that 'thinking positive' can cure cancer on its own. This myth often places an unfair emotional burden on patients.",
+                theCommand = "Allow yourself to feel all emotions; do not feel guilty for being sad.",
+                theExecution = listOf(
+                    "Use positive thinking as a tool for mental health, not a medical cure.",
+                    "Seek support groups or therapy if you feel overwhelmed.",
+                    "Focus on your medical protocol as the primary path to physical healing."
+                ),
+                theShield = "Protects you from emotional exhaustion and the 'blaming the victim' trap.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.LOW,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Cancer Research UK", ""),
+                verdict = EvidenceVerdict.MISLEADING,
+                investigatedClaim = "A positive attitude can cure or treat cancer.",
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "truth-alternative-cures",
+                title = "Myth Check: Alternative Cures",
+                summary = "Cannabis oil, Ivermectin, and massive Vitamin C are not cures.",
+                theTruth = "While some natural products help with side effects (like ginger for nausea), they cannot shrink tumors or replace medical treatment. Patients who choose alternative medicine *instead* of conventional care have a much higher risk of death.",
+                theCommand = "Use natural products only for comfort; never as a replacement for treatment.",
+                theExecution = listOf(
+                    "Always tell your oncologist about any supplements you are taking.",
+                    "Be wary of expensive 'natural' clinics that promise 100% success.",
+                    "Verify any 'unheard of' cure with the Agency before investing money."
+                ),
+                theShield = "Protects you from predatory financial exploitation and from the danger of stopping proven care.",
+                category = SignalCategory.RESEARCH,
+                importance = SignalImportance.CRITICAL,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Huntsman Cancer Institute / Agency Truth Check", ""),
+                verdict = EvidenceVerdict.MISLEADING,
+                investigatedClaim = "Alternative cures like Cannabis oil or Ivermectin are better than chemo. Detox.",
+                interactionContexts = listOf("Home", "Public")
+            )
+        )
+        signals.forEach { memory.saveSignal(it); seedThread(it) }
     }
 
     private suspend fun seedThread(signal: Signal) {

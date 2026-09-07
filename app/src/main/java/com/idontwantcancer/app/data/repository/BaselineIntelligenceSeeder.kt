@@ -162,7 +162,7 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 theExecution = listOf(
                     "Turn the fan to high as soon as you start the stove.",
                     "If you don't have a fan, open a window to let fresh air in.",
-                    "Keep the fan running for 5 minutes after you finish."
+                    "Keep the air moving for 5 minutes after you finish."
                 ),
                 theShield = "Protects your lung tissue from breathing in concentrated pollutants.",
                 category = SignalCategory.ENVIRONMENT,
@@ -208,47 +208,116 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 id = "cos-1",
                 title = "Lotion Safety: Avoiding Parabens",
                 summary = "Common preservatives that can mimic body hormones.",
-                theTruth = "Parabens are chemicals that keep lotions from spoiling, but they can act like estrogen in your body.",
-                theCommand = "Check labels for 'Paraben-Free' hair and skin products.",
+                theTruth = "Parabens keep lotions from spoiling, but they can act like estrogen in your body. This 'hormone mimicking' is linked to breast cancer risk.",
+                theCommand = "Avoid products containing Methyl-, Ethyl-, Propyl-, or Butyl-paraben.",
                 theExecution = listOf(
-                    "Look for ingredients ending in 'paraben' (like Methylparaben).",
-                    "Switch to products that use natural preservatives instead.",
-                    "Focus on daily-use items like body lotion and face cream."
+                    "Scan the ingredient list for any word ending in 'paraben'.",
+                    "Switch to products that are explicitly labeled 'Paraben-Free'.",
+                    "Prefer preservatives like Sodium Benzoate or Potassium Sorbate."
                 ),
-                theShield = "Protects your body's natural hormone balance.",
+                theShield = "Reduces the cumulative endocrine-disrupting load on your sensitive tissues.",
                 category = SignalCategory.COSMETICS,
                 importance = SignalImportance.MODERATE,
                 confidence = SignalConfidence.HIGH,
                 detectedAt = now,
                 publishedAt = now,
-                source = SignalSource("Cosmetic Intelligence", ""),
+                source = SignalSource("EU SCCS / Agency Intelligence", ""),
                 isActionable = true,
-                affectedIngredients = listOf("Methylparaben", "Propylparaben", "Butylparaben"),
-                safeAlternatives = listOf("Vitamin E", "Sodium Benzoate"),
+                affectedIngredients = listOf("Methylparaben", "Propylparaben", "Butylparaben", "Ethylparaben", "Isobutylparaben"),
+                safeAlternatives = listOf("Sodium Benzoate", "Potassium Sorbate", "Vitamin E"),
+                interactionContexts = listOf("Store")
+            ),
+            Signal(
+                id = "cos-2",
+                title = "Phthalates: The Fragrance Loophole",
+                summary = "Hidden chemicals used to make scents last longer.",
+                theTruth = "Phthalates (like DEP) are used to 'fix' fragrances to your skin. They are reproductive toxins and linked to hormone-driven cancers.",
+                theCommand = "Avoid 'Fragrance' or 'Parfum' unless it's from essential oils.",
+                theExecution = listOf(
+                    "Check for 'Phthalate-Free' on the front label.",
+                    "If you see only 'Fragrance' or 'Parfum' in the ingredients, put it back.",
+                    "Look for 'DEP' or 'Diethyl phthalate' specifically in nail polish or hair spray."
+                ),
+                theShield = "Blocks a major direct path for plasticizing chemicals into your bloodstream.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("NIEHS / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Fragrance", "Parfum", "DEP", "Diethyl phthalate", "DBP"),
+                safeAlternatives = listOf("Essential Oil Scents", "Fragrance-Free products"),
+                interactionContexts = listOf("Store")
+            ),
+            Signal(
+                id = "cos-3",
+                title = "DMDM Hydantoin: Formaldehyde Risks",
+                summary = "Preservatives that slowly release a known human carcinogen.",
+                theTruth = "Ingredients like DMDM Hydantoin and Quaternium-15 slowly release small amounts of Formaldehyde (a Group 1 Carcinogen) to kill bacteria.",
+                theCommand = "Check shampoo and hair gels for Formaldehyde-releasers.",
+                theExecution = listOf(
+                    "Scan for: 'DMDM Hydantoin', 'Imidazolidinyl Urea', 'Diazolidinyl Urea', or 'Quaternium-15'.",
+                    "Avoid these in 'leave-on' products like face cream or hair styling gels.",
+                    "Switch to products using 'Phenoxyethanol' as a safer preservative."
+                ),
+                theShield = "Prevents chronic low-level exposure to one of the most potent known cancer-causers.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("IARC / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("DMDM Hydantoin", "Quaternium-15", "Imidazolidinyl Urea", "Diazolidinyl Urea"),
+                safeAlternatives = listOf("Phenoxyethanol", "Caprylyl Glycol"),
                 interactionContexts = listOf("Store")
             ),
             Signal(
                 id = "cos-8",
                 title = "Makeup Safety: Avoiding 'Forever Chemicals'",
                 summary = "Persistent industrial chemicals found in waterproof makeup.",
-                theTruth = "Some waterproof mascaras and foundations use PFAS to stay on. These chemicals stay in your body for a very long time.",
+                theTruth = "Teflon-like chemicals (PFAS) are used to make makeup 'waterproof'. They are linked to cancer and never leave the body.",
                 theCommand = "Choose 'Washable' makeup over 'Waterproof' formulas.",
                 theExecution = listOf(
-                    "Check labels for 'PTFE' or 'Perfluoro-'.",
-                    "Choose brands that explicitly say they are 'PFAS-Free'.",
-                    "Wash makeup off thoroughly every night."
+                    "Check labels for 'PTFE', 'Perfluoro-', or 'Polyperfluoromethylisopropyl Ether'.",
+                    "Avoid long-wear lipsticks and mascaras that require special oil to remove.",
+                    "Select brands that explicitly state they are 'PFAS-Free'."
                 ),
-                theShield = "Prevents long-term buildup of toxic industrial chemicals in your system.",
+                theShield = "Prevents the direct application of permanent industrial pollutants to your eyes and skin.",
                 category = SignalCategory.COSMETICS,
                 importance = SignalImportance.HIGH,
                 confidence = SignalConfidence.HIGH,
                 detectedAt = now,
                 publishedAt = now,
-                source = SignalSource("Consumer Safety Lab", ""),
+                source = SignalSource("Agency Safety Lab", ""),
                 isActionable = true,
-                affectedIngredients = listOf("PTFE", "PFAS", "Teflon"),
-                safeAlternatives = listOf("Washable Mascara", "Beeswax formulas"),
+                affectedIngredients = listOf("PTFE", "PFAS", "Teflon", "Perfluoro-"),
+                safeAlternatives = listOf("Washable Mascara", "Beeswax-based formulas"),
                 interactionContexts = listOf("Store")
+            ),
+            Signal(
+                id = "cos-9",
+                title = "Talcum Powder: Asbestos Risk",
+                summary = "Body powders that may be contaminated with a deadly mineral.",
+                theTruth = "Talc and Asbestos are mined together. If the talc isn't purified perfectly, it contains asbestos, which causes ovarian and lung cancer.",
+                theCommand = "Stop using talc-based body powders; use cornstarch instead.",
+                theExecution = listOf(
+                    "Look for 'Talc' or 'Talcum Powder' in the ingredient list.",
+                    "Switch to products using 'Zea Mays (Corn) Starch' or 'Arrowroot'.",
+                    "Discard old baby powders or makeup powders containing talc."
+                ),
+                theShield = "Completely removes the risk of inhaling or absorbing microscopic asbestos fibers.",
+                category = SignalCategory.COSMETICS,
+                importance = SignalImportance.CRITICAL,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("IARC / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Talc", "Talcum Powder", "Hydrous Magnesium Silicate"),
+                safeAlternatives = listOf("Cornstarch", "Arrowroot Powder", "Baking Soda"),
+                interactionContexts = listOf("Store", "Home")
             )
         )
         signals.forEach { memory.saveSignal(it); seedThread(it) }
@@ -261,24 +330,47 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 id = "clean-1",
                 title = "Soap Tip: Skip 'Antibacterial' Labels",
                 summary = "Harsh chemicals in special soaps are not needed for safety.",
-                theTruth = "Ingredients like Triclosan are no better than plain soap but can interfere with your health.",
+                theTruth = "Triclosan and Triclocarban are antibacterial agents that can disrupt your thyroid. Plain soap and water are just as effective at removing germs.",
                 theCommand = "Use plain soap and water; avoid 'Triclosan' on labels.",
                 theExecution = listOf(
-                    "Check your hand soap and toothpaste for 'Triclosan'.",
-                    "Understand that scrubbing with plain soap is the best way to clean.",
-                    "Switch to 'Castile' or simple plant-based soaps."
+                    "Check hand soaps, dish soaps, and toothpaste for 'Triclosan'.",
+                    "Understand that the mechanical act of scrubbing with soap is the key to safety.",
+                    "Choose simple, non-antibacterial soaps like Castile or glycerin soap."
                 ),
-                theShield = "Protects your natural skin barrier and internal health.",
+                theShield = "Protects your hormonal health and prevents antibiotic resistance.",
                 category = SignalCategory.CLEANING,
                 importance = SignalImportance.MODERATE,
                 confidence = SignalConfidence.HIGH,
                 detectedAt = now,
                 publishedAt = now,
-                source = SignalSource("Agency Safety Lab", ""),
+                source = SignalSource("FDA / Agency Intelligence", ""),
                 isActionable = true,
-                affectedIngredients = listOf("Triclosan"),
+                affectedIngredients = listOf("Triclosan", "Triclocarban"),
                 safeAlternatives = listOf("Plain Soap", "Castile Soap"),
                 interactionContexts = listOf("Home", "Store")
+            ),
+            Signal(
+                id = "clean-2",
+                title = "1,4-Dioxane: The Process Contaminant",
+                summary = "A probable carcinogen found in 46% of cleaning products.",
+                theTruth = "This chemical is not listed on labels. It is created when making sudsing agents like SLES. It is a persistent kidney and liver toxin.",
+                theCommand = "Avoid ingredients containing 'PEG', 'Polyethylene', or '-eth'.",
+                theExecution = listOf(
+                    "Scan for: 'Sodium Laureth Sulfate' (SLES), 'Polysorbate-20', or 'PEG-100'.",
+                    "Choose products certified by 'EWG Verified' or 'MADE SAFE'.",
+                    "Prefer 'Sodium Coco Sulfate' or 'Glucosides' as sudsing agents."
+                ),
+                theShield = "Significantly lowers your exposure to a hidden industrial contaminant.",
+                category = SignalCategory.CLEANING,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("EPA / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("PEG", "Sodium Laureth Sulfate", "Polysorbate", "Ceteareth"),
+                safeAlternatives = listOf("Sodium Coco Sulfate", "Decyl Glucoside"),
+                interactionContexts = listOf("Store")
             )
         )
         signals.forEach { memory.saveSignal(it); seedThread(it) }
@@ -291,23 +383,46 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 id = "food-add-1",
                 title = "Meat Safety: Avoiding Nitrates (E250)",
                 summary = "Chemicals used to keep meats pink can damage your colon.",
-                theTruth = "Sodium Nitrite (E250) reacts in your stomach to form toxins that can damage your DNA.",
-                theCommand = "Choose natural, unpreserved meats over 'cured' pink ones.",
+                theTruth = "Sodium Nitrite (E250) reacts with stomach acid to form Nitrosamines—powerful chemicals that damage DNA and cause colorectal cancer.",
+                theCommand = "Choose 'Nitrite-Free' or brown/grey natural sausages and hams.",
                 theExecution = listOf(
                     "Look for 'E250' or 'Sodium Nitrite' on the package.",
-                    "Pick meats that are brown or grey (natural) instead of bright pink.",
-                    "Prefer fresh chicken, fish, or beans."
+                    "Avoid 'Celery Powder' if it is being used as a high-nitrate 'natural' preservative.",
+                    "Prioritize fresh meat, sea-salt cured meat, or plant-based proteins."
                 ),
-                theShield = "Directly stops the formation of DNA-damaging chemicals in your body.",
+                theShield = "Directly stops the production of cancer-causing chemicals in your digestive tract.",
                 category = SignalCategory.FOOD,
                 importance = SignalImportance.CRITICAL,
                 confidence = SignalConfidence.VERY_HIGH,
                 detectedAt = now,
                 publishedAt = now,
-                source = SignalSource("World Health Organization", ""),
+                source = SignalSource("IARC / Agency Intelligence", ""),
                 isActionable = true,
-                affectedIngredients = listOf("Sodium Nitrite", "E250", "Curing Salt"),
-                safeAlternatives = listOf("Fresh Meat", "Sea Salt Only"),
+                affectedIngredients = listOf("Sodium Nitrite", "E250", "Curing Salt", "Nitrate"),
+                safeAlternatives = listOf("Fresh Meat", "Nitrite-Free products"),
+                interactionContexts = listOf("Store")
+            ),
+            Signal(
+                id = "food-add-2",
+                title = "Titanium Dioxide (E171): Whitening Risk",
+                summary = "Whitening pigment in candies and pills that can cross the gut barrier.",
+                theTruth = "E171 contains nanoparticles that cause chronic inflammation in the intestines. It is banned in the EU but common elsewhere.",
+                theCommand = "Avoid products with bright white coatings or 'E171'.",
+                theExecution = listOf(
+                    "Check labels of candies, chewing gum, and cake frostings.",
+                    "Scan vitamin and pill labels for 'Titanium Dioxide'.",
+                    "Choose products that use Calcium Carbonate or are untinted."
+                ),
+                theShield = "Maintains the health of your gut lining and prevents industrial nanoparticle buildup.",
+                category = SignalCategory.FOOD,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("EFSA / Agency Intelligence", ""),
+                isActionable = true,
+                affectedIngredients = listOf("Titanium Dioxide", "E171", "CI 77891"),
+                safeAlternatives = listOf("Calcium Carbonate", "Natural Coloring"),
                 interactionContexts = listOf("Store")
             )
         )
@@ -321,14 +436,14 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 id = "seed-cellphone-1",
                 title = "Peace of Mind: Cell Phones are Safe",
                 summary = "There is no scientific proof that phone waves cause brain tumors.",
-                theTruth = "Cell phones use 'non-ionizing' waves. These are too weak to damage your DNA or cause cancer.",
+                theTruth = "Radiofrequency (RF) waves from phones are 'non-ionizing.' They do not have enough energy to damage DNA or cause the mutations that lead to cancer.",
                 theCommand = "You are safe to use your device as normal.",
                 theExecution = listOf(
-                    "Ignore viral posts about 5G or phone radiation.",
-                    "If you want to be extra careful, use a headset to keep the phone away from your ear.",
-                    "Don't waste money on 'radiation stickers'—they don't work."
+                    "Ignore viral posts about 5G or 'brain-frying' radiation.",
+                    "If you are concerned about heat, use a speakerphone or wired headset.",
+                    "Don't waste money on 'radiation stickers'—they are biologically useless."
                 ),
-                theShield = "Protects you from unnecessary stress and from wasting money on fake safety products.",
+                theShield = "Protects you from unnecessary stress and predatory 'protection' scams.",
                 category = SignalCategory.ENVIRONMENT,
                 importance = SignalImportance.LOW,
                 confidence = SignalConfidence.VERY_HIGH,

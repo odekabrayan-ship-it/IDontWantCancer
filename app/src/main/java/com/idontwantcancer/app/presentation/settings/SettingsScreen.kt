@@ -48,7 +48,22 @@ fun SettingsScreen(
             contentPadding = PaddingValues(vertical = spacing.medium)
         ) {
             item {
-                SettingsSectionHeader(title = "MISSION")
+                SettingsSectionHeader(title = "IDENTITY & REGION")
+            }
+            item {
+                ListItem(
+                    headlineContent = { Text("Agency Location") },
+                    supportingContent = { Text("Intelligence is tailored for your region") },
+                    trailingContent = {
+                        Text(
+                            text = java.util.Locale("", viewModel.userCountry).displayCountry,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    },
+                    leadingContent = { Icon(Icons.Default.Public, contentDescription = null) }
+                )
             }
             item {
                 ListItem(

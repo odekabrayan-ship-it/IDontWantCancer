@@ -68,15 +68,16 @@ fun SignalCard(
                 text = signal.theCommand ?: signal.title,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.onSurface
+                color = if (signal.importance == SignalImportance.CRITICAL) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+                lineHeight = 28.sp
             )
             if (signal.theCommand != null) {
                 Text(
-                    text = signal.title,
+                    text = "IDENTIFIED RISK: ${signal.title}",
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.secondary,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 2.dp)
+                    modifier = Modifier.padding(top = 4.dp)
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))

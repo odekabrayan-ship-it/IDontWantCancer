@@ -25,6 +25,8 @@ class SettingsViewModel @Inject constructor(
             initialValue = UserMission.UNDEFINED
         )
 
+    val userCountry: String = userContextRepository.getUserCountryCode()
+
     fun setMission(mission: UserMission) {
         viewModelScope.launch {
             userContextRepository.setUserMission(mission)

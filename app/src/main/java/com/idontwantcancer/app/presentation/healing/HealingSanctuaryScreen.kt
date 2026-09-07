@@ -281,6 +281,44 @@ private fun ClinicalSectionHeader(title: String, color: androidx.compose.ui.grap
 }
 
 @Composable
+private fun ClinicalReadinessChecklist() {
+    val spacing = LocalSpacing.current
+    var checkedItems by remember { mutableStateOf(setOf<Int>()) }
+    val items = listOf(
+        "I have a digital thermometer ready.",
+        "My 'Red Folder' (medical cards) is by the door.",
+        "My Oncology Hotline is saved in my phone."
+    )
+
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+        shape = MaterialTheme.shapes.extraSmall,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "CLINICAL READINESS CHECKLIST",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.secondary
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            items.forEachIndexed { index, item ->
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 4.dp)) {
+                    Checkbox(
+                        checked = index in checkedItems,
+                        onCheckedChange = { 
+                            checkedItems = if (it) checkedItems + index else checkedItems - index
+                        }
+                    )
+                    Text(item, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun RedFlagDossierCard(flag: RedFlagDirective) {
     var expanded by remember { mutableStateOf(false) }
     val colorScheme = MaterialTheme.colorScheme

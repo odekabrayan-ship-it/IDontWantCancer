@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -62,6 +63,9 @@ fun SearchScreen(
     val focusRequester = remember { FocusRequester() }
     val navigator = rememberListDetailPaneScaffoldNavigator<String>()
     val scope = rememberCoroutineScope()
+    
+    // NEW: Context filter state
+    var storeFilterActive by rememberSaveable { mutableStateOf(false) }
 
     BackHandler(navigator.canNavigateBack()) {
         scope.launch {
@@ -118,7 +122,19 @@ fun SearchScreen(
                             text = stringResource(R.string.search_subtitle),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 4.dp, bottom = 24.dp)
+                            modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
+                        )
+                        
+                        // NEW: Aisle-Side Filter
+                        FilterChip(
+                            selected = storeFilterActive,
+                            onClick = { storeFilterActive = !storeFilterActive },
+                            label = { Text("🛒 AT THE STORE") },
+                            leadingIcon = if (storeFilterActive) {
+                                { Icon(Icons.Default.Check, contentDescription = null, modifier = Modifier.size(16.dp)) }
+                            } else null,
+                            modifier = Modifier.padding(bottom = 16.dp),
+                            shape = MaterialTheme.shapes.extraSmall
                         )
 
                         OutlinedTextField(
@@ -191,17 +207,24 @@ fun SearchScreen(
                                         )
                                     }
                                 }
-                                is SearchUiState.Success -> SearchResultsList(
-                                signals = state.signals,
-                                reconciliations = state.reconciliations,
-                                finality = state.finality,
-                                selectedSignalId = state.selectedSignalId,
-                                onInteraction = onInteraction,
-                                onScroll = {
-                                    focusManager.clearFocus()
-                                    keyboardController?.hide()
+                                is SearchUiState.Success -> {
+                                    val filteredSignals = if (storeFilterActive) {
+                                        state.signals.filter { "Store" in it.interactionContexts }
+                                    } else {
+                                        state.signals
+                                    }
+                                    SearchResultsList(
+                                        signals = filteredSignals,
+                                        reconciliations = state.reconciliations,
+                                        finality = state.finality,
+                                        selectedSignalId = state.selectedSignalId,
+                                        onInteraction = onInteraction,
+                                        onScroll = {
+                                            focusManager.clearFocus()
+                                            keyboardController?.hide()
+                                        }
+                                    )
                                 }
-                            )
                                 is SearchUiState.Empty -> AgencyEmptyState(
                                     title = stringResource(R.string.search_empty_title),
                                     description = stringResource(R.string.search_empty_desc)

@@ -217,7 +217,10 @@ private fun PreventionContent(state: PreventionUiState.Success, viewModel: Preve
         }
 
         items(state.educationLessons, key = { it.id }) { lesson ->
-            EducationLessonItem(lesson)
+            EducationLessonItem(
+                lesson = lesson,
+                onRead = { viewModel.markLessonAsRead(lesson.id) }
+            )
         }
         
         item {
@@ -456,17 +459,28 @@ private fun NutritionTruthItem(truth: NutritionIntelligence) {
 }
 
 @Composable
-private fun EducationLessonItem(lesson: EducationLesson) {
+private fun EducationLessonItem(
+    lesson: EducationLesson,
+    onRead: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     val spacing = LocalSpacing.current
+
+    // Automatically mark as read when expanded
+    LaunchedEffect(expanded) {
+        if (expanded && !lesson.isRead) {
+            onRead()
+        }
+    }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = spacing.screenPadding, vertical = spacing.extraSmall),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-        )
+            containerColor = if (lesson.isRead) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+        ),
+        border = if (lesson.isRead) null else BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f))
     ) {
         Column(
             modifier = Modifier
@@ -484,6 +498,10 @@ private fun EducationLessonItem(lesson: EducationLesson) {
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )
+                if (lesson.isRead) {
+                    Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(16.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
                 Icon(
                     imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                     contentDescription = null

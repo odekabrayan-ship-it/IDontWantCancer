@@ -49,78 +49,18 @@ class BaselineIntelligenceSeeder @Inject constructor(
 
     private suspend fun seedCosmeticRegistry() {
         val data = listOf(
-            RegistrySeed(
-                "Parabens", 
-                listOf("Methylparaben", "Propylparaben", "Butylparaben", "Ethylparaben", "Isobutylparaben", "E216", "E218"), 
-                "Endocrine Disruptors common in lotions and makeup. They mimic estrogen and can promote breast cancer cell growth.", 
-                listOf("Lotion", "Moisturizer", "Makeup", "Preservative", "Bathroom")
-            ),
-            RegistrySeed(
-                "Formaldehyde Releasers", 
-                listOf("DMDM Hydantoin", "Quaternium-15", "Imidazolidinyl Urea", "Diazolidinyl Urea", "Bronopol"), 
-                "Preservatives that slowly release known human carcinogens into your skin and air.", 
-                listOf("Shampoo", "Body Wash", "Conditioner", "Bathroom")
-            ),
-            RegistrySeed(
-                "Phthalates", 
-                listOf("DEP", "DBP", "DEHP", "Phthalate", "Fragrance", "Parfum", "Synthetic Musk"), 
-                "Hormone disruptors that make scents last longer. Linked to reproductive issues and hormone-sensitive cancers.", 
-                listOf("Perfume", "Cologne", "Fragrance", "Scent")
-            ),
-            RegistrySeed(
-                "Ethanolamines", 
-                listOf("DEA", "TEA", "MEA", "Diethanolamine", "Triethanolamine", "Cocamide DEA", "Lauramide DEA"), 
-                "Chemicals used as sudsing agents. Can react with other ingredients to form Nitrosamines, which are powerful carcinogens.", 
-                listOf("Soap", "Sudsing", "Foam", "Detergent")
-            ),
-            RegistrySeed(
-                "Coal Tar", 
-                listOf("Coal Tar", "CI 77266", "Carbon Black", "P-phenylenediamine", "PPD", "Aminophenol"), 
-                "Used in dandruff shampoos and hair dyes. A known human carcinogen (Group 1).", 
-                listOf("Hair Dye", "Dandruff", "Scalp", "Black Dye")
-            ),
-            RegistrySeed(
-                "Synthetic Musks", 
-                listOf("Galaxolide", "Tonalide", "HHCB", "AHTN", "Musk Xylene"), 
-                "Highly persistent chemicals used in perfumes. They build up in human fat tissue and disrupt hormones.", 
-                listOf("Perfume", "Laundry", "Dryer Sheet")
-            ),
-            RegistrySeed(
-                "Chemical UV Filters", 
-                listOf("Oxybenzone", "Octinoxate", "Benzophenone-3", "Avobenzone", "Homosalate", "Octocrylene"), 
-                "Sunscreen chemicals that absorb into the body at high rates and disrupt hormonal balance.", 
-                listOf("Sunscreen", "SPF", "Sunblock", "Beach")
-            ),
-            RegistrySeed(
-                "PFAS (Forever Chemicals)", 
-                listOf("PTFE", "Perfluoro", "Polyperfluoromethylisopropyl Ether", "Teflon", "Fluorine"), 
-                "Used in waterproof mascara and long-wear foundations. Linked to kidney cancer and immune suppression.", 
-                listOf("Waterproof", "Makeup", "Mascara", "Eyeliner")
-            ),
-            RegistrySeed(
-                "Lead Acetate", 
-                listOf("Lead Acetate"), 
-                "Found in some progressive hair dyes. Lead is a neurotoxin and suspected carcinogen.", 
-                listOf("Hair Dye", "Metal", "Neurotoxin")
-            ),
-            RegistrySeed(
-                "Talcum Powder", 
-                listOf("Talc", "Hydrous Magnesium Silicate", "Magnesium Silicate"), 
-                "Can be naturally contaminated with asbestos. Linked to ovarian and lung cancer.", 
-                listOf("Body Powder", "Baby Powder", "Asbestos", "Dust")
-            ),
-            RegistrySeed(
-                "Resorcinol", 
-                listOf("Resorcinol", "1,3-benzenediol"), 
-                "Found in hair dyes and acne treatments. Linked to thyroid disruption and immune system issues.", 
-                listOf("Hair Dye", "Acne", "Skin Treatment")
-            ),
-            RegistrySeed(
-                "Carbon Black", 
-                listOf("Carbon Black", "D&C Black No. 2", "Acetylene Black"), 
-                "Used in eyeliners and mascaras. Linked to cancer and organ system toxicity.", 
-                listOf("Mascara", "Eyeliner", "Black Pigment")
-            )
+            RegistrySeed("Parabens", listOf("Methylparaben", "Propylparaben", "Butylparaben", "Ethylparaben", "Isobutylparaben", "E216", "E218"), "Endocrine Disruptors common in lotions and makeup. They mimic estrogen and can promote breast cancer cell growth.", listOf("Lotion", "Moisturizer", "Makeup", "Preservative", "Bathroom")),
+            RegistrySeed("Formaldehyde Releasers", listOf("DMDM Hydantoin", "Quaternium-15", "Imidazolidinyl Urea", "Diazolidinyl Urea", "2-bromo-2-nitropropane-1,3-diol", "Bronopol"), "Preservatives that slowly release known human carcinogens into your skin and air.", listOf("Shampoo", "Body Wash", "Conditioner", "Bathroom")),
+            RegistrySeed("Phthalates", listOf("DEP", "DBP", "DEHP", "Phthalate", "Fragrance", "Parfum", "Synthetic Musk"), "Hormone disruptors that make scents last longer. Linked to reproductive issues and hormone-sensitive cancers.", listOf("Perfume", "Cologne", "Fragrance", "Scent")),
+            RegistrySeed("Ethanolamines", listOf("DEA", "TEA", "MEA", "Diethanolamine", "Triethanolamine", "Cocamide DEA", "Lauramide DEA"), "Chemicals used as sudsing agents. Can react with other ingredients to form Nitrosamines, which are powerful carcinogens.", listOf("Soap", "Sudsing", "Foam", "Detergent")),
+            RegistrySeed("Coal Tar", listOf("Coal Tar", "CI 77266", "Carbon Black", "P-phenylenediamine", "PPD", "Aminophenol"), "Used in dandruff shampoos and hair dyes. A known human carcinogen (Group 1).", listOf("Hair Dye", "Dandruff", "Scalp", "Black Dye")),
+            RegistrySeed("Synthetic Musks", listOf("Galaxolide", "Tonalide", "HHCB", "AHTN", "Musk Xylene"), "Highly persistent chemicals used in perfumes. They build up in human fat tissue and disrupt hormones.", listOf("Perfume", "Laundry", "Dryer Sheet")),
+            RegistrySeed("Chemical UV Filters", listOf("Oxybenzone", "Octinoxate", "Benzophenone-3", "Avobenzone", "Homosalate", "Octocrylene"), "Sunscreen chemicals that absorb into the body at high rates and disrupt hormonal balance.", listOf("Sunscreen", "SPF", "Sunblock", "Beach")),
+            RegistrySeed("PFAS (Forever Chemicals)", listOf("PTFE", "Perfluoro", "Polyperfluoromethylisopropyl Ether", "Teflon", "Fluorine"), "Used in waterproof mascara and long-wear foundations. Linked to kidney cancer and immune suppression.", listOf("Waterproof", "Makeup", "Mascara", "Eyeliner")),
+            RegistrySeed("Lead Acetate", listOf("Lead Acetate"), "Found in some progressive hair dyes. Lead is a neurotoxin and suspected carcinogen.", listOf("Hair Dye", "Metal", "Neurotoxin")),
+            RegistrySeed("Talcum Powder", listOf("Talc", "Hydrous Magnesium Silicate", "Magnesium Silicate"), "Can be naturally contaminated with asbestos. Linked to ovarian and lung cancer.", listOf("Body Powder", "Baby Powder", "Asbestos", "Dust")),
+            RegistrySeed("Resorcinol", listOf("Resorcinol", "1,3-benzenediol"), "Found in hair dyes and acne treatments. Linked to thyroid disruption and immune system issues.", listOf("Hair Dye", "Acne", "Skin Treatment")),
+            RegistrySeed("Carbon Black", listOf("Carbon Black", "D&C Black No. 2", "Acetylene Black"), "Used in eyeliners and mascaras. Linked to cancer and organ system toxicity.", listOf("Mascara", "Eyeliner", "Black Pigment"))
         )
 
         data.forEach { seed ->
@@ -149,36 +89,11 @@ class BaselineIntelligenceSeeder @Inject constructor(
 
     private suspend fun seedHouseholdRegistry() {
         val data = listOf(
-            RegistrySeed(
-                "Triclosan", 
-                listOf("Triclosan", "Triclocarban"), 
-                "Antibacterial agent that disrupts thyroid hormones and contributes to antibiotic resistance.", 
-                listOf("Antibacterial", "Soap", "Toothpaste", "Kitchen")
-            ),
-            RegistrySeed(
-                "1,4-Dioxane", 
-                listOf("PEG", "Polyethylene Glycol", "Sodium Laureth Sulfate", "SLES", "Ceteareth", "Polysorbate"), 
-                "A probable carcinogen that is a manufacturing byproduct. Found in sudsing products like dish soap and laundry detergent.", 
-                listOf("Laundry", "Dish Soap", "Sudsing", "Foam")
-            ),
-            RegistrySeed(
-                "Quats", 
-                listOf("Benzalkonium Chloride", "Distearyldimonium Chloride", "Quaternium-18"), 
-                "Quaternary Ammonium Compounds used as disinfectants and fabric softeners. Potent lung irritants and endocrine disruptors.", 
-                listOf("Fabric Softener", "Disinfectant", "Wipes", "Laundry")
-            ),
-            RegistrySeed(
-                "Ammonia", 
-                listOf("Ammonia", "Ammonium Hydroxide"), 
-                "Found in window cleaners. Can react with bleach to create deadly Mustard Gas. Chronic exposure is hard on the lungs.", 
-                listOf("Window Cleaner", "Glass", "Ammonia", "Janitorial")
-            ),
-            RegistrySeed(
-                "2-Butoxyethanol", 
-                listOf("2-Butoxyethanol", "Ethylene Glycol Monobutyl Ether"), 
-                "Found in multipurpose and glass cleaners. A known organ toxin linked to blood disorders and potential cancer.", 
-                listOf("Multipurpose", "Spray", "Cleaner", "Solvent")
-            )
+            RegistrySeed("Triclosan", listOf("Triclosan", "Triclocarban"), "Antibacterial agent that disrupts thyroid hormones and contributes to antibiotic resistance.", listOf("Antibacterial", "Soap", "Toothpaste", "Kitchen")),
+            RegistrySeed("1,4-Dioxane", listOf("PEG", "Polyethylene Glycol", "Sodium Laureth Sulfate", "SLES", "Ceteareth", "Polysorbate"), "A probable carcinogen that is a manufacturing byproduct. Found in sudsing products like dish soap and laundry detergent.", listOf("Laundry", "Dish Soap", "Sudsing", "Foam")),
+            RegistrySeed("Quats", listOf("Benzalkonium Chloride", "Distearyldimonium Chloride", "Quaternium-18"), "Quaternary Ammonium Compounds used as disinfectants and fabric softeners. Potent lung irritants and endocrine disruptors.", listOf("Fabric Softener", "Disinfectant", "Wipes", "Laundry")),
+            RegistrySeed("Ammonia", listOf("Ammonia", "Ammonium Hydroxide"), "Found in window cleaners. Can react with bleach to create deadly Mustard Gas. Chronic exposure is hard on the lungs.", listOf("Window Cleaner", "Glass", "Ammonia", "Janitorial")),
+            RegistrySeed("2-Butoxyethanol", listOf("2-Butoxyethanol", "Ethylene Glycol Monobutyl Ether"), "Found in multipurpose and glass cleaners. A known organ toxin linked to blood disorders and potential cancer.", listOf("Multipurpose", "Spray", "Cleaner", "Solvent"))
         )
 
         data.forEach { seed ->
@@ -207,72 +122,17 @@ class BaselineIntelligenceSeeder @Inject constructor(
 
     private suspend fun seedFoodAdditiveRegistry() {
         val data = listOf(
-            RegistrySeed(
-                "Sodium Nitrite", 
-                listOf("E250", "Sodium Nitrite", "Curing Salt", "Pink Salt", "Prague Powder", "Nitrate"), 
-                "Used in bacon and ham. Forms DNA-damaging Nitrosamines in your stomach.", 
-                listOf("Bacon", "Ham", "Deli Meat", "Pink Meat")
-            ),
-            RegistrySeed(
-                "Titanium Dioxide", 
-                listOf("E171", "Titanium Dioxide", "CI 77891", "Pigment White 6"), 
-                "Whitening pigment in candies and pills. Contains nanoparticles that can damage the gut barrier.", 
-                listOf("Candy", "Chewing Gum", "Pill Coating", "White Food")
-            ),
-            RegistrySeed(
-                "Potassium Bromate", 
-                listOf("E924", "Potassium Bromate", "Bromated Flour", "Enriched Bromated Flour"), 
-                "Flour improver that is a known carcinogen. Banned in most countries except the USA.", 
-                listOf("Bread", "Flour", "Bakery", "White Bread")
-            ),
-            RegistrySeed(
-                "BHA & BHT", 
-                listOf("E320", "E321", "Butylated Hydroxyanisole", "Butylated Hydroxytoluene", "Antioxidant 320"), 
-                "Preservatives used in oils and cereals. Linked to hormonal disruption and cancer.", 
-                listOf("Cereal", "Oils", "Chips", "Preservative")
-            ),
-            RegistrySeed(
-                "Azo Dyes", 
-                listOf("Red 40", "Yellow 5", "Yellow 6", "E129", "E102", "E110", "Red 3", "E127", "Tartrazine", "Allura Red"), 
-                "Synthetic food colors derived from petroleum. Suspected carcinogens.", 
-                listOf("Coloring", "Cereal", "Candy", "Soda")
-            ),
-            RegistrySeed(
-                "Propyl Gallate", 
-                listOf("E310", "Propyl Gallate"), 
-                "Antioxidant used to prevent oils from going rancid. Suspected endocrine disruptor.", 
-                listOf("Oils", "Mayonnaise", "Lard", "Preservative")
-            ),
-            RegistrySeed(
-                "Carrageenan", 
-                listOf("E407", "Carrageenan", "Irish Moss Extract"), 
-                "Thickener found in dairy and plant milks. Can cause intense gut inflammation, a precursor to cancer.", 
-                listOf("Milk", "Yogurt", "Dairy Free", "Thickener")
-            ),
-            RegistrySeed(
-                "TBHQ", 
-                listOf("Tertiary Butylhydroquinone", "E319", "Antioxidant 319"), 
-                "Preservative in crackers and frozen foods. Linked to immune system damage.", 
-                listOf("Crackers", "Frozen Food", "Chicken Nuggets", "Preservative")
-            ),
-            RegistrySeed(
-                "Potassium Iodate", 
-                listOf("E917", "Potassium Iodate"), 
-                "Flour treatment agent. Linked to thyroid dysfunction and potential carcinogenic effects.", 
-                listOf("Bread", "Bakery", "Flour")
-            ),
-            RegistrySeed(
-                "Aspartame", 
-                listOf("E951", "Aspartame", "Equal", "NutraSweet"), 
-                "Artificial sweetener classified as 'possibly carcinogenic' by IARC (2B).", 
-                listOf("Diet Soda", "Sugar Free", "Sweetener")
-            ),
-            RegistrySeed(
-                "Acesulfame K", 
-                listOf("E950", "Acesulfame Potassium", "Ace-K"), 
-                "Artificial sweetener. Some studies suggest potential for thyroid disruption and cancer.", 
-                listOf("Diet Soda", "Sugar Free", "Sweetener")
-            )
+            RegistrySeed("Sodium Nitrite", listOf("E250", "Sodium Nitrite", "Curing Salt", "Pink Salt", "Prague Powder", "Nitrate"), "Used in bacon and ham. Forms DNA-damaging Nitrosamines in your stomach.", listOf("Bacon", "Ham", "Deli Meat", "Pink Meat")),
+            RegistrySeed("Titanium Dioxide", listOf("E171", "Titanium Dioxide", "CI 77891", "Pigment White 6"), "Whitening pigment in candies and pills. Contains nanoparticles that can damage the gut barrier.", listOf("Candy", "Chewing Gum", "Pill Coating", "White Food")),
+            RegistrySeed("Potassium Bromate", listOf("E924", "Potassium Bromate", "Bromated Flour", "Enriched Bromated Flour"), "Flour improver that is a known carcinogen. Banned in most countries except the USA.", listOf("Bread", "Flour", "Bakery", "White Bread")),
+            RegistrySeed("BHA & BHT", listOf("E320", "E321", "Butylated Hydroxyanisole", "Butylated Hydroxytoluene", "Antioxidant 320"), "Preservatives used in oils and cereals. Linked to hormonal disruption and cancer.", listOf("Cereal", "Oils", "Chips", "Preservative")),
+            RegistrySeed("Azo Dyes", listOf("Red 40", "Yellow 5", "Yellow 6", "E129", "E102", "E110", "Red 3", "E127", "Tartrazine", "Allura Red"), "Synthetic food colors derived from petroleum. Suspected carcinogens.", listOf("Coloring", "Cereal", "Candy", "Soda")),
+            RegistrySeed("Propyl Gallate", listOf("E310", "Propyl Gallate"), "Antioxidant used to prevent oils from going rancid. Suspected endocrine disruptor.", listOf("Oils", "Mayonnaise", "Lard", "Preservative")),
+            RegistrySeed("Carrageenan", listOf("E407", "Carrageenan", "Irish Moss Extract"), "Thickener found in dairy and plant milks. Can cause intense gut inflammation, a precursor to cancer.", listOf("Milk", "Yogurt", "Dairy Free", "Thickener")),
+            RegistrySeed("TBHQ", listOf("Tertiary Butylhydroquinone", "E319", "Antioxidant 319"), "Preservative in crackers and frozen foods. Linked to immune system damage.", listOf("Crackers", "Frozen Food", "Chicken Nuggets", "Preservative")),
+            RegistrySeed("Potassium Iodate", listOf("E917", "Potassium Iodate"), "Flour treatment agent. Linked to thyroid dysfunction and potential carcinogenic effects.", listOf("Bread", "Bakery", "Flour")),
+            RegistrySeed("Aspartame", listOf("E951", "Aspartame", "Equal", "NutraSweet"), "Artificial sweetener classified as 'possibly carcinogenic' by IARC (2B).", listOf("Diet Soda", "Sugar Free", "Sweetener")),
+            RegistrySeed("Acesulfame K", listOf("E950", "Acesulfame Potassium", "Ace-K"), "Artificial sweetener. Some studies suggest potential for thyroid disruption and cancer.", listOf("Diet Soda", "Sugar Free", "Sweetener"))
         )
 
         data.forEach { seed ->
@@ -548,7 +408,8 @@ class BaselineIntelligenceSeeder @Inject constructor(
         affectedIngredients: List<String>,
         safeAlternatives: List<String>,
         interactionContexts: List<String>,
-        discoveryTags: List<String> = emptyList()
+        discoveryTags: List<String> = emptyList(),
+        investigatedClaim: String? = null
     ) {
         val signal = Signal(
             id = id,
@@ -568,7 +429,9 @@ class BaselineIntelligenceSeeder @Inject constructor(
             affectedIngredients = affectedIngredients,
             safeAlternatives = safeAlternatives,
             interactionContexts = interactionContexts,
-            discoveryTags = discoveryTags
+            discoveryTags = discoveryTags,
+            verdict = if (importance == SignalImportance.CRITICAL) EvidenceVerdict.MISLEADING else EvidenceVerdict.NOT_SUPPORTED,
+            investigatedClaim = investigatedClaim
         )
         memory.saveSignal(signal)
         seedThread(signal)
@@ -812,17 +675,57 @@ class BaselineIntelligenceSeeder @Inject constructor(
     }
 
     private suspend fun seedEducationLessons() {
-        val lessons = listOf(
+        val data = listOf(
             EducationLesson(
-                id = "edu-1",
-                title = "Focus on Exposure, Not Just Hazard",
-                summary = "Learn how to prioritize what really matters for your safety.",
-                content = "A 'Hazard' is something that *can* cause harm. 'Risk' is the chance it *will* harm you. Risk = Hazard x Exposure. You are safe near a hazard if you reduce your exposure time.",
+                id = "edu-risk-vs-hazard",
+                title = "Strategy: Hazard vs. Risk",
+                summary = "Learn why some carcinogens matter more than others.",
+                content = "A 'Hazard' is something that can cause harm. 'Risk' is the chance it *will* harm you. Risk = Hazard x Exposure. You are safe near a hazard if you reduce your exposure time.",
                 keyTakeaway = "Don't panic about every chemical. Focus on the ones you touch every single day.",
-                source = "Agency Foundation"
+                source = "Agency Strategic Briefing"
+            ),
+            EducationLesson(
+                id = "edu-dose-response",
+                title = "Strategy: The Dose-Response Rule",
+                summary = "Why frequency is the most important factor in your safety.",
+                content = "Your body can repair minor DNA damage from one-off exposures. Cancer risk becomes high when you are exposed to the same carcinogen daily (e.g., in your soap or daily meat).",
+                keyTakeaway = "Prioritize removing daily toxins over rare special-occasion treats.",
+                source = "Agency Strategic Briefing"
+            ),
+            EducationLesson(
+                id = "edu-detox-phase-2",
+                title = "Masterclass: Real Biological Detox",
+                summary = "How your body actually cleans itself without 'teas' or 'cleanses'.",
+                content = "Your liver uses 'Phase II Detox' enzymes (GST, SULT) to make toxins water-soluble so they can leave your body. Cruciferous veggies (Broccoli) trigger these enzymes.",
+                keyTakeaway = "Eat broccoli and cabbage to 'turn on' your body's natural cleaning system.",
+                source = "Agency Strategic Briefing"
+            ),
+            EducationLesson(
+                id = "edu-insulin-tumor",
+                title = "Masterclass: Tumor Fuel (Insulin)",
+                summary = "The link between liquid sugar and cancer growth.",
+                content = "Liquid sugar causes a spike in Insulin and IGF-1. These are growth hormones. High levels can act like 'fertilizer' for tiny tumors that your immune system hasn't caught yet.",
+                keyTakeaway = "Eliminate sugary drinks to lower your body's growth-hormone levels.",
+                source = "Agency Strategic Briefing"
+            ),
+            EducationLesson(
+                id = "edu-label-scan-pro",
+                title = "Masterclass: 5-Second Label Scan",
+                summary = "A professional protocol for reading ingredients.",
+                content = "Don't read the whole label. Look for the top 3 ingredients first (volume) and then skip to the very end for preservatives (Parabens) and colors (Azo Dyes).",
+                keyTakeaway = "The end of the label is often where the highest risks are hidden.",
+                source = "Agency Strategic Briefing"
+            ),
+            EducationLesson(
+                id = "edu-dna-repair",
+                title = "Masterclass: DNA Repair Kit",
+                summary = "The nutrients that act as 'mechanics' for your cells.",
+                content = "Folate (greens) and Zinc (seeds) are essential for the enzymes that repair broken DNA strands. Without them, cell mutations can go uncorrected and lead to cancer.",
+                keyTakeaway = "Greens and seeds are not just 'healthy'—they are the literal repair tools for your DNA.",
+                source = "Agency Strategic Briefing"
             )
         )
-        preventionRepository.saveEducationLessons(lessons)
+        preventionRepository.saveEducationLessons(data)
     }
 
     private suspend fun seedPreventionActions() {
@@ -1050,229 +953,72 @@ class BaselineIntelligenceSeeder @Inject constructor(
 
     private suspend fun seedTruthCheckSignals() {
         val now = Instant.now()
-        val signals = listOf(
-            Signal(
-                id = "truth-sugar-feeds",
-                title = "Myth Check: Sugar Feeds Cancer",
-                summary = "All cells use sugar, but eating sugar doesn't make cancer grow faster.",
-                theTruth = "Every cell in your body uses glucose (sugar) for energy. While cancer cells use it faster, there is no evidence that eating sugar directly feeds tumors. However, too much sugar leads to obesity, which IS a cancer risk.",
-                theCommand = "Manage sugar for weight control, not to 'starve' cancer.",
-                theExecution = listOf(
-                    "Limit sugary sodas and sweets to maintain a healthy weight.",
-                    "Don't panic about natural sugars in fruit.",
-                    "Focus on a balanced diet rather than extreme sugar-cutting."
-                ),
-                theShield = "Protects you from the stress of an impossible diet while keeping your weight in a safe range.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.LOW,
-                confidence = SignalConfidence.VERY_HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("Mayo Clinic / Agency Truth Check", ""),
-                verdict = EvidenceVerdict.MISLEADING,
-                investigatedClaim = "Sugar feeds cancer and should be zeroed.",
-                interactionContexts = listOf("Home")
-            ),
-            Signal(
-                id = "truth-alkaline-diet",
-                title = "Myth Check: Alkaline Diet Cures Cancer",
-                summary = "Your body's pH is tightly controlled and cannot be changed by what you eat.",
-                theTruth = "Cancer cannot survive in an alkaline lab dish, but your blood pH is strictly kept at 7.4 by your lungs and kidneys. Eating alkaline foods (like lemons or greens) won't change your body's internal chemistry.",
-                theCommand = "Eat greens for their nutrients, not to change your pH.",
-                theExecution = listOf(
-                    "Ignore claims that 'cancer cannot live in an alkaline body'.",
-                    "Maintain a balanced diet rich in varied vegetables.",
-                    "Don't waste money on expensive alkaline water machines."
-                ),
-                theShield = "Protects you from predatory 'cure' scams and biologically useless devices.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.MODERATE,
-                confidence = SignalConfidence.VERY_HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("American Cancer Society / Agency Truth Check", ""),
-                verdict = EvidenceVerdict.NOT_SUPPORTED,
-                investigatedClaim = "An alkaline diet can cure or treat cancer.",
-                interactionContexts = listOf("Home")
-            ),
-            Signal(
-                id = "truth-cell-phones",
-                title = "Myth Check: Cell Phones and 5G",
-                summary = "Phone waves are non-ionizing and too weak to damage your DNA.",
-                theTruth = "Cell phones and 5G networks use radiofrequency (RF) waves. Unlike X-rays, these are 'non-ionizing'—they don't have enough energy to break DNA strands or cause cancer.",
-                theCommand = "You are safe to use your devices as normal.",
-                theExecution = listOf(
-                    "Ignore viral posts about '5G radiation' causing brain tumors.",
-                    "If you want extra comfort, use a speakerphone or wired headset.",
-                    "Don't waste money on 'EMF protection' stickers."
-                ),
-                theShield = "Protects you from unnecessary radiation anxiety and financial scams.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.LOW,
-                confidence = SignalConfidence.VERY_HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("WHO / Agency Truth Check", ""),
-                verdict = EvidenceVerdict.NOT_SUPPORTED,
-                investigatedClaim = "Cell phones and 5G networks cause brain tumors.",
-                interactionContexts = listOf("Public", "Work")
-            ),
-            Signal(
-                id = "truth-biopsy-spread",
-                title = "Myth Check: Biopsies Spread Cancer",
-                summary = "Medical procedures follow strict rules to prevent cancer from moving.",
-                theTruth = "It is extremely rare for a biopsy or surgery to cause cancer to spread. Doctors use special techniques and tools to ensure any cancer cells stay contained during the test.",
-                theCommand = "Do not skip your biopsy; it is the only way to get the right treatment.",
-                theExecution = listOf(
-                    "Trust that your surgical team is trained to prevent 'seeding'.",
-                    "Understand that finding cancer during surgery usually means it was already there.",
-                    "Get the diagnostic test your doctor recommends immediately."
-                ),
-                theShield = "Ensures you get an accurate diagnosis in time to save your life.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.HIGH,
-                confidence = SignalConfidence.VERY_HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("NCI / Agency Truth Check", ""),
-                verdict = EvidenceVerdict.NOT_SUPPORTED,
-                investigatedClaim = "Biopsies or surgery cause cancer to spread.",
-                interactionContexts = listOf("Public")
-            ),
-            Signal(
-                id = "truth-big-pharma",
-                title = "Myth Check: Hidden Cancer Cures",
-                summary = "There is no single 'secret cure' being withheld by companies.",
-                theTruth = "Cancer is not one disease; it is hundreds of different types. Developing treatments is incredibly complex, and there is more profit in a cure than in temporary treatments.",
-                theCommand = "Be wary of anyone claiming to have a 'secret cure' doctors won't tell you about.",
-                theExecution = listOf(
-                    "Look for clinical trial evidence for any treatment claim.",
-                    "Ask: 'If there was a cure, why would researchers' own families still die of cancer?'",
-                    "Stick to treatments verified by global medical communities."
-                ),
-                theShield = "Protects you from delaying life-saving care while chasing fraudulent promises.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.MODERATE,
-                confidence = SignalConfidence.HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("Agency Intelligence Foundation", ""),
-                verdict = EvidenceVerdict.NOT_SUPPORTED,
-                investigatedClaim = "A simple cancer cure exists but is being hidden for profit. Big Pharma Cures.",
-                interactionContexts = listOf("Home")
-            ),
-            Signal(
-                id = "truth-antiperspirant",
-                title = "Myth Check: Deodorant and Breast Cancer",
-                summary = "No scientific evidence links aluminum in deodorant to tumors.",
-                theTruth = "Many people fear that aluminum or parabens in antiperspirants are absorbed and cause cancer. However, large studies have found no consistent link between these products and breast cancer.",
-                theCommand = "Use your preferred deodorant with confidence.",
-                theExecution = listOf(
-                    "Switch to aluminum-free versions only if you have a skin sensitivity.",
-                    "Ignore viral emails about 'sweating out toxins'.",
-                    "Focus on known breast cancer risks like exercise and alcohol reduction."
-                ),
-                theShield = "Reduces unnecessary daily worry about a common personal care item.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.LOW,
-                confidence = SignalConfidence.HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("National Cancer Institute", ""),
-                verdict = EvidenceVerdict.NOT_SUPPORTED,
-                investigatedClaim = "Aluminum in antiperspirants causes breast cancer. Deodorant risk.",
-                interactionContexts = listOf("Home")
-            ),
-            Signal(
-                id = "truth-microwaves",
-                title = "Myth Check: Microwave Radiation",
-                summary = "Microwaves do not make food radioactive or cause cancer.",
-                theTruth = "Microwaves use non-ionizing radiation to vibrate water molecules in food, creating heat. This is not the same as the ionizing radiation from X-rays that damages DNA. Your food does not become 'radioactive'.",
-                theCommand = "Use your microwave for heating; use glass containers for safety.",
-                theExecution = listOf(
-                    "Ignore claims that microwaving kills 'life energy' in food.",
-                    "Always use microwave-safe glass or ceramic, not plastic.",
-                    "Ensure the door seal on your microwave is clean and tight."
-                ),
-                theShield = "Protects you from appliance-fear while ensuring you avoid plastic chemical leaching.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.LOW,
-                confidence = SignalConfidence.VERY_HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("FDA / Agency Truth Check", ""),
-                verdict = EvidenceVerdict.NOT_SUPPORTED,
-                investigatedClaim = "Microwaves cause cancer and make food toxic.",
-                interactionContexts = listOf("Home")
-            ),
-            Signal(
-                id = "truth-contagious",
-                title = "Myth Check: Is Cancer Contagious?",
-                summary = "You cannot catch cancer like a cold or flu.",
-                theTruth = "Cancer is not a contagious disease. You cannot 'catch' it from someone else. However, some viruses (like HPV or Hepatitis) are contagious and can increase cancer risk years later.",
-                theCommand = "Support loved ones with cancer without fear of catching it.",
-                theExecution = listOf(
-                    "Feel safe to hug and spend time with cancer patients.",
-                    "Focus on vaccinations (like HPV) to prevent the viruses that can lead to cancer.",
-                    "Practice standard hygiene for overall health, not because cancer is catching."
-                ),
-                theShield = "Protects your relationships and mental health from unnecessary isolation.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.LOW,
-                confidence = SignalConfidence.VERY_HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("Mayo Clinic", ""),
-                verdict = EvidenceVerdict.NOT_SUPPORTED,
-                investigatedClaim = "Cancer is contagious and can be caught from others.",
-                interactionContexts = listOf("Public")
-            ),
-            Signal(
-                id = "truth-positive-thinking",
-                title = "Myth Check: Positive Thinking Cures",
-                summary = "Attitude is great for quality of life, but it doesn't shrink tumors.",
-                theTruth = "While a positive outlook helps you cope with treatment stress, there is no scientific evidence that 'thinking positive' can cure cancer on its own. This myth often places an unfair emotional burden on patients.",
-                theCommand = "Allow yourself to feel all emotions; do not feel guilty for being sad.",
-                theExecution = listOf(
-                    "Use positive thinking as a tool for mental health, not a medical cure.",
-                    "Seek support groups or therapy if you feel overwhelmed.",
-                    "Focus on your medical protocol as the primary path to physical healing."
-                ),
-                theShield = "Protects you from emotional exhaustion and the 'blaming the victim' trap.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.LOW,
-                confidence = SignalConfidence.HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("Cancer Research UK", ""),
-                verdict = EvidenceVerdict.MISLEADING,
-                investigatedClaim = "A positive attitude can cure or treat cancer.",
-                interactionContexts = listOf("Home")
-            ),
-            Signal(
-                id = "truth-alternative-cures",
-                title = "Myth Check: Alternative Cures",
-                summary = "Cannabis oil, Ivermectin, and massive Vitamin C are not cures.",
-                theTruth = "While some natural products help with side effects (like ginger for nausea), they cannot shrink tumors or replace medical treatment. Patients who choose alternative medicine *instead* of conventional care have a much higher risk of death.",
-                theCommand = "Use natural products only for comfort; never as a replacement for treatment.",
-                theExecution = listOf(
-                    "Always tell your oncologist about any supplements you are taking.",
-                    "Be wary of expensive 'natural' clinics that promise 100% success.",
-                    "Verify any 'unheard of' cure with the Agency before investing money."
-                ),
-                theShield = "Protects you from predatory financial exploitation and from the danger of stopping proven care.",
-                category = SignalCategory.RESEARCH,
-                importance = SignalImportance.CRITICAL,
-                confidence = SignalConfidence.VERY_HIGH,
-                detectedAt = now,
-                publishedAt = now,
-                source = SignalSource("Huntsman Cancer Institute / Agency Truth Check", ""),
-                verdict = EvidenceVerdict.MISLEADING,
-                investigatedClaim = "Alternative cures like Cannabis oil or Ivermectin are better than chemo. Detox.",
-                interactionContexts = listOf("Home", "Public")
-            )
+        
+        // --- 1. DANGEROUS SCAMS & HARMFUL CURES ---
+        val dangerousScams = listOf(
+            RegistrySeed("Black Salve", listOf("Cansema", "Bloodroot", "Drawing Salve", "Indian Herb", "Zinc Chloride"), "A corrosive acid paste that burns through skin. It does not treat cancer; it destroys healthy tissue while tumors continue to grow underneath.", listOf("Skin", "Salve", "Natural Cure", "Burn")),
+            RegistrySeed("Miracle Mineral Solution", listOf("MMS", "Chlorine Dioxide", "CD", "Water Purification Drops"), "A industrial bleach that causes severe vomiting, kidney failure, and life-threatening low blood pressure. It is not a medicine.", listOf("Bleach", "Drops", "Miracle", "Toxic")),
+            RegistrySeed("Laetrile (Vitamin B17)", listOf("Apricot Kernels", "Amygdalin", "B17 supplement", "Fruit Seeds"), "A chemical that turns into cyanide in your stomach. It does not cure cancer and causes chronic cyanide poisoning.", listOf("Seeds", "Vitamin", "Cyanide", "Supplement")),
+            RegistrySeed("Cesium Chloride", listOf("High pH Therapy", "Cesium drops", "Cesium Carbonate"), "A treatment that blocks heart channels, causing fatal heart attacks and seizures. It is proven ineffective for cancer.", listOf("Heart", "pH", "Alkaline", "Mineral")),
+            RegistrySeed("Baking Soda Injections", listOf("Sodium Bicarbonate therapy", "Tulio Simoncini", "Fungus cure"), "The myth that cancer is a fungus cured by baking soda. Injections can cause severe blood chemistry imbalance and death.", listOf("Fungus", "Soda", "Injection", "Scam")),
+            RegistrySeed("Shark Cartilage", listOf("Cartilage pills", "Shark medicine", "BeneFin"), "Based on the false myth that sharks don't get cancer. Studies show it is zero-effective and may contain toxins.", listOf("Pills", "Shark", "Marine", "Supplement"))
         )
-        signals.forEach { memory.saveSignal(it); seedThread(it) }
+
+        // --- 2. DIETARY & NUTRITION MYTHS ---
+        val dietaryMyths = listOf(
+            RegistrySeed("Alkaline Diet", listOf("pH Balance", "Acidic foods", "Lemon water cure", "Dr Sebi"), "The body strictly controls blood pH via the lungs and kidneys. You cannot 'alkalize' your body with food to kill cancer.", listOf("Lemon", "Acid", "pH", "Diet")),
+            RegistrySeed("Sugar Feeds Cancer", listOf("Starve cancer", "No sugar diet", "Glucose fuel", "Fruit sugar"), "While weight management is vital, all cells use sugar. Cutting sugar won't 'starve' a tumor and can cause dangerous weight loss.", listOf("Sweets", "Carbs", "Fruit", "Weight")),
+            RegistrySeed("Gerson Therapy", listOf("Coffee enemas", "Juice fasting", "Max Gerson", "Detox diet"), "A restrictive diet and enema protocol with zero evidence. Enemas cause dehydration and bowel infections.", listOf("Juice", "Enema", "Detox", "Cleanse")),
+            RegistrySeed("Keto for Cancer", listOf("Ketogenic cure", "Fat-fuel", "Zero carb"), "Keto is being studied *alongside* medical care for some tumors, but it is NOT a cure and can be dangerous for many patients.", listOf("Fat", "Diet", "Carbs", "Study")),
+            RegistrySeed("Superfood Miracles", listOf("Soursop", "Graviola", "Ginger vs Chemo", "Turmeric cure"), "Individual foods are healthy but are not 'cures.' Soursop is not '100x stronger' than chemo and can damage nerves.", listOf("Fruit", "Spice", "Stronger than chemo", "Supplement")),
+            RegistrySeed("Aspartame Fear", listOf("Diet Soda", "Equal", "NutraSweet", "Artificial sweeteners"), "IARC labels it 'possibly' carcinogenic, but current levels in soda are safe for most. Focus on body fat, not one sweetener.", listOf("Soda", "Sugar Free", "Chemical", "Fear"))
+        )
+
+        // --- 3. TECHNOLOGY & RADIATION MYTHS ---
+        val techMyths = listOf(
+            RegistrySeed("Cell Phones & 5G", listOf("5G Radiation", "RF Waves", "Phone brain tumor", "EMF"), "Phones use non-ionizing waves. They don't have the energy to break DNA. Billions of users show no tumor increase.", listOf("Phone", "Tower", "Radiation", "5G")),
+            RegistrySeed("Wi-Fi & Bluetooth", listOf("Wireless internet", "Bluetooth cancer", "Router safety"), "Like phones, Wi-Fi waves are too weak to damage human tissue. They are biologically distinct from X-rays.", listOf("Internet", "Router", "Bluetooth", "Wireless")),
+            RegistrySeed("Microwaves", listOf("Microwaved food", "Radioactive food", "Life energy"), "Microwaves heat food by vibrating water. They do not make food radioactive or remove its 'healing energy'.", listOf("Kitchen", "Food", "Heat", "Appliance")),
+            RegistrySeed("Airport Scanners", listOf("TSA scanner", "X-ray backscatter", "Security radiation"), "The radiation from a single scanner is equal to 2 minutes of a high-altitude flight. It is medically insignificant.", listOf("Travel", "TSA", "X-ray", "Security")),
+            RegistrySeed("Smart Meters", listOf("Electricity meter", "Utility waves", "Household EMF"), "Smart meters emit tiny pulses of RF energy, lower than a cell phone. There is no evidence of a cancer link.", listOf("Home", "Electricity", "Waves", "Meter"))
+        )
+
+        // --- 4. LIFESTYLE & MEDICAL MYTHS ---
+        val medicalMyths = listOf(
+            RegistrySeed("Biopsies Spread Cancer", listOf("Seeding", "Needle biopsy", "Poking the tumor"), "Doctors use strict protocols to prevent 'seeding'. The risk is microscopic compared to the benefit of diagnosis.", listOf("Needle", "Test", "Diagnosis", "Spread")),
+            RegistrySeed("Surgery Spreads Cancer", listOf("Exposing to air", "Cutting the tumor", "Surgery fear"), "Cancer doesn't spread because it 'hits the air'. Finding cancer during surgery means it was already there.", listOf("Hospital", "Surgery", "Spread", "Air")),
+            RegistrySeed("Big Pharma Conspiracy", listOf("Suppressed cure", "Secret treatment", "Doctors hiding"), "A cure would be the most profitable discovery ever. Researchers also lose their own families to cancer.", listOf("Secret", "Profit", "Conspiracy", "Doctor")),
+            RegistrySeed("Deodorant Aluminum", listOf("Antiperspirant", "Armpit cancer", "Lymph nodes"), "Large studies show no link between aluminum in deodorant and breast cancer. Sweat is not the body's primary detox.", listOf("Beauty", "Skin", "Deodorant", "Sweat")),
+            RegistrySeed("Underwire Bras", listOf("Bra cancer", "Lymph flow", "Tight bras"), "Bras do not block lymph flow or cause breast cancer. This is a purely social media myth.", listOf("Clothes", "Women", "Bras", "Myth")),
+            RegistrySeed("Dental Fillings", listOf("Mercury fillings", "Amalgam", "Teeth cancer"), "Mercury in fillings is stable and does not cause cancer. Removal is more stressful for the body than leaving them.", listOf("Dentist", "Teeth", "Mercury", "Amalgam")),
+            RegistrySeed("Contagious Cancer", listOf("Catching cancer", "Cancer virus", "Touching cancer"), "Cancer is not a cold. You can't catch it. Only the viruses that *lead* to it (like HPV) are contagious.", listOf("Contagious", "Viral", "Touching", "Safety"))
+        )
+
+        val allSeeds = dangerousScams + dietaryMyths + techMyths + medicalMyths
+
+        allSeeds.forEach { seed ->
+            saveSignal(
+                id = "truth-${seed.name.lowercase().replace(" ", "-")}",
+                title = "Myth Check: ${seed.name}",
+                summary = seed.truth,
+                theTruth = seed.truth,
+                theCommand = "Ignore the viral claim; stick to evidence-based safety.",
+                theExecution = listOf(
+                    "Verify the source of the claim (Is it an ad or a medical journal?)",
+                    "Understand the basic biology: ${seed.truth.split(".")[0]}.",
+                    "Focus your energy on known risks (Tobacco, UV, Processed Meat)."
+                ),
+                theShield = "Protects you from the financial, physical, and emotional burden of misinformation.",
+                category = SignalCategory.RESEARCH,
+                importance = if (dangerousScams.contains(seed)) SignalImportance.CRITICAL else SignalImportance.LOW,
+                confidence = SignalConfidence.VERY_HIGH,
+                affectedIngredients = seed.ingredients,
+                safeAlternatives = emptyList(),
+                interactionContexts = listOf("Home", "Public"),
+                discoveryTags = seed.tags,
+                investigatedClaim = seed.ingredients.joinToString(", ")
+            )
+        }
     }
 
     private suspend fun seedThread(signal: Signal) {

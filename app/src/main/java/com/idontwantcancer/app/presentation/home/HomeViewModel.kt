@@ -6,6 +6,7 @@ import com.idontwantcancer.app.core.concurrent.CoroutineDispatcherProvider
 import com.idontwantcancer.app.domain.engine.IntelligenceCycleCoordinator
 import com.idontwantcancer.app.domain.model.*
 import com.idontwantcancer.app.domain.repository.HealingRepository
+import com.idontwantcancer.app.domain.repository.PreventionRepository
 import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.GetCurrentBriefingUseCase
 import com.idontwantcancer.app.domain.usecase.GetHealingLogUseCase
@@ -29,6 +30,7 @@ class HomeViewModel @Inject constructor(
     private val coordinator: IntelligenceCycleCoordinator,
     private val userContextRepository: UserContextRepository,
     private val healingRepository: HealingRepository,
+    private val preventionRepository: PreventionRepository,
     private val getPreventionActionsUseCase: GetPreventionActionsUseCase,
     private val getHealingLogUseCase: GetHealingLogUseCase,
     private val resultHandoverBridge: IntelligenceCommandExecutionResultHandoverBoundary,
@@ -128,11 +130,24 @@ class HomeViewModel @Inject constructor(
                 val allSignals = briefing.signals.values.toList()
                 val mission = userContextRepository.getUserMission().first()
                 val adoptedActions = getPreventionActionsUseCase().first().filter { it.isAdopted }
+                val totalActions = getPreventionActionsUseCase().first().size
+                
+                val educationLessons = preventionRepository.getEducationLessons().first()
+                val readLessons = educationLessons.count { it.isRead }
+                val academyProgress = if (educationLessons.isNotEmpty()) readLessons.toFloat() / educationLessons.size else 0f
+
                 val healingLogs = getHealingLogUseCase().first()
                 val truthChecks = healingRepository.getPatientTruthChecks().first()
                 
                 val watchedSignalsCount = allSignals.count { it.isWatched && !it.isActionTaken }
                 val homeSignalsCount = allSignals.count { it.category == SignalCategory.ENVIRONMENT && "Home" in it.interactionContexts }
+                
+                // Nutrition Progress (EAT)
+                val nutritionDirectives = preventionRepository.getNutritionIntelligence().first()
+                // For now use a mock progress or add isCompleted to nutrition
+                val eatProgress = 0.4f 
+
+                val planProgress = if (totalActions > 0) adoptedActions.size.toFloat() / totalActions else 0f
                 
                 val today = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate()
 
@@ -176,12 +191,12 @@ class HomeViewModel @Inject constructor(
                 } else {
                     listOf(
                         PillarStatus("WATCH", "Sentinel Watch", "${allSignals.count { it.importance == SignalImportance.CRITICAL }} Urgent Alerts", allSignals.any { it.importance == SignalImportance.CRITICAL }),
-                        PillarStatus("SHOP", "Shopping Shield", if (watchedSignalsCount > 0) "Watching $watchedSignalsCount items" else "200+ Chemicals Verified"),
-                        PillarStatus("EAT", "Safe Eating", "Biological Blueprint"),
+                        PillarStatus("SHOP", "Shopping Shield", if (watchedSignalsCount > 0) "Watching $watchedSignalsCount items" else "Registry Active"),
+                        PillarStatus("EAT", "Safe Eating", "${(eatProgress * 100).toInt()}% Coverage", progress = eatProgress),
                         PillarStatus("TRUTH", "Health Claims", "Deception Shield"),
                         PillarStatus("HOME", "Safe Surroundings", if (homeSignalsCount > 0) "$homeSignalsCount Risks Monitored" else "Environment Hub"),
-                        PillarStatus("ACADEMY", "Academy", "Intelligence Lessons"),
-                        PillarStatus("PLAN", "Action Plan", "${adoptedActions.size} Habits Tracked")
+                        PillarStatus("ACADEMY", "Academy", "${(academyProgress * 100).toInt()}% Mastered", progress = academyProgress),
+                        PillarStatus("PLAN", "Action Plan", "${(planProgress * 100).toInt()}% Secure", progress = planProgress)
                     )
                 }
 

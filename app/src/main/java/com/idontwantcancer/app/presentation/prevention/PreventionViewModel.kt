@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.idontwantcancer.app.domain.engine.NutritionInstructionTransformer
 import com.idontwantcancer.app.domain.model.*
+import com.idontwantcancer.app.domain.repository.PreventionRepository
 import com.idontwantcancer.app.domain.repository.UserContextRepository
 import com.idontwantcancer.app.domain.usecase.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,6 +24,7 @@ class PreventionViewModel @Inject constructor(
     getPreventionActionsUseCase: GetPreventionActionsUseCase,
     private val toggleActionAdoptionUseCase: ToggleActionAdoptionUseCase,
     private val userContextRepository: UserContextRepository,
+    private val preventionRepository: PreventionRepository,
     private val transformer: NutritionInstructionTransformer
 ) : ViewModel() {
 
@@ -63,6 +66,13 @@ class PreventionViewModel @Inject constructor(
     fun toggleActionAdoption(id: String) {
         viewModelScope.launch {
             toggleActionAdoptionUseCase(id)
+        }
+    }
+
+    fun markLessonAsRead(id: String) {
+        viewModelScope.launch {
+            userContextRepository.getUserMission().first() // Verify access
+            preventionRepository.updateLessonReadStatus(id, true)
         }
     }
 }

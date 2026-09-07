@@ -11,5 +11,6 @@ data class EducationLessonEntity(
     val content: String,
     val keyTakeaway: String,
     val source: String,
-    val sourceUrl: String?
+    val sourceUrl: String?,
+    val isRead: Boolean = false
 )

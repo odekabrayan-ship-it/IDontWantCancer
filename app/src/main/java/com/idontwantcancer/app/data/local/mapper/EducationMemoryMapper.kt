@@ -11,7 +11,8 @@ fun EducationLessonEntity.toDomain(): EducationLesson {
         content = content,
         keyTakeaway = keyTakeaway,
         source = source,
-        sourceUrl = sourceUrl
+        sourceUrl = sourceUrl,
+        isRead = isRead
     )
 }
 
@@ -23,6 +24,7 @@ fun EducationLesson.toEntity(): EducationLessonEntity {
         content = content,
         keyTakeaway = keyTakeaway,
         source = source,
-        sourceUrl = sourceUrl
+        sourceUrl = sourceUrl,
+        isRead = isRead
     )
 }

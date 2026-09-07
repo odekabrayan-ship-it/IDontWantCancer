@@ -57,6 +57,10 @@ class PreventionRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateLessonReadStatus(id: String, isRead: Boolean) = withContext(dispatcherProvider.io) {
+        educationDao.updateReadStatus(id, isRead)
+    }
+
     override suspend fun savePreventionActions(items: List<PreventionAction>) = withContext(dispatcherProvider.io) {
         actionDao.upsertAll(items.map { it.toEntity() })
     }

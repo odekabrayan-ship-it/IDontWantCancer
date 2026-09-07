@@ -3,7 +3,7 @@ package com.idontwantcancer.app.domain.model
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a short, foundational education module for cancer prevention.
+ * Represents a 60-second masterclass in cancer intelligence.
  */
 @Serializable
 data class EducationLesson(
@@ -13,5 +13,6 @@ data class EducationLesson(
     val content: String,
     val keyTakeaway: String,
     val source: String,
-    val sourceUrl: String? = null
+    val sourceUrl: String? = null,
+    val isRead: Boolean = false
 )

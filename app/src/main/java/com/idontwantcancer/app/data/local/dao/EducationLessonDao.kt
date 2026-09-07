@@ -6,11 +6,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EducationLessonDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertAll(items: List<EducationLessonEntity>)
+
     @Query("SELECT * FROM education_lessons")
     fun getAllFlow(): Flow<List<EducationLessonEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertAll(items: List<EducationLessonEntity>)
+    @Query("UPDATE education_lessons SET isRead = :isRead WHERE id = :id")
+    suspend fun updateReadStatus(id: String, isRead: Boolean)
 
     @Query("DELETE FROM education_lessons")
     suspend fun deleteAll()

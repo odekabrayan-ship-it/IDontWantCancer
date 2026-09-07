@@ -40,6 +40,11 @@ interface PreventionRepository {
     suspend fun toggleActionAdoption(id: String)
 
     /**
+     * Updates the read status of a specific lesson.
+     */
+    suspend fun updateLessonReadStatus(id: String, isRead: Boolean)
+
+    /**
      * Saves foundational prevention actions.
      */
     suspend fun savePreventionActions(items: List<PreventionAction>)

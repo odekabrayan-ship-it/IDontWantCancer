@@ -56,6 +56,16 @@ fun AppNavigation(
         return
     }
 
+    // NEW: Sovereign Mission Switcher
+    // Automatically re-routes the user when they change missions in Settings
+    LaunchedEffect(userMission) {
+        val destination = if (userMission == UserMission.HEALING) Screen.HealingSanctuary else Screen.Home
+        navController.navigate(destination) {
+            popUpTo(0) { inclusive = true } // Clear entire backstack for clean state
+            launchSingleTop = true
+        }
+    }
+
     // Stage 5 Overhaul: Handle initial deep link from notification
     LaunchedEffect(initialSignalId) {
         if (initialSignalId != null) {
@@ -93,7 +103,9 @@ fun AppNavigation(
                     selected = currentDestination?.hierarchy?.any { it.hasRoute(item.screen::class) } == true,
                     onClick = {
                         navController.navigate(item.screen) {
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            // popUpTo start destination for clean navigation within current mission
+                            val startDest = if (userMission == UserMission.HEALING) Screen.HealingSanctuary else Screen.Home
+                            popUpTo(startDest) {
                                 saveState = true
                             }
                             launchSingleTop = true
@@ -104,10 +116,14 @@ fun AppNavigation(
             }
         }
     ) {
+        val startDestination = remember(userMission) {
+            if (userMission == UserMission.HEALING) Screen.HealingSanctuary else Screen.Home
+        }
+        
         // Step 204: Use NavHost transitions for top-level screen changes to maintain visual continuity.
         NavHost(
             navController = navController,
-            startDestination = Screen.Home,
+            startDestination = startDestination,
             enterTransition = { fadeIn(animationSpec = tween(400)) },
             exitTransition = { fadeOut(animationSpec = tween(400)) },
             popEnterTransition = { fadeIn(animationSpec = tween(400)) },

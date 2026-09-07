@@ -132,6 +132,7 @@ class HomeViewModel @Inject constructor(
                 val truthChecks = healingRepository.getPatientTruthChecks().first()
                 
                 val watchedSignalsCount = allSignals.count { it.isWatched && !it.isActionTaken }
+                val homeSignalsCount = allSignals.count { it.category == SignalCategory.ENVIRONMENT && "Home" in it.interactionContexts }
                 
                 val today = Instant.now().atZone(ZoneId.systemDefault()).toLocalDate()
 
@@ -160,7 +161,7 @@ class HomeViewModel @Inject constructor(
                         PillarStatus(id = "SYMPTOMS", title = "Symptom Help", status = if (managedSymptoms.isNotEmpty()) "Managing: ${managedSymptoms.size} Symptoms" else "Immediate Directives Ready"),
                         PillarStatus(id = "DECEPTION", title = "Deception Shield", status = "$scamCount Known Scams Blocked"),
                         PillarStatus(id = "PROGRESS", title = "My Progress", status = "${healingLogs.size} Victories Logged"),
-                        PillarStatus(id = "VERIFY", title = "Laboratory", status = "Safety Check Active")
+                        PillarStatus(id = "VERIFY", title = "Laboratory", status = "Drug & Supplement Check")
                     )
                 } else {
                     listOf(
@@ -168,7 +169,7 @@ class HomeViewModel @Inject constructor(
                         PillarStatus("SHOP", "Shopping Shield", if (watchedSignalsCount > 0) "Watching $watchedSignalsCount items" else "200+ Chemicals Verified"),
                         PillarStatus("EAT", "Safe Eating", "Biological Blueprint"),
                         PillarStatus("TRUTH", "Health Claims", "Deception Shield"),
-                        PillarStatus("HOME", "Safe Home", "Surroundings Hub"),
+                        PillarStatus("HOME", "Safe Surroundings", if (homeSignalsCount > 0) "$homeSignalsCount Risks Monitored" else "Environment Hub"),
                         PillarStatus("ACADEMY", "Academy", "Intelligence Lessons"),
                         PillarStatus("PLAN", "Action Plan", "${adoptedActions.size} Habits Tracked")
                     )

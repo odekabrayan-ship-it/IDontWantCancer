@@ -190,6 +190,166 @@ class BaselineIntelligenceSeeder @Inject constructor(
                 publishedAt = now,
                 source = SignalSource("Agency Safety Lab", ""),
                 interactionContexts = listOf("Home", "Public")
+            ),
+            Signal(
+                id = "env-house-dust",
+                title = "Household Dust: Flame Retardants",
+                summary = "Dust acts as a 'sink' for chemicals shed from furniture.",
+                theTruth = "Flame retardants and PFAS shed from electronics and couches settle in house dust. These are endocrine disruptors linked to multiple cancers.",
+                theCommand = "Use a damp cloth for all surface cleaning; avoid dry dusting.",
+                theExecution = listOf(
+                    "Wipe hard surfaces with a wet microfiber rag to trap particles.",
+                    "Vacuum with a certified HEPA-filter machine at least once per week.",
+                    "Remove shoes at the door to stop tracking in outdoor lead and pesticides."
+                ),
+                theShield = "Stops the inhalation and accidental hand-to-mouth ingestion of toxic industrial chemicals.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Environmental Health Perspectives", ""),
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "env-radon",
+                title = "Basement Watch: Radon Gas",
+                summary = "The #1 cause of lung cancer in non-smokers.",
+                theTruth = "Radon is an invisible, odorless radioactive gas that seeps from the soil into homes. Long-term exposure damages lung DNA.",
+                theCommand = "Test your home's lowest living level for Radon every 2 years.",
+                theExecution = listOf(
+                    "Buy a $15-25 short-term radon test kit at a hardware store.",
+                    "Place it in your basement or ground-floor room for 48-96 hours.",
+                    "Mail the kit to a lab for results. If levels are high (>4 pCi/L), install a mitigation system."
+                ),
+                theShield = "Detection and simple ventilation fix virtually eliminates this specific lung cancer risk.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("EPA / Agency Intelligence", ""),
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "env-cooking-smoke",
+                title = "Kitchen Watch: Cooking Smog",
+                summary = "High-heat frying and gas stoves create indoor air pollution.",
+                theTruth = "Burning gas releases Nitrogen Dioxide, and high-heat oils create particulate matter (PM2.5) that irritates and damages lung tissue.",
+                theCommand = "Always turn on your exhaust fan *before* you light the stove.",
+                theExecution = listOf(
+                    "Start the fan 1 minute before cooking to create a draft.",
+                    "Open a window if you don't have an external-venting hood.",
+                    "Prefer back burners as they are more effectively captured by hood fans."
+                ),
+                theShield = "Protects your lungs from concentrated indoor smog that can be 5x worse than outdoor air.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("WHO / Indoor Air Quality", ""),
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "env-new-furnishings",
+                title = "Home Watch: New Product Off-Gassing",
+                summary = "New furniture and carpets release industrial glues for weeks.",
+                theTruth = "Volatile Organic Compounds (VOCs) like formaldehyde are used in finishes. These 'off-gas' at high rates when an item is brand new.",
+                theCommand = "Ventilate any new furniture or carpet for at least 72 hours.",
+                theExecution = listOf(
+                    "Unbox new items in a garage or outdoors for the first 3 days if possible.",
+                    "Keep windows in the affected room open and use a fan to push air outward.",
+                    "Choose 'Low-VOC' or 'Formaldehyde-Free' certified items when buying new."
+                ),
+                theShield = "Prevents the high-concentrate inhalation of industrial solvents in your safe space.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Indoor Watch", ""),
+                interactionContexts = listOf("Home", "Work")
+            ),
+            Signal(
+                id = "env-plastic-leach",
+                title = "Kitchen Watch: Plastic Heat Leaching",
+                summary = "Heating plastic releases hormone disruptors into your food.",
+                theTruth = "Heat breaks the polymer chains in plastic, releasing phthalates and BPA even from 'microwave-safe' containers.",
+                theCommand = "Never heat food in plastic; transfer to glass or ceramic.",
+                theExecution = listOf(
+                    "Transfer all leftovers to a glass bowl before microwaving.",
+                    "Never put hot liquids into plastic cups or containers.",
+                    "Discard plastic items that are scratched or stained, as they leach more easily."
+                ),
+                theShield = "Eliminates a primary route for hormone-disrupting chemicals into your bloodstream.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Consumer Safety Lab", ""),
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "env-dry-cleaning",
+                title = "Wardrobe Watch: Dry Cleaning Chemicals",
+                summary = "Dry-cleaned clothes often carry toxic 'PERC' residues.",
+                theTruth = "Perchloroethylene (PERC) is a solvent used by many dry cleaners and is a known carcinogen.",
+                theCommand = "Air out dry-cleaned clothes outdoors for 24 hours.",
+                theExecution = listOf(
+                    "Remove the plastic bag immediately upon bringing clothes home.",
+                    "Hang items in a well-ventilated area or outdoors before putting them in your closet.",
+                    "Choose 'Wet Cleaning' or 'CO2 Cleaning' services which are toxin-free."
+                ),
+                theShield = "Prevents the build-up of industrial solvent vapors in your bedroom and closet.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Wardrobe Sentinel", ""),
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "env-non-stick",
+                title = "Cookware Watch: Overheated PTFE",
+                summary = "Non-stick pans release 'Teflon Flu' gases when overheated.",
+                theTruth = "PTFE coatings begin to break down at high temperatures, releasing toxic fumes that can cause flu-like symptoms and damage DNA.",
+                theCommand = "Never pre-heat an empty non-stick pan; use Cast Iron instead.",
+                theExecution = listOf(
+                    "Switch to stainless steel or cast iron for high-heat searing.",
+                    "If using non-stick, always have food or oil in the pan while heating.",
+                    "Discard non-stick pans immediately if the surface is scratched or peeling."
+                ),
+                theShield = "Stops the inhalation of fluorinated gases in your kitchen.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.HIGH,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Agency Kitchen Protocol", ""),
+                interactionContexts = listOf("Home")
+            ),
+            Signal(
+                id = "env-pesticide-shoes",
+                title = "Threshold Watch: Tracking in Toxins",
+                summary = "Shoes carry outdoor pesticides and lead into your home.",
+                theTruth = "Street dust contains lead, coal tar, and lawn pesticides. These settle into carpets where children and pets are exposed.",
+                theCommand = "Implement a strict 'No-Shoes' policy inside your home.",
+                theExecution = listOf(
+                    "Leave all outdoor footwear at the entry door.",
+                    "Use indoor slippers or socks that never touch the pavement.",
+                    "Clean your entry mat weekly to prevent 'dust-drag' into the house."
+                ),
+                theShield = "Reduces the cumulative outdoor toxic load brought into your living space by 60%.",
+                category = SignalCategory.ENVIRONMENT,
+                importance = SignalImportance.MODERATE,
+                confidence = SignalConfidence.VERY_HIGH,
+                detectedAt = now,
+                publishedAt = now,
+                source = SignalSource("Environmental Health Lab", ""),
+                interactionContexts = listOf("Home")
             )
         )
         signals.forEach { memory.saveSignal(it); seedThread(it) }
